@@ -42,6 +42,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField]
     [Range(0.001f, 2.0f)]
     private float headbobAmount = 1.0f;
+    [SerializeField]
+    private bool isLocked;
 
     // Non-Serialized Fields
     private bool isCrouched = false;
@@ -53,6 +55,9 @@ public class FirstPersonController : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+        //Used to lock player inputs, off by default
+        isLocked = false;
+
         // Getting the Rigidbody component
         body = GetComponent<Rigidbody>();
 
@@ -70,8 +75,12 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        HandleMouseInput();
-        HandleKeyboardInput();
+        if(isLocked == false)
+        {
+            HandleMouseInput();
+            HandleKeyboardInput();
+        }
+
     }
 
     /// <summary>
@@ -423,6 +432,14 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Locking input for the player. use this if you wat to shut off the players actions
+    /// </summary>
+    /// <param name="state">true or false false if you want to allow movement</param>
+    public void LockControls(bool state)
+    {
+        isLocked = state;
+    }
     /// <summary>
     /// Casts 4 rays downwards from the player to check if the player is standing on something. Returns true if the player stands on something.
     /// </summary>
