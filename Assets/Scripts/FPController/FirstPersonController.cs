@@ -20,7 +20,6 @@ public class FirstPersonController : MonoBehaviour
     // Non-Serialized Fields
     private Camera cam;
 
-
     [Header("- Movement Settings -")]
     // Serialized Fields
     [SerializeField]
@@ -75,12 +74,15 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(isLocked == false)
+        if(isLocked)
+        {
+            headAnimator.SetBool("animateHead", false);
+        }
+        else
         {
             HandleMouseInput();
             HandleKeyboardInput();
         }
-
     }
 
     /// <summary>
@@ -440,6 +442,7 @@ public class FirstPersonController : MonoBehaviour
     {
         isLocked = state;
     }
+
     /// <summary>
     /// Casts 4 rays downwards from the player to check if the player is standing on something. Returns true if the player stands on something.
     /// </summary>
