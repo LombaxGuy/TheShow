@@ -7,12 +7,6 @@ public class PlayerRespawn : MonoBehaviour
     //For the respawn cordinates
     private Vector3 spawnCords;
 
-    ////For the fade screen
-    ////private Image img;
-    //private float fadetime = 120f;
-    //private float dark = 255f;
-    //private float bright = 0.1f;
-
     [SerializeField]
     private bool isAlive = true;
 
@@ -23,9 +17,6 @@ public class PlayerRespawn : MonoBehaviour
 	void Start ()
     {
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
-
-        //img = GameObject.Find("FadePanel").GetComponent<Image>();
-        //img.GetComponent<CanvasRenderer>().SetAlpha(0.1f);
     }
 	
 	// Update is called once per frame
@@ -44,7 +35,6 @@ public class PlayerRespawn : MonoBehaviour
         
         GetComponent<FirstPersonController>().LockControls(false);
 
-        //img.CrossFadeAlpha(bright, 1, true);
         isAlive = true;
     }
 
@@ -52,8 +42,7 @@ public class PlayerRespawn : MonoBehaviour
    public virtual void Death()
     {
         isAlive = false;
-        GetComponent<FirstPersonController>().LockControls(true);
 
-        //img.CrossFadeAlpha(dark, 1, true);
+        GetComponent<FirstPersonController>().LockControls(true);
     }
 }
