@@ -14,7 +14,7 @@ public class DoorManagerComponent : MonoBehaviour
     [SerializeField]
     // The bouncines of the door
     private float doorBouncinessValue = 0.3f;
-
+    
     private float yRotation;
     private HingeJoint hinge;
 
@@ -27,7 +27,7 @@ public class DoorManagerComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        yRotation = transform.eulerAngles.y;
+        yRotation = transform.localEulerAngles.y;
         //Debug.Log(yRotation);
 
         AutoCloseDoor();

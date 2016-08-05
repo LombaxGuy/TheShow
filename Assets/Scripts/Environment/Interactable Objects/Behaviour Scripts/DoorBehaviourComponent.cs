@@ -13,7 +13,7 @@ public class DoorBehaviourComponent : MonoBehaviour
 
     [SerializeField]
     private float openOrCloseDoorAngle = 95;
-
+    
     private float yRotation;
 
     // Use this for initialization
@@ -32,6 +32,7 @@ public class DoorBehaviourComponent : MonoBehaviour
         {
             Debug.Log("No 'InteractableObjectComponent' was found!");
         }
+        
     }
 
     /// <summary>
@@ -40,19 +41,20 @@ public class DoorBehaviourComponent : MonoBehaviour
     private void ThisSpecificBehaviour()
     {
         // Set the yRotation to the rotation of the door
-        yRotation = transform.eulerAngles.y;
+        yRotation = transform.localEulerAngles.y;
         //Debug.Log(yRotation);
 
         // Opens the door
         if (yRotation < openOrCloseDoorAngle)
         {
-            GetComponentInChildren<Rigidbody>().AddForce(transform.forward * doorOpenForce);
-            //Debug.Log("Open door");
+            GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
+            Debug.Log("Open door");
         }
         else // Closes the door
         {
-            GetComponentInChildren<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
-            //Debug.Log("Close door");
+            GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
+            Debug.Log("Close door");
         }
+
     }
 }
