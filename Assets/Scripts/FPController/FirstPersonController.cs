@@ -43,6 +43,8 @@ public class FirstPersonController : MonoBehaviour
     private float headbobAmount = 1.0f;
     [SerializeField]
     private bool isLocked;
+    [SerializeField]
+    private bool isLockedCamera;
 
     // Non-Serialized Fields
     private bool isCrouched = false;
@@ -56,6 +58,7 @@ public class FirstPersonController : MonoBehaviour
     {
         //Used to lock player inputs, off by default
         isLocked = false;
+        isLockedCamera = false;
 
         // Getting the Rigidbody component
         body = GetComponent<Rigidbody>();
@@ -80,9 +83,15 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
+            if(isLockedCamera)
+            {
+
+            }
+            else
             HandleMouseInput();
             HandleKeyboardInput();
         }
+
     }
 
     /// <summary>
@@ -441,6 +450,14 @@ public class FirstPersonController : MonoBehaviour
     public void LockControls(bool state)
     {
         isLocked = state;
+    }
+    /// <summary>
+    /// For Locking the camera only, used together with timescale pausing
+    /// </summary>
+    /// <param name="state"></param>
+    public void LockCamera(bool state)
+    {
+        isLockedCamera = state;
     }
 
     /// <summary>

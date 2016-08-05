@@ -8,7 +8,7 @@ public class PlayerRespawn : MonoBehaviour
     private Vector3 spawnCords;
 
     [SerializeField]
-    private bool isAlive = true;
+    private bool isAlive;
 
     //For other scripts to use
     public GameObject targetSpawnpoint;
@@ -16,13 +16,17 @@ public class PlayerRespawn : MonoBehaviour
 	//Initialize the master spawn and image
 	void Start ()
     {
+        isAlive = true;
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
     }
 	
 	// Update is called once per frame
+    /// <summary>
+    /// Use rigmt mouse atm
+    /// </summary>
 	void Update ()
     {
-	    if(isAlive == false && Input.GetKey(KeyCode.Mouse0))
+	    if(isAlive == false && Input.GetKey(KeyCode.Mouse1))
         {
             Respawn();
         }
