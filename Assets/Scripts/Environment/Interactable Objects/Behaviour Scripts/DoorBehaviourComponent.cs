@@ -9,12 +9,20 @@ public class DoorBehaviourComponent : MonoBehaviour
 
     [SerializeField]
     [Range(0f, 50000f)]
+    // The force applied to the door when opened or closed
     private float doorOpenForce = 10000;
 
     [SerializeField]
+    // The angle at which the force directions are changed
     private float openOrCloseDoorAngle = 95;
+
+    [SerializeField]
+    // Interaction cooldown in seconds
+    private float interactionCooldown = 0.5f;
     
     private float yRotation;
+    [SerializeField]
+    private bool onCooldown = false;
 
     // Use this for initialization
     void Start()
@@ -32,7 +40,6 @@ public class DoorBehaviourComponent : MonoBehaviour
         {
             Debug.Log("No 'InteractableObjectComponent' was found!");
         }
-        
     }
 
     /// <summary>
@@ -43,17 +50,32 @@ public class DoorBehaviourComponent : MonoBehaviour
         // Set the yRotation to the rotation of the door
         yRotation = transform.localEulerAngles.y;
 
-        // Opens the door
-        if (yRotation < openOrCloseDoorAngle)
+        // If interaction is not on cooldown
+        if (!onCooldown)
         {
-            GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
-            Debug.Log("Open door");
+            // Opens the door
+            if (yRotation < openOrCloseDoorAngle)
+            {
+                GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
+                StartCoroutine(StartDoorCooldown());
+                //Debug.Log("Open door");
+            }
+            // Closes the door
+            else
+            {
+                GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
+                StartCoroutine(StartDoorCooldown());
+                //Debug.Log("Close door");
+            }
         }
-        else // Closes the door
-        {
-            GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
-            Debug.Log("Close door");
-        }
+    }
 
+    private IEnumerator StartDoorCooldown()
+    {
+        onCooldown = true;
+
+        yield return new WaitForSeconds(interactionCooldown);
+
+        onCooldown = false;
     }
 }
