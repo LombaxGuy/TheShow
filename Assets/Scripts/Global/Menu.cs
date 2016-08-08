@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
+
 
 public class Menu : MonoBehaviour {
 
@@ -13,16 +15,27 @@ public class Menu : MonoBehaviour {
     private GameObject settingsMenu;
 
     /// <summary>
-    /// All Menus are set fo not being shown by default
+    /// All Menus are set for not being shown by default try is made for the ingame menu that is not supposed to show up in the mainmenu
     /// </summary>
 	// Use this for initialization
 	void Start () {
         menu = GameObject.Find("Menu");
         settingsMenu = GameObject.Find("SettingsMenu");
         player = GameObject.Find("Player");
-        menu.SetActive(false);
         settingsMenu.SetActive(false);
-	}
+        try
+        { 
+            menu.SetActive(false);            
+        }
+        catch(Exception)
+        {
+            Debug.Log("Null Exception caused by no found 'Menu' or 'settingsMenu'");
+            
+        }
+
+        
+
+    }
 	
 	// Update is called once per frame
         /// <summary>
