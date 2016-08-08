@@ -42,17 +42,16 @@ public class DoorBehaviourComponent : MonoBehaviour
     {
         // Set the yRotation to the rotation of the door
         yRotation = transform.localEulerAngles.y;
-        //Debug.Log(yRotation);
 
         // Opens the door
         if (yRotation < openOrCloseDoorAngle)
         {
-            GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
+            GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
             Debug.Log("Open door");
         }
         else // Closes the door
         {
-            GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
+            GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
             Debug.Log("Close door");
         }
 
