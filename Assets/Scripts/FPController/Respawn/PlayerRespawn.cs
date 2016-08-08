@@ -8,11 +8,14 @@ public class PlayerRespawn : MonoBehaviour
     private Vector3 spawnCords;
     private DeathFadeComponent CCScript;
 
+    private float deathCooldown;
+
     [SerializeField]
     private bool isAlive;
 
     //For other scripts to use
     public GameObject targetSpawnpoint;
+    private Animator animator;
 
 	//Initialize the master spawn and image
 	void Start ()
@@ -20,6 +23,7 @@ public class PlayerRespawn : MonoBehaviour
         isAlive = true;
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
         CCScript = GetComponentInChildren<DeathFadeComponent>();
+        animator = GetComponentInChildren<Animator>();
     }
 	
 	// Update is called once per frame
@@ -28,9 +32,14 @@ public class PlayerRespawn : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-	    if(isAlive == false && Input.GetKey(KeyCode.Mouse1))
+	    if(!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
         {
             Respawn();
+        }
+
+        if(!isAlive)
+        {
+            deathCooldown -= Time.deltaTime;
         }
     }
 
@@ -38,20 +47,31 @@ public class PlayerRespawn : MonoBehaviour
     void Respawn()
     {
         transform.position  = targetSpawnpoint.transform.position;
-        
+                
         GetComponent<FirstPersonController>().LockControls(false);
+
+        animator.SetBool("playerDead", false);
 
         CCScript.ResetImageEffects();
 
         isAlive = true;
+
     }
 
     // Locks the controller in FirstPersonController script
     public void Death()
     {
+        deathCooldown = 2;
         GetComponent<FirstPersonController>().LockControls(true);
 
         StartCoroutine(CCScript.StartDeathFade());
+
+        float test = Random.Range(0, 2);
+
+        Debug.Log(test);
+
+        animator.SetFloat("random", test);
+        animator.SetBool("playerDead", true);
 
         isAlive = false;
     }
