@@ -15,6 +15,7 @@ public class PlayerRespawn : MonoBehaviour
 
     //For other scripts to use
     public GameObject targetSpawnpoint;
+    private Animator animator;
 
 	//Initialize the master spawn and image
 	void Start ()
@@ -22,6 +23,7 @@ public class PlayerRespawn : MonoBehaviour
         isAlive = true;
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
         CCScript = GetComponentInChildren<DeathFadeComponent>();
+        animator = GetComponentInChildren<Animator>();
     }
 	
 	// Update is called once per frame
@@ -39,8 +41,6 @@ public class PlayerRespawn : MonoBehaviour
         {
             deathCooldown -= Time.deltaTime;
         }
-        
-
     }
 
     // Sets the respawn position to the current selected checkpoint and moves the player to the checkpoint
@@ -49,6 +49,8 @@ public class PlayerRespawn : MonoBehaviour
         transform.position  = targetSpawnpoint.transform.position;
                 
         GetComponent<FirstPersonController>().LockControls(false);
+
+        animator.SetBool("playerDead", false);
 
         CCScript.ResetImageEffects();
 
@@ -63,6 +65,13 @@ public class PlayerRespawn : MonoBehaviour
         GetComponent<FirstPersonController>().LockControls(true);
 
         StartCoroutine(CCScript.StartDeathFade());
+
+        float test = Random.Range(0, 2);
+
+        Debug.Log(test);
+
+        animator.SetFloat("random", test);
+        animator.SetBool("playerDead", true);
 
         isAlive = false;
     }
