@@ -6,7 +6,7 @@ public class PlayerRespawn : MonoBehaviour
 {
     //For the respawn cordinates
     private Vector3 spawnCords;
-    private DeathFadeCC CCScript;
+    private DeathFadeComponent CCScript;
 
     [SerializeField]
     private bool isAlive;
@@ -19,7 +19,7 @@ public class PlayerRespawn : MonoBehaviour
     {
         isAlive = true;
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
-        CCScript = GetComponentInChildren<DeathFadeCC>();
+        CCScript = GetComponentInChildren<DeathFadeComponent>();
     }
 	
 	// Update is called once per frame
@@ -41,7 +41,7 @@ public class PlayerRespawn : MonoBehaviour
         
         GetComponent<FirstPersonController>().LockControls(false);
 
-        CCScript.ResetCC();
+        CCScript.ResetImageEffects();
 
         isAlive = true;
     }
@@ -51,7 +51,7 @@ public class PlayerRespawn : MonoBehaviour
     {
         GetComponent<FirstPersonController>().LockControls(true);
 
-        StartCoroutine(CCScript.StartBlackAndWhiteCCFade());
+        StartCoroutine(CCScript.StartDeathFade());
 
         isAlive = false;
     }
