@@ -46,11 +46,11 @@ public class Menu : MonoBehaviour {
 	void Update () {           
         if(Input.GetKeyDown(KeyCode.Q))
         {
-            if(menu.gameObject.activeInHierarchy == false && menu != null)
+            if (menu != null && menu.gameObject.activeInHierarchy == false)
             {
                 MenuToggle(true);
             }
-            else if(menu.gameObject.activeInHierarchy == true && menu != null)
+            else if (menu != null && menu.gameObject.activeInHierarchy == true)
             {
                 MenuToggle(false);
                 
