@@ -35,6 +35,8 @@ public class DeathFadeComponent : MonoBehaviour
     private float defaultVignetting = 0.1f;
     private float defaultBlurredCorners = 0;
 
+    private bool continueFade = true;
+
     /// <summary>
     /// Initialization
     /// </summary>
@@ -58,8 +60,13 @@ public class DeathFadeComponent : MonoBehaviour
         // Variable used to smooth out the vignette fade
         float loopNumber = 0;
 
+        continueFade = true;
+
         // Fade to colors
-        while (colorCorrectionEffect.saturation > targetSaturation || vignette.blur < targetBlurredCorners || vignette.intensity < targetVignetting)
+        while ((colorCorrectionEffect.saturation > targetSaturation || 
+                vignette.blur < targetBlurredCorners || 
+                vignette.intensity < targetVignetting) &&
+                continueFade)
         {
             // Only change the saturation if the current saturation is smaller than the target saturation
             if (colorCorrectionEffect.saturation < targetSaturation)
@@ -108,6 +115,7 @@ public class DeathFadeComponent : MonoBehaviour
     /// </summary>
     public void ResetImageEffects()
     {
+        continueFade = false;
         colorCorrectionEffect.saturation = defaultSaturation;
         vignette.intensity = defaultVignetting;
         vignette.blur = defaultBlurredCorners;

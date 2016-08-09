@@ -18,9 +18,8 @@ public class Menu : MonoBehaviour {
     /// <summary>
     /// All Menus are set for not being shown by default try is made for the ingame menu that is not supposed to show up in the mainmenu
     /// </summary>
-	// Use this for initialization
-	void Start () {
-
+	void Start ()
+    {
         //Find all the objects using name
         menu = GameObject.Find("Menu");
         settingsMenu = GameObject.Find("SettingsMenu");
@@ -28,22 +27,22 @@ public class Menu : MonoBehaviour {
 
         //Turning off all menus
         settingsMenu.SetActive(false);
+
         try
         { 
             menu.SetActive(false);            
         }
         catch(Exception)
         {
-            Debug.Log("Null Exception caused by no found 'Menu'");
-            
+            Debug.Log("Null Exception caused by no found 'Menu'"); 
         }
     }
 	
-	// Update is called once per frame
-        /// <summary>
-        /// Q is used for now, 
-        /// </summary>
-	void Update () {           
+    /// <summary>
+    /// Q is used for now 
+    /// </summary>
+	void Update ()
+    {           
         if(Input.GetKeyDown(KeyCode.Q))
         {
             if (menu != null && menu.gameObject.activeInHierarchy == false)
@@ -53,13 +52,12 @@ public class Menu : MonoBehaviour {
             else if (menu != null && menu.gameObject.activeInHierarchy == true)
             {
                 MenuToggle(false);
-                
             }                       
         }
 	}
 
     /// <summary>
-    /// MEnu toggle is used by the keyboard button for opening the menu in game
+    /// Menu toggle is used by the keyboard button for opening the menu in game
     /// </summary>
     /// <param name="state">Bool to control the toggled state of the menus</param>
     public void MenuToggle(bool state)
@@ -101,16 +99,18 @@ public class Menu : MonoBehaviour {
     }
 
     /// <summary>
-    /// USed in the ingame menu when pressing on the main menu button
+    /// Used in the ingame menu when pressing on the main menu button
     /// </summary>
    public void MainMenu()
     {
-        Time.timeScale = 1;       
+        // Resets the time scale to 1 if the player exists to the menu
+        Time.timeScale = 1;    
+           
         SceneManager.LoadScene("Menu");       
     }
 
     /// <summary>
-    /// USed for the back button in settings menu useful when real settings are implimented.
+    /// Used for the back button in settings menu useful when real settings are implimented.
     /// </summary>
     public void SettingsBack(bool state)
     {
@@ -118,20 +118,23 @@ public class Menu : MonoBehaviour {
     }
 
     /// <summary>
-    /// USed to exit the game ingame
+    /// Used to exit the game ingame
     /// </summary>
    public void ExitInGame()
     {
         Application.Quit();
     }
     /// <summary>
-    /// USed to exit the game in main menu
+    /// Used to exit the game in main menu
     /// </summary>
     public void ExitApplication()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     void SetMouseState()
     {
         Cursor.lockState = cMode;

@@ -8,7 +8,10 @@ public class PlayerRespawn : MonoBehaviour
     private Vector3 spawnCords;
     private DeathFadeComponent CCScript;
 
-    private float deathCooldown;
+    [SerializeField]
+    private float defaultDeathCooldown = 2;
+
+    private float deathCooldown = 2;
 
     [SerializeField]
     private bool isAlive;
@@ -61,7 +64,8 @@ public class PlayerRespawn : MonoBehaviour
     // Locks the controller in FirstPersonController script
     public void Death()
     {
-        deathCooldown = 2;
+        deathCooldown = defaultDeathCooldown;
+
         GetComponent<FirstPersonController>().LockControls(true);
 
         StartCoroutine(CCScript.StartDeathFade());
