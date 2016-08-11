@@ -10,6 +10,10 @@ public class GameObjectPositionReset : MonoBehaviour {
 
     private Quaternion[] gameObjectStartRotation;
 
+    private Vector3[] gameObjectsVelocity;
+
+    private Vector3[] gameObjectsAngularVelocity;
+
     private int gameObjectWithTagCount;
 
     // Use this for initialization
@@ -44,6 +48,7 @@ public class GameObjectPositionReset : MonoBehaviour {
                 if (hitColliders[i].tag == "CanRespawn")
                 {
                     gameObjects.Add(hitColliders[i].gameObject);
+                    Debug.Log("-> " + hitColliders[i].gameObject.GetComponent<Rigidbody>().velocity);
                 }
 
             }
@@ -73,10 +78,17 @@ public class GameObjectPositionReset : MonoBehaviour {
 
             gameObjectStartRotation = new Quaternion[gameObjects.Count];
 
+            gameObjectsVelocity = new Vector3[gameObjects.Count];
+
+            gameObjectsAngularVelocity = new Vector3[gameObjects.Count];
+
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjectsStartLocation[i] = gameObjects[i].transform.position;
                 gameObjectStartRotation[i] = gameObjects[i].transform.rotation;
+                gameObjectsVelocity[i] = gameObjects[i].GetComponent<Rigidbody>().velocity;
+                gameObjectsAngularVelocity[i] = gameObjects[i].GetComponent<Rigidbody>().angularVelocity;
+                Debug.Log("Object : " + i + " position: " + gameObjects[i].transform.position + " Rotation: " + gameObjects[i].transform.rotation + " Velocity: " + gameObjects[i].GetComponent<Rigidbody>().velocity + " angularVelocity: " + gameObjects[i].GetComponent<Rigidbody>().angularVelocity);
 
             }
 
@@ -102,6 +114,8 @@ public class GameObjectPositionReset : MonoBehaviour {
             {
                 gameObjects[i].transform.position = gameObjectsStartLocation[i];
                 gameObjects[i].transform.rotation = gameObjectStartRotation[i];
+                gameObjects[i].GetComponent<Rigidbody>().velocity = gameObjectsVelocity[i];
+                gameObjects[i].GetComponent<Rigidbody>().angularVelocity = gameObjectsAngularVelocity[i];
             }
         }
 
