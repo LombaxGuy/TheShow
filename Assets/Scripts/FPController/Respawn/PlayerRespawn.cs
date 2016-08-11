@@ -35,14 +35,17 @@ public class PlayerRespawn : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-	    if(!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
+        if (!Pause.getPauseState())
         {
-            Respawn();
-        }
+            if (!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
+            {
+                Respawn();
+            }
 
-        if(!isAlive)
-        {
-            deathCooldown -= Time.deltaTime;
+            if (!isAlive)
+            {
+                deathCooldown -= Time.deltaTime;
+            }
         }
     }
 
