@@ -12,6 +12,8 @@ public class Checkpoint : MonoBehaviour
         {
             other.GetComponent<PlayerRespawn>().targetSpawnpoint = transform.gameObject;
             GetComponent<Collider>().enabled = false;
+            //Param need to changes to the right BoxCollider marked as trigger.
+            GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().UpdateListWithGameObjects(GetComponent<BoxCollider>());
         }
    
     }
