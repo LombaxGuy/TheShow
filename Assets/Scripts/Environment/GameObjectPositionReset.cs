@@ -30,7 +30,7 @@ public class GameObjectPositionReset : MonoBehaviour {
 
     /// <summary>
     /// OverlapBox is created with the BoxCollider information in the param. 
-    /// It takes all the colliders in the area and place it in the gameObjects list, if the have the canRespawn tag.
+    /// It takes all the colliders in the area and place it in the gameObjects list, if they have the canRespawn tag.
     /// If there is already something in the list. It clears the list and insert new gameobjects in it.
     /// When the list contains gameobjects its position and rotation will be stored in 2 arrays. One with Vector3 and one with Quaternion.
     /// </summary>
