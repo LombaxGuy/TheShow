@@ -1,38 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pause : MonoBehaviour {
-
+public class Pause : MonoBehaviour
+{
     //The Global pause variable
     private static bool isPaused;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    //This is used to get the paused state of the game
-    public static bool getPauseState()
+    /// <summary>
+    /// This is used to get the pause state of the game.
+    /// </summary>
+    /// <returns>Returns true if the game is paused. Returned false if the game is not paused.</returns>
+    public static bool GetPauseState()
     {
         return isPaused;
     }
 
     /// <summary>
     /// This is used to set the pause to a state, Like when pausing using the menu.
-    /// Put this in update.
-    /// Use if(!Pause.setPauseState())
-    /// {
-    /// 
-    /// {
     /// </summary>
     /// <param name="state">The state of pause, true is paused false is not paused</param>
-   public static void setPauseState(bool state)
-    {
+   public static void SetPauseState(bool state)
+   {
         isPaused = state;
         if(state == true)
         {
@@ -42,6 +30,5 @@ public class Pause : MonoBehaviour {
         {
             Time.timeScale = 1;
         }
-        
     }
 }

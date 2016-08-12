@@ -77,7 +77,7 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!Pause.getPauseState())
+        if (!Pause.GetPauseState())
         {
             if (isLocked)
             {

@@ -62,7 +62,7 @@ public class Menu : MonoBehaviour {
     /// <param name="state">Bool to control the toggled state of the menus</param>
     public void MenuToggle(bool state)
     {
-        Pause.setPauseState(state);
+        Pause.SetPauseState(state);
         menu.SetActive(state);
         switch(state)
         {
@@ -101,7 +101,7 @@ public class Menu : MonoBehaviour {
     /// </summary>
    public void MainMenu()
     {
-        Pause.setPauseState(false);
+        Pause.SetPauseState(false);
         SceneManager.LoadScene("Menu");       
     }
 
