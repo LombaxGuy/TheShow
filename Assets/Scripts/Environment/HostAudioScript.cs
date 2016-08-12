@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using UnityEngine.Audio;
 
 
-[RequireComponent(typeof(AudioSource))]
+//[RequireComponent(typeof(AudioSource))]
 public class HostAudioScript : MonoBehaviour {
 
 
-
+    public AudioMixer masterMixer;
 
 
 	// Use this for initialization
@@ -21,6 +22,11 @@ public class HostAudioScript : MonoBehaviour {
 
 	
 	}
+    
+    public void SetVolume(float dinMor)
+    {
+        masterMixer.SetFloat("musicVol", dinMor);
+    }
 
  
 }

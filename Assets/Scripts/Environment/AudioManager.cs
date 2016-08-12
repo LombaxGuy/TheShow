@@ -10,10 +10,7 @@ public class AudioManager : MonoBehaviour {
     private string audiod;
 
 
-
-    ArrayList<>
-
-
+    
     public string AudioPath
     {
         get
