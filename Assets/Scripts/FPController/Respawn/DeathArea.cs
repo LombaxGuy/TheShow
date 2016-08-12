@@ -15,6 +15,11 @@ public class DeathArea : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        other.GetComponent<PlayerRespawn>().Death();
+        if(other.tag == "Player")
+        {
+            other.GetComponent<PlayerRespawn>().Death();
+        }
+
+        
     }
 }

@@ -20,10 +20,13 @@ public class PlayerRespawn : MonoBehaviour
     public GameObject targetSpawnpoint;
     private Animator animator;
 
+    private GameObject gameResetManager;
+
 	//Initialize the master spawn and image
 	void Start ()
     {
         isAlive = true;
+        gameResetManager = GameObject.Find("GameResetManager");
         targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
         CCScript = GetComponentInChildren<DeathFadeComponent>();
         animator = GetComponentInChildren<Animator>();
@@ -35,20 +38,26 @@ public class PlayerRespawn : MonoBehaviour
     /// </summary>
 	void Update ()
     {
-	    if(!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
+        if (!Pause.getPauseState())
         {
-            Respawn();
-        }
+            if (!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
+            {
+                Respawn();
+            }
 
-        if(!isAlive)
-        {
-            deathCooldown -= Time.deltaTime;
+            if (!isAlive)
+            {
+                deathCooldown -= Time.deltaTime;
+            }
         }
     }
 
     // Sets the respawn position to the current selected checkpoint and moves the player to the checkpoint
     void Respawn()
     {
+
+        gameResetManager.GetComponent<GameObjectPositionReset>().GameObjectToStartLocation();
+
         transform.position  = targetSpawnpoint.transform.position;
                 
         GetComponent<FirstPersonController>().LockControls(false);

@@ -57,23 +57,21 @@ public class Menu : MonoBehaviour {
 	}
 
     /// <summary>
-    /// Menu toggle is used by the keyboard button for opening the menu in game
+    /// MenuToggle is used to show and hide the menu ingame. This also gets the cursor and hides/shows/locks/unlocks it aswell as pause the game with the pause manager.
     /// </summary>
     /// <param name="state">Bool to control the toggled state of the menus</param>
     public void MenuToggle(bool state)
-    {        
-        player.GetComponent<FirstPersonController>().LockCamera(state);
+    {
+        Pause.setPauseState(state);
         menu.SetActive(state);
         switch(state)
         {
             case true:               
                 cMode = CursorLockMode.None;
-                Time.timeScale = 0;
                 break;
 
             case false:
                 cMode = CursorLockMode.Locked;
-                Time.timeScale = 1;
                 SettingsToggle(false);
                 break;
         }
@@ -103,9 +101,7 @@ public class Menu : MonoBehaviour {
     /// </summary>
    public void MainMenu()
     {
-        // Resets the time scale to 1 if the player exists to the menu
-        Time.timeScale = 1;    
-           
+        Pause.setPauseState(false);
         SceneManager.LoadScene("Menu");       
     }
 

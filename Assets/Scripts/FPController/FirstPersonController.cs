@@ -77,20 +77,24 @@ public class FirstPersonController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(isLocked)
+        if (!Pause.getPauseState())
         {
-            headAnimator.SetBool("animateHead", false);
-        }
-        else
-        {
-            if(isLockedCamera)
+            if (isLocked)
             {
-
+                headAnimator.SetBool("animateHead", false);
             }
             else
-            HandleMouseInput();
-            HandleKeyboardInput();
+            {
+                if (isLockedCamera)
+                {
+
+                }
+                else
+                    HandleMouseInput();
+                HandleKeyboardInput();
+            }
         }
+
 
     }
 
