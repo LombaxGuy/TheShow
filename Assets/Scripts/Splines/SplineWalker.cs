@@ -20,15 +20,17 @@ public class SplineWalker : MonoBehaviour
 
     private bool goingForward = true;
 
-    private bool isRotating = false;
+    public bool isRotating = false;
 
     private float progress;
 
     private float orthogonalAngleThreshold = 80.0f;
-    private float nextDirectionThreshold = 0.01f;
+    private float nextDirectionThreshold = 0.003f;
 
     private float timeToRotateOneLoop = 3.0f;
     private float rotationSpeed;
+
+    private float rotationCoolDown = 1.0f;
 
     void Start()
     {
@@ -41,7 +43,7 @@ public class SplineWalker : MonoBehaviour
     /// <param name="targetDirection">The direction the object should rotate to.</param>
     private IEnumerator RotateTo(Vector3 targetDirection)
     {
-        isRotating = true;
+
         Quaternion newRotation;
         Vector3 startDirection = transform.forward;
         float t = 0.0f;
@@ -49,6 +51,13 @@ public class SplineWalker : MonoBehaviour
         float deltaAngle = Vector3.Angle(startDirection, targetDirection);
         float totalRotationTime = deltaAngle / rotationSpeed;
         //Debug.Log(deltaAngle);
+
+        if (Vector3.Angle(transform.forward, targetDirection) < orthogonalAngleThreshold)
+        {
+            Debug.Log("Done turning! " + spline.GetDirection(progress + nextDirectionThreshold));
+
+            isRotating = false;
+        }
 
         while (t < 1.0f)
         {
@@ -67,35 +76,15 @@ public class SplineWalker : MonoBehaviour
             yield return null;
         }
 
-        if (t != 1.0f)
-        {
-            t = 1.0f;
-
-            newRotation = Quaternion.LookRotation(Vector3.Lerp(startDirection, targetDirection, t));
-
-            transform.rotation = newRotation;
-        }
-
+        Debug.Log("Done turning! " + spline.GetDirection(progress + nextDirectionThreshold));
         isRotating = false;
+
     }
 
     // Update is called once per frame
     void Update ()
     {
         
-
-        float deltaAngle = Vector3.Angle(spline.GetDirection(progress), spline.GetDirection(progress + nextDirectionThreshold));
-
-        if (deltaAngle > orthogonalAngleThreshold && !isRotating)
-        {
-            Debug.Log("Hit corner! " + spline.GetDirection(progress + nextDirectionThreshold));
-
-            StartCoroutine(RotateTo(spline.GetDirection(progress + nextDirectionThreshold)));
-
-            //targetRotation = spline.GetDirection(progress + 0.1f);
-            //targetRotation = spline.GetDirection(progress + nextDirectionThreshold);
-        }
-
         //if(isRotating)
         //{
         //    //var rotation = Quaternion.FromToRotation(transform.position, targetRotation);
@@ -114,7 +103,7 @@ public class SplineWalker : MonoBehaviour
 
         if (!isRotating)
         {
-            Debug.Log("Entered IF!");
+            //Debug.Log("Entered IF!");
             if (goingForward)
             {
                 progress += Time.deltaTime / duration;
@@ -151,6 +140,21 @@ public class SplineWalker : MonoBehaviour
         transform.localPosition = position;
 
         if (lookForward && !isRotating)
-            transform.LookAt(position + spline.GetDirection(progress));	
-	}
+            transform.LookAt(position + spline.GetDirection(progress));
+
+        rotationCoolDown += Time.deltaTime;
+        float deltaAngle = Vector3.Angle(spline.GetDirection(progress), spline.GetDirection(progress + nextDirectionThreshold));
+
+        if (deltaAngle > orthogonalAngleThreshold && !isRotating && rotationCoolDown >= 1)
+        {
+            Debug.Log("Hit corner! " + spline.GetDirection(progress + nextDirectionThreshold));
+
+            rotationCoolDown = 0f;
+            isRotating = true;
+            StartCoroutine(RotateTo(spline.GetDirection(progress + nextDirectionThreshold)));
+
+            //targetRotation = spline.GetDirection(progress + 0.1f);
+            //targetRotation = spline.GetDirection(progress + nextDirectionThreshold);
+        }
+    }
 }
