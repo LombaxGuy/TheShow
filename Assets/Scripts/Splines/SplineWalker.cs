@@ -8,8 +8,8 @@ public enum SplineWalkerMode
     PingPong
 }
 
-public class SplineWalker : MonoBehaviour {
-
+public class SplineWalker : MonoBehaviour
+{
     public BezierSpline spline;
 
     public SplineWalkerMode mode;
@@ -20,38 +20,101 @@ public class SplineWalker : MonoBehaviour {
 
     private bool goingForward = true;
 
-    private bool isTurning = false;
-
-    private Vector3 targetRotation;
+    private bool isRotating = false;
 
     private float progress;
-	
-	// Update is called once per frame
-	void Update ()
+
+    private float orthogonalAngleThreshold = 80.0f;
+    private float nextDirectionThreshold = 0.01f;
+
+    private float timeToRotateOneLoop = 3.0f;
+    private float rotationSpeed;
+
+    void Start()
     {
-        if (Vector3.Angle(
-            spline.GetDirection(progress), spline.GetDirection(progress + 0.01f)) > 80f &&
-            !isTurning)
-        {
-            Debug.Log("Hit corner!");
-            isTurning = true;
+        rotationSpeed = 360 / timeToRotateOneLoop;
+    }
 
-            targetRotation = spline.GetDirection(progress + 0.1f);
+    /// <summary>
+    /// Rotates the spline walker to the target direction using the rotation speed.
+    /// </summary>
+    /// <param name="targetDirection">The direction the object should rotate to.</param>
+    private IEnumerator RotateTo(Vector3 targetDirection)
+    {
+        isRotating = true;
+        Quaternion newRotation;
+        Vector3 startDirection = transform.forward;
+        float t = 0.0f;
+
+        float deltaAngle = Vector3.Angle(startDirection, targetDirection);
+        float totalRotationTime = deltaAngle / rotationSpeed;
+        //Debug.Log(deltaAngle);
+
+        while (t < 1.0f)
+        {
+            newRotation = Quaternion.LookRotation(Vector3.Lerp(startDirection, targetDirection, t));
+
+            transform.rotation = newRotation;
+
+            //Debug.Log("Start dir: " + startDirection);
+            //Debug.Log("Target dir: " + targetDirection);
+
+            //Debug.DrawRay(transform.position, transform.forward * 10, Color.green);
+            //Debug.DrawRay(transform.position, targetDirection * 10, Color.red);
+
+            t += Time.deltaTime / totalRotationTime;
+
+            yield return null;
         }
 
-        if(isTurning)
+        if (t != 1.0f)
         {
-            var rotation = Quaternion.FromToRotation(transform.position, targetRotation);
-            Debug.Log(targetRotation);
+            t = 1.0f;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
+            newRotation = Quaternion.LookRotation(Vector3.Lerp(startDirection, targetDirection, t));
 
-            if (Quaternion.Angle(transform.rotation, rotation) < 5f)
-                isTurning = true;
+            transform.rotation = newRotation;
         }
 
-        if (!isTurning)
+        isRotating = false;
+    }
+
+    // Update is called once per frame
+    void Update ()
+    {
+        
+
+        float deltaAngle = Vector3.Angle(spline.GetDirection(progress), spline.GetDirection(progress + nextDirectionThreshold));
+
+        if (deltaAngle > orthogonalAngleThreshold && !isRotating)
         {
+            Debug.Log("Hit corner! " + spline.GetDirection(progress + nextDirectionThreshold));
+
+            StartCoroutine(RotateTo(spline.GetDirection(progress + nextDirectionThreshold)));
+
+            //targetRotation = spline.GetDirection(progress + 0.1f);
+            //targetRotation = spline.GetDirection(progress + nextDirectionThreshold);
+        }
+
+        //if(isRotating)
+        //{
+        //    //var rotation = Quaternion.FromToRotation(transform.position, targetRotation);
+
+        //    float yAngle = Mathf.Lerp(startAngle.y, startAngle.y + deltaAngle, t);
+
+        //    transform.eulerAngles = new Vector3(transform.eulerAngles.x, yAngle, transform.eulerAngles.z);
+
+
+
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
+
+        //    if (Quaternion.Angle(transform.rotation, rotation) < 5f)
+        //        isRotating = true;
+        //}
+
+        if (!isRotating)
+        {
+            Debug.Log("Entered IF!");
             if (goingForward)
             {
                 progress += Time.deltaTime / duration;
@@ -87,7 +150,7 @@ public class SplineWalker : MonoBehaviour {
         Vector3 position = spline.GetPoint(progress);
         transform.localPosition = position;
 
-        if (lookForward && !isTurning)
+        if (lookForward && !isRotating)
             transform.LookAt(position + spline.GetDirection(progress));	
 	}
 }
