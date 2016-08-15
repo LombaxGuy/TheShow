@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AudioManager : MonoBehaviour {
-
-    
-    [SerializeField]
+public class AudioManager : MonoBehaviour
+{   
     private GameObject[] speakers;
-    // Use this for initialization
-    void Start () {
 
+    // Use this for initialization
+    void Start ()
+    {
         //Tag the speakers "Speaker"
         speakers = GameObject.FindGameObjectsWithTag("Speaker");
         if(speakers.Length == 0)
@@ -17,11 +16,6 @@ public class AudioManager : MonoBehaviour {
         }
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     /// <summary>
     /// Used to call all the objects tagged with "Speaker"
@@ -35,11 +29,5 @@ public class AudioManager : MonoBehaviour {
                 speakers[i].GetComponent<AudioSpeakerScript>().SoundInitiate();
             }
         }
-    }
-
-    //Might be good splitting
-    public void PlayEffectSoundInstance()
-    {
-    
     }
 }

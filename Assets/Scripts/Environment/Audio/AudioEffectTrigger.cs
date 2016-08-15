@@ -1,21 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AudioEffectTrigger : MonoBehaviour {
-    //Target is the object you want to play sound.
+public class AudioEffectTrigger : MonoBehaviour
+{
     [SerializeField]
+    [Tooltip("The GameObject that should play the sound. The GameObject must have an audiosource-component.")]
     private GameObject target;
-    //setClip is the audio clip you want played.
+
     [SerializeField]
+    [Tooltip("The audioclip that should be played.")]
     private AudioClip setClip;
 
     /// <summary>
-    /// Used to trigger a onetime soundeffect on an object. Other object needs to have audiosource component.
+    /// Used to trigger a onetime soundeffect on an object. Other object needs to have an audiosource-component.
     /// </summary>
-    /// <param name="other">player</param>
+    /// <param name="other">The object that collides with the triggerbox.</param>
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && !target.GetComponent<AudioSource>() == false)
+        if (other.tag == "Player" && target.GetComponent<AudioSource>())
         {
             target.GetComponent<AudioSource>().PlayOneShot(setClip);
         }
