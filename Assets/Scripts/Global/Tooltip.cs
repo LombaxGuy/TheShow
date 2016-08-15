@@ -2,6 +2,11 @@
 using UnityEngine.UI;
 using System.Collections;
 
+public enum TooltipPosition
+{
+    TopRight, TopCenter, TopLeft, CenterRight, CenterLeft, BottomRight, BottomCenter, BottomLeft
+}
+
 public class Tooltip : MonoBehaviour
 {
     #region Singleton
@@ -55,8 +60,9 @@ public class Tooltip : MonoBehaviour
     private Text centerText;
     private string textName = "CenterText";
 
-    // The default position of tooltips
-    private Vector3 defaultTooltipPosition = new Vector3(0, -150, 0);
+    private float borderPixelValue = 20;
+
+    private float fadePixelMovement = 25;
 
     [SerializeField]
     [Tooltip("The time in seconds it takes to fade-in or fade-out.")]
@@ -101,11 +107,21 @@ public class Tooltip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyBindings.KeyInteraction))
-        //{
-        //    StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1));
-        //    DisplayText("I'm displaying a text! I'm so good.");
-        //}
+        if (Input.GetKeyDown(KeyBindings.KeyInteraction))
+        {
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1));
+
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomCenter));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomLeft));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomRight));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.CenterLeft));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.CenterRight));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopCenter));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopLeft));
+            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopRight));
+
+            //DisplayText("I'm displaying a text! I'm so good.");
+        }
 
         //if (Input.GetKeyDown(KeyBindings.KeyMoveCrouch))
         //{
@@ -144,7 +160,11 @@ public class Tooltip : MonoBehaviour
         uiText.transform.SetParent(inGameUI.transform, false);
 
         // Moves the text element to the default starting position.
-        uiText.rectTransform.anchoredPosition = defaultTooltipPosition;
+        uiText.rectTransform.anchorMin = new Vector2(0, 1);
+        uiText.rectTransform.anchorMax = new Vector2(1, 1);
+        uiText.rectTransform.pivot = new Vector2(0.5f, 1);
+        uiText.alignment = TextAnchor.UpperCenter;
+        uiText.rectTransform.anchoredPosition = new Vector2(0, -(borderPixelValue + fadePixelMovement));
 
         // Sets the color of the text to the default color.
         uiText.color = defaultColor;
@@ -154,7 +174,7 @@ public class Tooltip : MonoBehaviour
 
         // Starts a coroutine for the fade-in and one for the movement.
         StartCoroutine(FadeIn(uiText));
-        StartCoroutine(MoveToOverSeconds(uiText, new Vector2(0, -100), 0.5f, true));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, fadePixelMovement), 0.5f, true));
 
         // Makes this coroutine wait for the time it takes to fade in + the time the text should be displayed.
         for (float i = 0; i < seconds + fadeTime; i += Time.deltaTime)
@@ -164,7 +184,118 @@ public class Tooltip : MonoBehaviour
 
         // Starts a coroutine for the fade-out and one for the movement.
         StartCoroutine(FadeOut(uiText));
-        StartCoroutine(MoveToOverSeconds(uiText, new Vector2(0, -50), 0.5f, false));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, 2 * fadePixelMovement), 0.5f, false));
+    }
+
+    /// <summary>
+    /// Display a tooltip on the screen for a specified amount of time. 
+    /// </summary>
+    /// <param name="tooltipText">The text to display in the tooltip.</param>
+    /// <param name="seconds">The amount of seconds after the fade-in stops to the fadeout starts.</param>
+    /// <param name="tooltipPosition">The position on the screen the tooltip should be displayed.</param>
+    public IEnumerator DisplayTooltipForSeconds(string tooltipText, float seconds, TooltipPosition tooltipPosition)
+    {
+        // Instantiates a UI text element prefab.
+        Text uiText = Instantiate(Resources.Load<Text>("UI/Elements/Tooltip"));
+
+        // Sets the parrent of the text element to the correct canvas.
+        uiText.transform.SetParent(inGameUI.transform, false);
+
+        // Moves the text element to the default starting position.
+        switch (tooltipPosition)
+        {
+            case TooltipPosition.TopRight:
+                uiText.rectTransform.anchorMin = new Vector2(0, 1);
+                uiText.rectTransform.anchorMax = new Vector2(1, 1);
+                uiText.rectTransform.pivot = new Vector2(1, 1);
+                uiText.alignment = TextAnchor.UpperRight;
+                uiText.rectTransform.anchoredPosition = new Vector2(-borderPixelValue, -(borderPixelValue + fadePixelMovement));
+
+                break;
+
+            case TooltipPosition.TopCenter:
+                uiText.rectTransform.anchorMin = new Vector2(0, 1);
+                uiText.rectTransform.anchorMax = new Vector2(1, 1);
+                uiText.rectTransform.pivot = new Vector2(0.5f, 1);
+                uiText.alignment = TextAnchor.UpperCenter;
+                uiText.rectTransform.anchoredPosition = new Vector2(0, -(borderPixelValue + fadePixelMovement));
+
+                break;
+
+            case TooltipPosition.TopLeft:
+                uiText.rectTransform.anchorMin = new Vector2(0, 1);
+                uiText.rectTransform.anchorMax = new Vector2(1, 1);
+                uiText.rectTransform.pivot = new Vector2(0, 0);
+                uiText.alignment = TextAnchor.UpperLeft;
+                uiText.rectTransform.anchoredPosition = new Vector2(borderPixelValue, -(borderPixelValue + fadePixelMovement));
+
+                break;
+
+            case TooltipPosition.CenterRight:
+                uiText.rectTransform.anchorMin = new Vector2(0, 0.5f);
+                uiText.rectTransform.anchorMax = new Vector2(1, 0.5f);
+                uiText.rectTransform.pivot = new Vector2(1, 1);
+                uiText.alignment = TextAnchor.MiddleRight;
+                uiText.rectTransform.anchoredPosition = new Vector2(-borderPixelValue, -borderPixelValue);
+
+                break;
+
+            case TooltipPosition.CenterLeft:
+                uiText.rectTransform.anchorMin = new Vector2(0, 0.5f);
+                uiText.rectTransform.anchorMax = new Vector2(1, 0.5f);
+                uiText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                uiText.alignment = TextAnchor.MiddleLeft;
+                uiText.rectTransform.anchoredPosition = new Vector2(borderPixelValue, -borderPixelValue);
+
+                break;
+
+            case TooltipPosition.BottomRight:
+                uiText.rectTransform.anchorMin = new Vector2(0, 0);
+                uiText.rectTransform.anchorMax = new Vector2(1, 0);
+                uiText.rectTransform.pivot = new Vector2(1, 0);
+                uiText.alignment = TextAnchor.LowerRight;
+                uiText.rectTransform.anchoredPosition = new Vector2(-borderPixelValue, borderPixelValue);
+
+                break;
+
+            case TooltipPosition.BottomCenter:
+                uiText.rectTransform.anchorMin = new Vector2(0, 0);
+                uiText.rectTransform.anchorMax = new Vector2(1, 0);
+                uiText.rectTransform.pivot = new Vector2(0.5f, 0);
+                uiText.alignment = TextAnchor.LowerCenter;
+                uiText.rectTransform.anchoredPosition = new Vector2(0, borderPixelValue);
+
+                break;
+
+            case TooltipPosition.BottomLeft:
+                uiText.rectTransform.anchorMin = new Vector2(0, 0);
+                uiText.rectTransform.anchorMax = new Vector2(1, 0);
+                uiText.rectTransform.pivot = new Vector2(0, 0);
+                uiText.alignment = TextAnchor.LowerLeft;
+                uiText.rectTransform.anchoredPosition = new Vector2(borderPixelValue, borderPixelValue);
+
+                break;
+        }
+
+        // Sets the color of the text to the default color.
+        uiText.color = defaultColor;
+
+        // Sets the text of the tooltip
+        uiText.text = tooltipText;
+
+        // Starts a coroutine for the fade-in and one for the movement.
+        StartCoroutine(FadeIn(uiText));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, fadePixelMovement), 0.5f, true));
+
+        // Makes this coroutine wait for the time it takes to fade in + the time the text should be displayed.
+        for (float i = 0; i < seconds + fadeTime; i += Time.deltaTime)
+        {
+            yield return null;
+        }
+
+        // Starts a coroutine for the fade-out and one for the movement.
+        StartCoroutine(FadeOut(uiText));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, 2 * fadePixelMovement), 0.5f, false));
     }
 
     /// <summary>
