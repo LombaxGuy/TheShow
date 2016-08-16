@@ -69,6 +69,7 @@ public class SubtitleControl : MonoBehaviour
         if (subtitleUI != null)
         {
             subtitles = subtitleUI.transform.Find(textName).GetComponent<Text>();
+            Debug.Log(subtitles.name);
         }
     }
 
@@ -115,7 +116,9 @@ public class SubtitleControl : MonoBehaviour
             }
             else
             {
+                Debug.Log("Blargh" + line);
                 subtitles.text = line;
+
                 subtitles.rectTransform.anchorMin = new Vector2(0, 0);
                 subtitles.rectTransform.anchorMax = new Vector2(1, 0);
                 subtitles.rectTransform.pivot = new Vector2(0.5f, 0);
