@@ -49,33 +49,8 @@ public class Tooltip : MonoBehaviour
 
         // Makes sure that the singleton is carried over from scene to scene
         DontDestroyOnLoad(this.gameObject);
-    }
-    #endregion
 
-    // The canvas used to display the UI ingame
-    private Canvas inGameUI;
-    // The name of the canvas to look for
-    private string canvasName = "InGameUI";
-
-    private Text centerText;
-    private string textName = "CenterText";
-
-    private float borderPixelValue = 20;
-
-    private float fadePixelMovement = 25;
-
-    [SerializeField]
-    [Tooltip("The time in seconds it takes to fade-in or fade-out.")]
-    private float fadeTime = 0.5f;
-
-    [SerializeField]
-    [Tooltip("The color of the text. Always keep the alpha-channel on 0!")]
-    // White with the alpha-channel set to 0 (transparent)
-    private Color defaultColor = new Color(1, 1, 1, 0);
-
-    // Use this for initialization
-    private void Start()
-    {
+        #region Not Singleton Code
         // Creates an array of all the canvases in the scene.
         Canvas[] temp = GameObject.FindObjectsOfType<Canvas>();
 
@@ -102,32 +77,30 @@ public class Tooltip : MonoBehaviour
             // Finds the child with the specified name and gets the Text component.
             centerText = inGameUI.transform.Find(textName).GetComponent<Text>();
         }
+        #endregion
     }
+    #endregion
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyBindings.KeyInteraction))
-        {
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1));
+    // The canvas used to display the UI ingame
+    private Canvas inGameUI;
+    // The name of the canvas to look for
+    private string canvasName = "InGameUI";
 
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomCenter));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomLeft));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.BottomRight));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.CenterLeft));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.CenterRight));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopCenter));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopLeft));
-            //StartCoroutine(Tooltip.Instance.DisplayTooltipForSeconds("test", 1, TooltipPosition.TopRight));
+    private Text centerText;
+    private string textName = "CenterText";
 
-            //DisplayText("I'm displaying a text! I'm so good.");
-        }
+    private float borderPixelValue = 20;
 
-        //if (Input.GetKeyDown(KeyBindings.KeyMoveCrouch))
-        //{
-        //    Tooltip.Instance.ClearDisplayText();
-        //}
-    }
+    private float fadePixelMovement = 25;
+
+    [SerializeField]
+    [Tooltip("The time in seconds it takes to fade-in or fade-out.")]
+    private float fadeTime = 0.5f;
+
+    [SerializeField]
+    [Tooltip("The color of the text. Always keep the alpha-channel on 0!")]
+    // White with the alpha-channel set to 0 (transparent)
+    private Color defaultColor = new Color(1, 1, 1, 0);
 
     /// <summary>
     /// Displays a text in the center of the screen.
@@ -147,11 +120,32 @@ public class Tooltip : MonoBehaviour
     }
 
     /// <summary>
-    /// Display a tooltip on the screen for a specified amount of time. 
+    /// Display a tooltip on the screen for a specified amount of time. (Coroutine)
     /// </summary>
     /// <param name="tooltipText">The text to display in the tooltip.</param>
     /// <param name="seconds">The amount of seconds after the fade-in stops to the fadeout starts.</param>
-    public IEnumerator DisplayTooltipForSeconds(string tooltipText, float seconds)
+    public void DisplayTooltipForSeconds(string tooltipText, float seconds)
+    {
+        StartCoroutine(CoroutineTooltipForSeconds(tooltipText, seconds));
+    }
+
+    /// <summary>
+    /// Display a tooltip on the screen for a specified amount of time. (Coroutine)
+    /// </summary>
+    /// <param name="tooltipText">The text to display in the tooltip.</param>
+    /// <param name="seconds">The amount of seconds after the fade-in stops to the fadeout starts.</param>
+    /// <param name="tooltipPosition">The position on the screen the tooltip should be displayed.</param>
+    public void DisplayTooltipForSeconds(string tooltipText, float seconds, TooltipPosition tooltipPosition)
+    {
+        StartCoroutine(CoroutineTooltipForSeconds(tooltipText, seconds, tooltipPosition));
+    }
+
+    /// <summary>
+    /// A coroutine that displays a tooltip on screen.
+    /// </summary>
+    /// <param name="tooltipText">The text displayed in the tooltip.</param>
+    /// <param name="seconds">The time the tooltip is visible.</param>
+    private IEnumerator CoroutineTooltipForSeconds(string tooltipText, float seconds)
     {
         // Instantiates a UI text element prefab.
         Text uiText = Instantiate(Resources.Load<Text>("UI/Elements/Tooltip"));
@@ -188,12 +182,12 @@ public class Tooltip : MonoBehaviour
     }
 
     /// <summary>
-    /// Display a tooltip on the screen for a specified amount of time. 
+    /// A coroutine that displays a tooltip on screen at a specified position.
     /// </summary>
-    /// <param name="tooltipText">The text to display in the tooltip.</param>
-    /// <param name="seconds">The amount of seconds after the fade-in stops to the fadeout starts.</param>
-    /// <param name="tooltipPosition">The position on the screen the tooltip should be displayed.</param>
-    public IEnumerator DisplayTooltipForSeconds(string tooltipText, float seconds, TooltipPosition tooltipPosition)
+    /// <param name="tooltipText">The text displayed in the tooltip.</param>
+    /// <param name="seconds">The time the tooltip is visible.</param>
+    /// <param name="tooltipPosition">The position of the tooltip on the screen.</param>
+    private IEnumerator CoroutineTooltipForSeconds(string tooltipText, float seconds, TooltipPosition tooltipPosition)
     {
         // Instantiates a UI text element prefab.
         Text uiText = Instantiate(Resources.Load<Text>("UI/Elements/Tooltip"));

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SubtitleCollection>
+  <Subtitles>
+    <Subtitle name="sub1">
+      <voiceLine>
+        Greetings New Contestant
+      </voiceLine>
+    </Subtitle>
+    <Subtitle name="sub2">
+      <voiceLine>
+        Your unintellectual ways amuse me
+      </voiceLine>
+    </Subtitle>
+  <Subtitle name="sub3">
+      <voiceLine>
+        BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARGH
+      </voiceLine>
+    </Subtitle>
+  </Subtitles>
+</SubtitleCollection>
