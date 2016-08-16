@@ -3,6 +3,8 @@ using System.Collections;
 
 public class KeyBindings : MonoBehaviour
 {
+    private static KeyCode keyToggleDebug = KeyCode.F1;
+
     private static KeyCode keyMoveForward = KeyCode.W;
     private static KeyCode keyMoveBackward = KeyCode.S;
     private static KeyCode keyMoveRight = KeyCode.D;
@@ -13,6 +15,12 @@ public class KeyBindings : MonoBehaviour
 
     private static KeyCode keyInteraction = KeyCode.E;
     private static KeyCode keyPrimaryAction = KeyCode.Mouse0;
+
+    public static KeyCode KeyToggleDebug
+    {
+        get { return keyToggleDebug; }
+        set { keyToggleDebug = value; }
+    }
 
     public static KeyCode KeyMoveForward
     {
