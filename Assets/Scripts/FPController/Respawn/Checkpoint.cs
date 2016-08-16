@@ -10,11 +10,15 @@ public class Checkpoint : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            other.GetComponent<PlayerRespawn>().targetSpawnpoint = transform.gameObject;
-            GetComponent<Collider>().enabled = false;
-            //Param need to changes to the right BoxCollider marked as trigger.
-            GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().UpdateListWithGameObjects(GetComponent<BoxCollider>());
+            PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
+            
+            if (respawnScript.IsAlive)
+            {
+                respawnScript.targetSpawnpoint = transform.gameObject;
+                GetComponent<Collider>().enabled = false;
+                //Param need to changes to the right BoxCollider marked as trigger.
+                GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().UpdateListWithGameObjects(GetComponent<BoxCollider>());
+            }
         }
-   
     }
 }

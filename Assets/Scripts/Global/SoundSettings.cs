@@ -2,49 +2,64 @@
 using System.Collections;
 using UnityEngine.Audio;
 
-public class SoundSettings : MonoBehaviour {
-
-    
-
+public class SoundSettings : MonoBehaviour
+{
     public AudioMixer[] mixer;
 
     /// <summary>
-    /// This method is to change one of the AudioMixers. 
+    /// Changes the volume of the master channel.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeMaster(float value)
     {
-        mixer[0].SetFloat("MasterVol", ValueFixer(value));
+        mixer[0].SetFloat("masterVol", LinearToDecibel(value));
     }
 
+    /// <summary>
+    /// Changes the volume of the music channel.
+    /// </summary>
+    /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeMusic(float value)
     {
-        mixer[1].SetFloat("musicVol", ValueFixer(value));
-
+        mixer[1].SetFloat("musicVol", LinearToDecibel(value));
     }
 
+    /// <summary>
+    /// Changes the volume of the effects channel.
+    /// </summary>
+    /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeFX(float value)
     {
-        mixer[2].SetFloat("FxVol", ValueFixer(value));
+        mixer[2].SetFloat("fxVol", LinearToDecibel(value));
     }
 
+    /// <summary>
+    /// Changes the volume of the voice channel.
+    /// </summary>
+    /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeVoice(float value)
     {
-        mixer[3].SetFloat("VoiceVol", ValueFixer(value));  
+        mixer[3].SetFloat("voiceVol", LinearToDecibel(value));  
     }
-    /// <summary>
-    /// If the value is at -40 or under, it will automaticly change it to -80. Probably need some changes after QA or future testing
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    private float ValueFixer(float value)
-    {
 
-        if (value <= -40)
+    /// <summary>
+    /// Converts a linear value to a decibel value.
+    /// </summary>
+    /// <param name="linear">The linear value to convert to decible. Supports values from 0 to 1.</param>
+    /// <returns></returns>
+    private float LinearToDecibel(float linear)
+    {
+        float dB;
+
+        if (linear != 0)
         {
-            value = -80;
+            dB = 20.0f * Mathf.Log10(linear);
         }
-        Debug.Log(value);
-        return value;
+        else
+        {
+            dB = -144.0f;
+        }
+
+        return dB;
     }
 }

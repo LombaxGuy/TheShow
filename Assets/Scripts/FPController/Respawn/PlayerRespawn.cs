@@ -16,6 +16,11 @@ public class PlayerRespawn : MonoBehaviour
     [SerializeField]
     private bool isAlive;
 
+    public bool IsAlive
+    {
+        get { return isAlive; }
+    }
+
     //For other scripts to use
     public GameObject targetSpawnpoint;
     private Animator animator;
