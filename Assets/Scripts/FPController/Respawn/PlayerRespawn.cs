@@ -26,18 +26,34 @@ public class PlayerRespawn : MonoBehaviour
     private Animator animator;
 
     private GameObject gameResetManager;
+    private string gameResetManagerName = "GameResetManager";
 
-	//Initialize the master spawn and image
-	void Start ()
+    //Initialize the master spawn and image
+    void Start ()
     {
         isAlive = true;
-        gameResetManager = GameObject.Find("GameResetManager");
-        targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
         CCScript = GetComponentInChildren<DeathFadeComponent>();
         animator = GetComponentInChildren<Animator>();
+
+        try
+        {
+            gameResetManager = GameObject.Find(gameResetManagerName);
+        }
+        catch
+        {
+            Debug.Log("PlayerRespawn.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
+        }
+
+        try
+        {
+            targetSpawnpoint = GameObject.FindGameObjectWithTag("MasterRespawn");
+        }
+        catch
+        {
+            Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
+        }
     }
 	
-	// Update is called once per frame
     /// <summary>
     /// Use rigmt mouse atm
     /// </summary>
@@ -60,11 +76,11 @@ public class PlayerRespawn : MonoBehaviour
     // Sets the respawn position to the current selected checkpoint and moves the player to the checkpoint
     void Respawn()
     {
-
         //gameResetManager.GetComponent<GameObjectPositionReset>().GameObjectToStartLocation();
 
-        transform.position  = targetSpawnpoint.transform.position;
-                
+        transform.position = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position;
+        transform.rotation = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().rotation;
+
         GetComponent<FirstPersonController>().LockControls(false);
 
         animator.SetBool("playerDead", false);
@@ -84,12 +100,12 @@ public class PlayerRespawn : MonoBehaviour
 
         StartCoroutine(CCScript.StartDeathFade());
 
-        float test = Random.Range(0, 2);
+        float randomAnim = Random.Range(0, 2);
 
-        Debug.Log(test);
-
-        animator.SetFloat("random", test);
+        animator.SetFloat("random", randomAnim);
         animator.SetBool("playerDead", true);
+
+        StatTracker.TotalTimesDead += 1;
 
         isAlive = false;
     }

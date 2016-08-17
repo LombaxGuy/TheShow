@@ -12,8 +12,9 @@ public class AudioEffectTrigger : MonoBehaviour
     private AudioClip setClip;
 
     [SerializeField]
-    [Tooltip("Toggle if you want to disable the collider after one usage.")]
-    private bool oneTime;
+    [Tooltip("Set to true if you want to disable the collider after one usage.")]
+    private bool oneTime = false;
+
     /// <summary>
     /// Used to trigger a onetime soundeffect on an object. Other object needs to have an audiosource-component.
     /// </summary>
@@ -28,8 +29,6 @@ public class AudioEffectTrigger : MonoBehaviour
             {
                 gameObject.GetComponent<Collider>().enabled = false;
             }
-            
         }
     }
-
 }
