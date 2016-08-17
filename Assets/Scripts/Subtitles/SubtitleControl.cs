@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.IO;
-using System.Text;
 using UnityEngine.UI;
 
 public class SubtitleControl : MonoBehaviour
 {
-
-    private static SubtitleControl instance = null;
+    private static SubtitleControl instance;
     private Text subtitles;
     private string textName = "Subtitles";
     private Canvas subtitleUI;
     private string canvasName = "SubtitleUI";
     private bool isDisplayed = false;
     private string line = "";
-    private float timeElapsed;
 
     public static SubtitleControl Instance
     {
@@ -61,27 +57,31 @@ public class SubtitleControl : MonoBehaviour
             //If no Canvas is found a debug.log is made
             if (i == temp.Length && subtitleUI == null)
             {
-                Debug.Log("No Canvas Found");
+                Debug.Log("SubtitleControl.cs: No Canvas with the name '" + canvasName + "' could be found in the scene!");
             }
         }
 
-        //If a Canvas is found, subtitle is set to be equal to that Canvas' text component
+        //If a Canvas is found, subtitles is set to a text component of a child object
         if (subtitleUI != null)
         {
             subtitles = subtitleUI.transform.Find(textName).GetComponent<Text>();
-            Debug.Log(subtitles.name);
+            subtitles.text = line;
         }
     }
 
     /// <summary>
-    /// This is the method other scripts should call in order to display subtitles
+    /// This is the method other scripts should call in order to display subtitles.
     /// </summary>
     /// <param name="subNumber"></param>
     /// <param name="duration"></param>
     public void StartSub(int subNumber, float duration)
     {
-        //Starts a coroutine of the DisplaySubtitles method
-        StartCoroutine(DisplaySubtitles(subNumber, duration));
+        //Starts the coroutine if there is no subtitle currently being displayed
+        if (!isDisplayed)
+        {
+            //Starts a coroutine of the DisplaySubtitles method
+            StartCoroutine(DisplaySubtitles(subNumber, duration));
+        }
     }
 
     /// <summary>
@@ -90,61 +90,51 @@ public class SubtitleControl : MonoBehaviour
     /// If a subline with the same number as the sumNumber exists it's printed on screen
     /// </summary>
     /// <param name="subNumber"></param>
-    /// 
-    public IEnumerator DisplaySubtitles(int subNumber, float duration)
+    /// <param name="duration"></param>
+    private IEnumerator DisplaySubtitles(int subNumber, float duration)
     {
-        //Runs the method if there is no subtitle currently being displayed
-        if (!isDisplayed)
+        line = "";
+        SubtitleContainer sc = SubtitleContainer.LoadSubtitle();
+
+        //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
+        foreach (Subtitle subtitle in sc.subtitles)
         {
-            line = "";
-            SubtitleContainer sc = SubtitleContainer.LoadSubtitle();
-
-            //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
-            foreach (Subtitle subtitle in sc.subtitles)
+            if (subtitle.name == ("sub" + subNumber))
             {
-
-                if (subtitle.name == ("sub" + subNumber))
-                {
-                    line = subtitle.voiceLine;
-                    break;
-                }
+                line = subtitle.voiceLine;
+                break;
             }
-            //If the line is not found a debug log is mad. If the line is found it's displayed and the isDisplayed bool is set to true
-            if (line == "")
-            {
-                Debug.Log("Subtitle not found");
-            }
-            else
-            {
-                Debug.Log("Blargh" + line);
-                subtitles.text = line;
-
-                subtitles.rectTransform.anchorMin = new Vector2(0, 0);
-                subtitles.rectTransform.anchorMax = new Vector2(1, 0);
-                subtitles.rectTransform.pivot = new Vector2(0.5f, 0);
-                subtitles.alignment = TextAnchor.LowerCenter;
-                subtitles.rectTransform.anchoredPosition = new Vector2(0, 20);
-                SubEnable();
-                isDisplayed = true;
-            }
-
-            //Stops the method until a certain amount of time has passed
-            for (float i = 0; i < duration; i += Time.deltaTime)
-            {
-                yield return null;
-            }
-
-            //When the amount of time has passed the subtitle disappears from the screen and the isDisplayed bool is set to false
-            SubDisable();
-            isDisplayed = false;
         }
 
+        //If the line is not found a debug log is mad. If the line is found it's displayed and the isDisplayed bool is set to true
+        if (line == "")
+        {
+            Debug.Log("SubtitleControl.cs: Subtitle not found!");
+        }
+        else
+        {
+            subtitles.text = line;
+
+            EnableSubtitle();
+
+            isDisplayed = true;
+        }
+
+        //Stops the coroutine until a certain amount of time has passed
+        for (float i = 0; i < duration; i += Time.deltaTime)
+        {
+            yield return null;
+        }
+
+        //When the amount of time has passed the subtitle disappears from the screen and the isDisplayed bool is set to false
+        DisableSubtitel();
+        isDisplayed = false;
     }
 
     /// <summary>
     /// Enables subtitles
     /// </summary>
-    private void SubEnable()
+    private void EnableSubtitle()
     {
         subtitles.enabled = true;
     }
@@ -152,7 +142,7 @@ public class SubtitleControl : MonoBehaviour
     /// <summary>
     /// Disables subtitles
     /// </summary>
-    private void SubDisable()
+    private void DisableSubtitel()
     {
         subtitles.enabled = false;
     }
