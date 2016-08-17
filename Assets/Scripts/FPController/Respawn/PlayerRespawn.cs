@@ -84,12 +84,12 @@ public class PlayerRespawn : MonoBehaviour
 
         StartCoroutine(CCScript.StartDeathFade());
 
-        float test = Random.Range(0, 2);
+        float randomAnim = Random.Range(0, 2);
 
-        Debug.Log(test);
-
-        animator.SetFloat("random", test);
+        animator.SetFloat("random", randomAnim);
         animator.SetBool("playerDead", true);
+
+        StatTracker.TotalTimesDead += 1;
 
         isAlive = false;
     }

@@ -4,6 +4,8 @@ using System.Collections;
 
 public class StatTracker : MonoBehaviour
 {
+    #region Fields
+
     [SerializeField]
     private GameObject textParent;
     [SerializeField]
@@ -101,6 +103,8 @@ public class StatTracker : MonoBehaviour
         set { currentLevel = value; }
     }
 
+    #endregion
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -108,24 +112,46 @@ public class StatTracker : MonoBehaviour
 
     private void Update()
     {
-        timesDeadText.text = totalTimesDead.ToString();
-        timeSpendText.text = totalTimeSpend.ToString();
-        levelsCompletedText.text = levelsCompleted.ToString();
-        currentLevelText.text = currentLevel.ToString();
-        timeSpendOnCurrentLevelText.text = timeSpendOnCurrentLevel.ToString();
-        timeSpendInOneSettingText.text = timeSpendInOneSetting.ToString();
+        LogTimeSpend();
+
+        UpdateDebuggingWindow();
 
         if (Input.GetKeyDown(KeyBindings.KeyToggleDebug))
         {
-            ToggleDebugValues();
+            ToggleDebuggingWindow();
         }
+    }
+
+    /// <summary>
+    /// Sets the time values
+    /// </summary>
+    private void LogTimeSpend()
+    {
+        totalTimeSpend = Time.time; // This variable should be set to something else. Need the savesystem to work for it to function as intended.,
+
+        timeSpendOnCurrentLevel = Time.timeSinceLevelLoad;
+        timeSpendInOneSetting = Time.time;
+    }
+
+    /// <summary>
+    /// Updates the text elements of the debugging window.
+    /// </summary>
+    private void UpdateDebuggingWindow()
+    {
+        timesDeadText.text = totalTimesDead.ToString();
+        timeSpendText.text = HelperFunctions.ConvertToTimeFormat(totalTimeSpend);
+        levelsCompletedText.text = levelsCompleted.ToString();
+        currentLevelText.text = currentLevel.ToString();
+        timeSpendOnCurrentLevelText.text = HelperFunctions.ConvertToTimeFormatDebug(timeSpendOnCurrentLevel);
+        timeSpendInOneSettingText.text = HelperFunctions.ConvertToTimeFormatDebug(timeSpendInOneSetting);
     }
 
     /// <summary>
     /// Displays debug values to the screen or turns them off.
     /// </summary>
-    private void ToggleDebugValues()
+    private void ToggleDebuggingWindow()
     {
+        // Toggles the active state of the parent GameObject inside the debugging canvas.
         textParent.SetActive(!textParent.activeInHierarchy);
     }
 }
