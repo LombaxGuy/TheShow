@@ -72,26 +72,26 @@ public class SubtitleControl : MonoBehaviour
     /// <summary>
     /// This is the method other scripts should call in order to display subtitles.
     /// </summary>
-    /// <param name="subNumber"></param>
-    /// <param name="duration"></param>
-    public void StartSub(int subNumber, float duration)
+    /// <param name="subName">The name of the subtitle</param>
+    /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
+    public void StartSub(string subName, float duration)
     {
         //Starts the coroutine if there is no subtitle currently being displayed
         if (!isDisplayed)
         {
             //Starts a coroutine of the DisplaySubtitles method
-            StartCoroutine(DisplaySubtitles(subNumber, duration));
+            StartCoroutine(DisplaySubtitles(subName, duration));
         }
     }
 
     /// <summary>
-    /// Needs an int which is the voiceline that needs to be subbed
-    /// Calls the LoadSubtitle method from SubtileContainer.cs and looks through the contents of the subtitles list
-    /// If a subline with the same number as the sumNumber exists it's printed on screen
+    /// Needs an int which is the voiceline that needs to be subbed.
+    /// Calls the LoadSubtitle method from SubtileContainer.cs and looks through the contents of the subtitles list.
+    /// If a subline with the same number as the sumNumber exists it's printed on screen.
     /// </summary>
-    /// <param name="subNumber"></param>
-    /// <param name="duration"></param>
-    private IEnumerator DisplaySubtitles(int subNumber, float duration)
+    /// <param name="subName">The name of the subtitle</param>
+    /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
+    private IEnumerator DisplaySubtitles(string subName, float duration)
     {
         line = "";
         SubtitleContainer sc = SubtitleContainer.LoadSubtitle();
@@ -99,7 +99,7 @@ public class SubtitleControl : MonoBehaviour
         //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
         foreach (Subtitle subtitle in sc.subtitles)
         {
-            if (subtitle.name == ("sub" + subNumber))
+            if (subtitle.name == (subName))
             {
                 line = subtitle.voiceLine;
                 break;
