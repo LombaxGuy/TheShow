@@ -91,22 +91,31 @@ public class PlayerRespawn : MonoBehaviour
 
     }
 
-    // Locks the controller in FirstPersonController script
+    /// <summary>
+    /// This is the method that is called to kill the player.
+    /// </summary>
     public void Death()
     {
-        deathCooldown = defaultDeathCooldown;
+        if (isAlive)
+        {
+            deathCooldown = defaultDeathCooldown;
 
-        GetComponent<FirstPersonController>().LockControls(true);
+            GetComponent<FirstPersonController>().LockControls(true);
 
-        StartCoroutine(CCScript.StartDeathFade());
+            StartCoroutine(CCScript.StartDeathFade());
 
-        float randomAnim = Random.Range(0, 2);
+            float randomAnim = Random.Range(0, 2);
 
-        animator.SetFloat("random", randomAnim);
-        animator.SetBool("playerDead", true);
+            animator.SetFloat("random", randomAnim);
+            animator.SetBool("playerDead", true);
 
-        StatTracker.TotalTimesDead += 1;
+            StatTracker.TotalTimesDead += 1;
 
-        isAlive = false;
+            isAlive = false;
+        }
+        else
+        {
+            Debug.Log("PlayerRespawn.cs: The player is already dead! The player cannot be killed while 'isAlive' is false.");
+        }
     }
 }

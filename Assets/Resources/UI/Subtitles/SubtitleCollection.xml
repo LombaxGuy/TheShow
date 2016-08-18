@@ -2,19 +2,13 @@
 <SubtitleCollection>
   <Subtitles>
     <Subtitle name="sub1">
-      <voiceLine>
-        Greetings New Contestant
-      </voiceLine>
+      <voiceLine>Greetings New Contestant</voiceLine>
     </Subtitle>
     <Subtitle name="sub2">
-      <voiceLine>
-        Your unintellectual ways amuse me
-      </voiceLine>
+      <voiceLine>Your unintellectual ways amuse me</voiceLine>
     </Subtitle>
   <Subtitle name="sub3">
-      <voiceLine>
-        BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARGH
-      </voiceLine>
+    <voiceLine>BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARGH</voiceLine>
     </Subtitle>
   </Subtitles>
 </SubtitleCollection>

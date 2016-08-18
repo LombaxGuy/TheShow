@@ -85,8 +85,11 @@ public class Spinner : MonoBehaviour {
                     rig.AddForce((Vector3.right * speed * Time.deltaTime), ForceMode.VelocityChange);
                     break;
                 }     
-
-
         }
+    }
+
+    private void spintest()
+    {
+        rig.velocity = new Vector3(0,0,0);
     }
 }
