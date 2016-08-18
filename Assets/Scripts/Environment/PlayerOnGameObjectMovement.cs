@@ -6,7 +6,7 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     //GameObject Y scale need to be 1, since it will mess til Player controller
     [Header("Change the speed.")]
     [SerializeField]
-    private float speed = 1;
+    private float speed = 2;
     [SerializeField]
     private bool moveOnPlayerTouch = false;
     [Header("Empty GameObjects")]
@@ -14,6 +14,9 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     private GameObject gameObjectLocationOne;
     [SerializeField]
     private GameObject gameObjectLocationTwo;
+    [SerializeField]
+    private int detectionSize = 1;
+    [Tooltip("This is one of the gameobjects it will start moving to.")]
     [SerializeField]
     private bool LocationOneFirst = false;
 
@@ -26,10 +29,10 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     }
 
 
-        /// <summary>
-        /// If moveOnPlayerTouch is false, then the GameObject will move on its own.
-        /// </summary>
-        void Update ()
+    /// <summary>
+    /// If moveOnPlayerTouch is false, then the GameObject will move on its own.
+    /// </summary>
+    void Update ()
     {
         if(moveOnPlayerTouch == false)
         {
@@ -42,11 +45,12 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// Getting collision data and if Player is in it. It will make the GameObject parent to Player.
     /// </summary>
     /// <param name="collision"></param>
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Player")
+
+        if (collision.gameObject.GetComponent<Rigidbody>() != null)
         {
-            collision.gameObject.transform.parent = transform;
+            collision.gameObject.transform.parent = transform.parent;
         }
     }
 
@@ -54,9 +58,10 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// When Player is leaving the collision area. Then gameobject will no longer be parent to Player.
     /// </summary>
     /// <param name="collision"></param>
-    void OnCollisionExit(Collision collision)
+    void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.tag == "Player")
+
+        if (collision.gameObject.GetComponent<Rigidbody>() != null)
         {
             collision.gameObject.transform.parent = null;
         }
@@ -67,9 +72,11 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// If moveOnPlayerTouch is true. Then when the Player is on the GameObject, then it will run GameObjectMove, that will make the GameObject move.
     /// </summary>
     /// <param name="collision"></param>
-    void OnCollisionStay(Collision collision)
+    void OnTriggerStay(Collider collision)
     {
-        if(moveOnPlayerTouch == true)
+
+
+        if (moveOnPlayerTouch == true)
         {
             if (collision.gameObject.tag == "Player")
             {
@@ -86,27 +93,24 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     private void GameObjectMove()
     {
 
-
-        //transform.position = new Vector3(Mathf.PingPong(Time.time, 3) + transform.position.x, transform.position.y, transform.position.z);
-
         if (LocationOneFirst == true)
         {
-            transform.Translate((gameObjectLocationOne.transform.position - transform.position).normalized * Time.deltaTime * speed);
+            transform.parent.Translate((gameObjectLocationOne.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
 
-            if (gameObjectLocationOne.transform.position.x - transform.position.x <= 1 && gameObjectLocationOne.transform.position.x - transform.position.x >= -1 &&
-                gameObjectLocationOne.transform.position.y - transform.position.y <= 1 && gameObjectLocationOne.transform.position.y - transform.position.y >= -1 &&
-                gameObjectLocationOne.transform.position.z - transform.position.z <= 1 && gameObjectLocationOne.transform.position.z - transform.position.z >= -1)
+            if (gameObjectLocationOne.transform.position.x - transform.parent.position.x <= detectionSize && gameObjectLocationOne.transform.position.x - transform.parent.position.x >= -detectionSize &&
+                gameObjectLocationOne.transform.position.y - transform.parent.position.y <= detectionSize && gameObjectLocationOne.transform.position.y - transform.parent.position.y >= -detectionSize &&
+                gameObjectLocationOne.transform.position.z - transform.parent.position.z <= detectionSize && gameObjectLocationOne.transform.position.z - transform.parent.position.z >= -detectionSize)
             {
                 LocationOneFirst = false;
             }
         }
         else
         {
-            transform.Translate((gameObjectLocationTwo.transform.position - transform.position).normalized * Time.deltaTime * speed);
+            transform.parent.Translate((gameObjectLocationTwo.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
 
-            if (gameObjectLocationTwo.transform.position.x - transform.position.x <= 1 && gameObjectLocationTwo.transform.position.x - transform.position.x >= -1 &&
-                gameObjectLocationTwo.transform.position.y - transform.position.y <= 1 && gameObjectLocationTwo.transform.position.y - transform.position.y >= -1 &&
-                gameObjectLocationTwo.transform.position.z - transform.position.z <= 1 && gameObjectLocationTwo.transform.position.z - transform.position.z >= -1)
+            if (gameObjectLocationTwo.transform.position.x - transform.parent.position.x <= detectionSize && gameObjectLocationTwo.transform.position.x - transform.parent.position.x >= -detectionSize &&
+                gameObjectLocationTwo.transform.position.y - transform.parent.position.y <= detectionSize && gameObjectLocationTwo.transform.position.y - transform.parent.position.y >= -detectionSize &&
+                gameObjectLocationTwo.transform.position.z - transform.parent.position.z <= detectionSize && gameObjectLocationTwo.transform.position.z - transform.parent.position.z >= -detectionSize)
             {
                 LocationOneFirst = true;
             }
