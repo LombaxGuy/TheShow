@@ -4,7 +4,20 @@ using UnityEngine.Audio;
 
 public class SoundSettings : MonoBehaviour
 {
-    public AudioMixer[] mixer;
+    private AudioMixer[] mixer;
+
+    public AudioMixer[] Mixer
+    {
+        get
+        {
+            return mixer;
+        }
+
+        set
+        {
+            mixer = value;
+        }
+    }
 
     /// <summary>
     /// Changes the volume of the master channel.
@@ -12,7 +25,7 @@ public class SoundSettings : MonoBehaviour
     /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeMaster(float value)
     {
-        mixer[0].SetFloat("masterVol", LinearToDecibel(value));
+        Mixer[0].SetFloat("masterVol", LinearToDecibel(value));
     }
 
     /// <summary>
@@ -21,7 +34,7 @@ public class SoundSettings : MonoBehaviour
     /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeMusic(float value)
     {
-        mixer[1].SetFloat("musicVol", LinearToDecibel(value));
+        Mixer[1].SetFloat("musicVol", LinearToDecibel(value));
     }
 
     /// <summary>
@@ -30,7 +43,7 @@ public class SoundSettings : MonoBehaviour
     /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeFX(float value)
     {
-        mixer[2].SetFloat("fxVol", LinearToDecibel(value));
+        Mixer[2].SetFloat("fxVol", LinearToDecibel(value));
     }
 
     /// <summary>
@@ -39,7 +52,7 @@ public class SoundSettings : MonoBehaviour
     /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeVoice(float value)
     {
-        mixer[3].SetFloat("voiceVol", LinearToDecibel(value));  
+        Mixer[3].SetFloat("voiceVol", LinearToDecibel(value));  
     }
 
     /// <summary>

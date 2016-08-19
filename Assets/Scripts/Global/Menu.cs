@@ -4,21 +4,23 @@ using UnityEngine.SceneManagement;
 using System;
 
 
-public class Menu : MonoBehaviour {
+public class Menu : MonoBehaviour
+{
 
     //Used by the UI Manager to find the gameobjects that are used.
     private GameObject player;
     private GameObject menu;
     private GameObject settingsMenu;
+    private SaveGame saveGame;
 
     //Used to change cursor
     private CursorLockMode cMode;
-    
+
 
     /// <summary>
     /// All Menus are set for not being shown by default try is made for the ingame menu that is not supposed to show up in the mainmenu
     /// </summary>
-	void Start ()
+    void Start()
     {
         //Find all the objects using name
         menu = GameObject.Find("Menu");
@@ -29,21 +31,21 @@ public class Menu : MonoBehaviour {
         settingsMenu.SetActive(false);
 
         try
-        { 
-            menu.SetActive(false);            
-        }
-        catch(Exception)
         {
-            Debug.Log("Null Exception caused by no found 'Menu'"); 
+            menu.SetActive(false);
+        }
+        catch (Exception)
+        {
+            Debug.Log("Null Exception caused by no found 'Menu'");
         }
     }
-	
+
     /// <summary>
     /// Q is used for now 
     /// </summary>
-	void Update ()
-    {           
-        if(Input.GetKeyDown(KeyCode.Q))
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if (menu != null && menu.gameObject.activeInHierarchy == false)
             {
@@ -52,9 +54,9 @@ public class Menu : MonoBehaviour {
             else if (menu != null && menu.gameObject.activeInHierarchy == true)
             {
                 MenuToggle(false);
-            }                       
+            }
         }
-	}
+    }
 
     /// <summary>
     /// MenuToggle is used to show and hide the menu ingame. This also gets the cursor and hides/shows/locks/unlocks it aswell as pause the game with the pause manager.
@@ -64,9 +66,9 @@ public class Menu : MonoBehaviour {
     {
         Pause.SetPauseState(state);
         menu.SetActive(state);
-        switch(state)
+        switch (state)
         {
-            case true:               
+            case true:
                 cMode = CursorLockMode.None;
                 break;
 
@@ -93,16 +95,33 @@ public class Menu : MonoBehaviour {
     public void NewGame()
     {
         SceneManager.LoadScene("fp-ctlr");
-        
+        SaveLoad.DeleteSaveData();
+    }
+
+    public void Continue()
+    {
+        saveGame = SaveLoad.Load();
+
+        StatTracker.TotalTimesDead = saveGame.totalTimesDead;
+        StatTracker.TimesKilledBySpikes = saveGame.timesKilledBySpikes;
+        StatTracker.TimesKilledBySpinners = saveGame.timesKilledBySpinners;
+        StatTracker.TimesKilledByFalling = saveGame.timesKilledByFalling;
+        StatTracker.TimesKilledByShocks = saveGame.timesKilledByShocks;
+        StatTracker.TimesKilledByGas = saveGame.timesKilledByGas;
+        StatTracker.TotalTimeSpend = saveGame.totalTimeSpend;
+        StatTracker.LevelsCompleted = saveGame.levelsCompleted;
+        StatTracker.CurrentLevel = saveGame.currentLevel;
+
+        SceneManager.LoadScene(saveGame.currentLevel);
     }
 
     /// <summary>
     /// Used in the ingame menu when pressing on the main menu button
     /// </summary>
-   public void MainMenu()
+    public void MainMenu()
     {
         Pause.SetPauseState(false);
-        SceneManager.LoadScene("Menu");       
+        SceneManager.LoadScene("Menu");
     }
 
     /// <summary>
@@ -116,7 +135,7 @@ public class Menu : MonoBehaviour {
     /// <summary>
     /// Used to exit the game ingame
     /// </summary>
-   public void ExitInGame()
+    public void ExitInGame()
     {
         Application.Quit();
     }

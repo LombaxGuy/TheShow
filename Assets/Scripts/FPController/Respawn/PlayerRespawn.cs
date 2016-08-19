@@ -31,6 +31,8 @@ public class PlayerRespawn : MonoBehaviour
     //Initialize the master spawn and image
     void Start ()
     {
+        SaveGame save = SaveLoad.Load();
+        transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);
         isAlive = true;
         CCScript = GetComponentInChildren<DeathFadeComponent>();
         animator = GetComponentInChildren<Animator>();
