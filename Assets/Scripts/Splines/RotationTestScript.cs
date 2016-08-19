@@ -7,7 +7,6 @@ public class RotationTestScript : MonoBehaviour
     [Tooltip("The walker will move through the following objects from first to last.")]
     private GameObject[] path;
 
-    [SerializeField]
     private int currentTargetIndex = 0;
 
     [SerializeField]
@@ -37,56 +36,6 @@ public class RotationTestScript : MonoBehaviour
         {
             if (WalkerReachedDestination())
             {
-                //if (currentTargetIndex < path.Length)
-                //{
-                //    Debug.Log("BUHUUU");
-
-                //    if (mode == SplineWalkerMode.PingPong)
-                //    {
-                //        if (goingForward)
-                //        {
-                //            currentTargetIndex += 1;
-                //        }
-                //        else
-                //        {
-                //            currentTargetIndex -= 1;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        currentTargetIndex += 1;
-                //    }
-                //}
-
-                //if (currentTargetIndex == path.Length)
-                //{
-                //    switch (mode)
-                //    {
-                //        case SplineWalkerMode.Once:
-                //            stop = true;
-                //            break;
-
-                //        case SplineWalkerMode.Loop:
-                //            Debug.Log("LOOOPing");
-                //            currentTargetIndex = 0;
-                //            break;
-
-                //        case SplineWalkerMode.PingPong:
-                //            if (goingForward)
-                //            {
-                //                currentTargetIndex -= 1;
-                //                //RotateYTo(transform, GetDirFromPointToPoint(path[currentTargetIndex - 1].transform.position, path[currentTargetIndex].transform.position), 3);
-                //                goingForward = false;
-                //            }
-                //            else
-                //            {
-                //                currentTargetIndex += 1;
-                //                goingForward = true;
-                //            }
-                //            break;
-                //    }
-                //}
-
                 switch (mode)
                 {
                     case SplineWalkerMode.Once:
@@ -97,7 +46,7 @@ public class RotationTestScript : MonoBehaviour
                         else if (currentTargetIndex < path.Length - 1)
                         {
                             currentTargetIndex += 1;
-                            RotateYTo(transform, GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position), 3);
+                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), 3);
                         }
                         break;
 
@@ -109,7 +58,7 @@ public class RotationTestScript : MonoBehaviour
                             currentTargetIndex = 0;
                         }
                         Debug.Log(currentTargetIndex);
-                        RotateYTo(transform, GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position), 3);
+                        RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), 3);
 
                         break;
 
@@ -126,12 +75,12 @@ public class RotationTestScript : MonoBehaviour
                         if (goingForward)
                         {
                             currentTargetIndex += 1;
-                            RotateYTo(transform, GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position), 3);
+                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), 3);
                         }
                         else
                         {
                             currentTargetIndex -= 1;
-                            RotateYTo(transform, GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position), 3);
+                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), 3);
                         }
                         break;
                 }
@@ -139,45 +88,10 @@ public class RotationTestScript : MonoBehaviour
 
             if (!isRotating)
             {
-                Debug.DrawRay(transform.position, GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position), Color.green);
-                transform.position += GetDirFromPointToPoint(transform.position, path[currentTargetIndex].transform.position) * moveSpeed * Time.deltaTime;
+                Debug.DrawRay(transform.position, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), Color.green);
+                transform.position += HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position) * moveSpeed * Time.deltaTime;
             }
         }
-
-
-        
-
-
-	 //   if (Input.GetKeyDown(KeyCode.E))
-     //   {
-     //       RotateYTo(transform, transform.position - testObjs[0].transform.position, 3);
-     //   }
-
-     //   if (Input.GetKeyDown(KeyCode.R))
-     //   {
-     //       RotateYTo(transform, transform.position - testObjs[1].transform.position, 3);
-     //   }
-
-     //   if (Input.GetKeyDown(KeyCode.T))
-     //   {
-     //       RotateYTo(transform, transform.position - testObjs[2].transform.position, 3);
-     //   }
-
-     //   if (Input.GetKeyDown(KeyCode.Y))
-     //   {
-     //       RotateYTo(transform, transform.position - testObjs[3].transform.position, 3);
-     //   }
-
-     //   MoveWalker();
-    }
-
-
-    /// <summary>
-    /// Moves the walker.
-    /// </summary>
-    private void MoveWalker()
-    {
-
     }
 
     private bool WalkerReachedDestination()
@@ -195,58 +109,24 @@ public class RotationTestScript : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the normalized direction vector from point a to point b.
-    /// </summary>
-    /// <param name="a">The position the direction is calculated from.</param>
-    /// <param name="b">The position the direction is calculated to.</param>
-    /// <returns>The normalized direction vector.</returns>
-    public Vector3 GetDirFromPointToPoint(Vector3 a, Vector3 b)
-    {
-        return (b - a).normalized;
-    }
-
-    /// <summary>
-    /// Rotates the Y-axis of a given transform towards the targetDirection over an amount of time.
+    /// Rotates the forward-vector of a given transform towards the targetDirection over an amount of time.
     /// </summary>
     /// <param name="rotatingTransform">The transform that will be rotated.</param>
     /// <param name="targetDirection">Roughly the direction the transform will face after the rotation is done.</param>
     /// <param name="secondsPerRotation">The amount of seconds it takes to rotate the transform 360 degrees.</param>
-    public void RotateYTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
+    public void RotateForwardTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
     {
-        StartCoroutine(CoroutineRotateYTo(rotatingTransform, targetDirection, secondsPerRotation));
+        StartCoroutine(CoroutineRotateForwardTo(rotatingTransform, targetDirection, secondsPerRotation));
     }
 
     /// <summary>
-    /// A coroutine that rotates the Y-axis of a given transform towards a targetDirection over an amount of time.
+    /// A coroutine that rotates the forward-vector of a given transform towards a targetDirection over an amount of time.
     /// </summary>
     /// <param name="rotatingTransform">The transform that will be rotated.</param>
     /// <param name="targetDirection">Roughly the direction the transform will face after the rotation is done.</param>
     /// <param name="secondsPerRotation">The amount of seconds it takes to rotate the transform 360 degrees.</param>
-    private IEnumerator CoroutineRotateYTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
+    private IEnumerator CoroutineRotateForwardTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
     {
-        //float rotationSpeed = 360 / secondsPerRotation;
-
-        //Vector3 startDirection = rotatingTransform.forward;
-        //float t = 0.0f;
-
-        //float deltaAngle = Vector3.Angle(startDirection, targetDirection);
-
-        //float totalRotationTime = deltaAngle / rotationSpeed;
-
-        //while (t < 1.0f)
-        //{
-        //    rotatingTransform.rotation = Quaternion.Euler(0, deltaAngle * t, 0);
-        //    t += Time.deltaTime / totalRotationTime;
-        //    yield return null;
-        //}
-
-        //if (t != 1.0f)
-        //{
-        //    t = 1.0f;
-        //    rotatingTransform.rotation = Quaternion.Euler(0, deltaAngle * t, 0);
-        //}
-
-        // -- SHOULD WORK --
         isRotating = true;
 
         float rotationSpeed = 360 / secondsPerRotation;
@@ -273,7 +153,101 @@ public class RotationTestScript : MonoBehaviour
             yield return null;
         }
 
+        t = 1.0f;
+        rotatingTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
         isRotating = false;
-        // -- SHOULD WORK --
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (path.Length > 0)
+        {
+            for (int i = 0; i < path.Length; i++)
+            {
+                if (path[i] != null)
+                {
+                    Gizmos.color = new Color(0, 0, 1, 0.2f);
+                    Gizmos.DrawSphere(path[i].transform.position, 0.1f);
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawWireSphere(path[i].transform.position, 0.1f);
+
+                    if (i == path.Length - 1)
+                    {
+                        switch (mode)
+                        {
+                            case SplineWalkerMode.Once:
+                                Gizmos.color = new Color(1, 0, 0, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                                Gizmos.color = Color.red;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                                break;
+
+                            case SplineWalkerMode.Loop:
+                                HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[0].transform.position, Color.blue);
+
+                                break;
+
+                            case SplineWalkerMode.PingPong:
+                                Gizmos.color = new Color(1, 0.92f, 0.016f, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.2f, 0.2f, 0.2f));
+                                Gizmos.color = Color.yellow;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.2f, 0.2f, 0.2f));
+                                break;
+                        }
+                    }
+                    else if (i == 0)
+                    {
+                        switch (mode)
+                        {
+                            case SplineWalkerMode.Once:
+                                Gizmos.color = new Color(0, 1, 0, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                                Gizmos.color = Color.green;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+
+                                HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[i + 1].transform.position, Color.blue);
+                                break;
+
+                            case SplineWalkerMode.Loop:
+                                Gizmos.color = new Color(0, 1, 0, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                                Gizmos.color = Color.green;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+
+                                HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[i + 1].transform.position, Color.blue);
+                                break;
+
+                            case SplineWalkerMode.PingPong:
+                                Gizmos.color = new Color(0, 1, 0, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                                Gizmos.color = Color.green;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+
+                                Gizmos.color = new Color(1, 0.92f, 0.016f, 0.2f);
+                                Gizmos.DrawCube(path[i].transform.position, new Vector3(0.2f, 0.2f, 0.2f));
+                                Gizmos.color = Color.yellow;
+                                Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.2f, 0.2f, 0.2f));
+
+                                Gizmos.color = Color.blue;
+                                Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (mode == SplineWalkerMode.PingPong)
+                        {
+                            Gizmos.color = Color.blue;
+                            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+                        }
+                        else
+                        {
+                            HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[i + 1].transform.position, Color.blue);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

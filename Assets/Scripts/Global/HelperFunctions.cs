@@ -117,4 +117,69 @@ public class HelperFunctions : MonoBehaviour
     }
 
     #endregion
+
+    #region Vectors
+    /// <summary>
+    /// Returns the normalized direction vector from point a to point b.
+    /// </summary>
+    /// <param name="a">The position the direction is calculated from.</param>
+    /// <param name="b">The position the direction is calculated to.</param>
+    /// <returns>The normalized direction vector.</returns>
+    public static Vector3 DirectionFromTo(Vector3 a, Vector3 b)
+    {
+        return (b - a).normalized;
+    }
+
+    /// <summary>
+    /// Returns the distance from point a to point b.
+    /// </summary>
+    /// <param name="a">The position the distance is calculated from.</param>
+    /// <param name="b">The position the distance is calculated to.</param>
+    /// <returns>The distance between the to points.</returns>
+    public static float DistanceFromTo(Vector3 a, Vector3 b)
+    {
+        return (b - a).magnitude;
+    }
+
+    #endregion
+
+    #region Gizmos
+    /// <summary>
+    /// Draws a Gizmo line with an arrow pointing in the forward direction.
+    /// </summary>
+    /// <param name="from">The position to draw from.</param>
+    /// <param name="to">The position to draw to.</param>
+    /// <param name="color">The color of the drawn line.</param>
+    public static void GizmoLineWithDirection(Vector3 from, Vector3 to, Color color)
+    {
+        // Saves the old color so it can be reset
+        Color oldColor = Gizmos.color;
+
+        // Changes the color to the specified color
+        Gizmos.color = color;
+        // Draws a line between the 'from' and 'to' positions
+        Gizmos.DrawLine(from, to);
+
+        // Finds the distance and direction of the 'from-to' vector
+        float distance = DistanceFromTo(from, to);
+        Vector3 direction = DirectionFromTo(from, to);
+
+        // Findes the mid-point of the vector
+        Vector3 pointOfArrow = from + direction * (distance / 2);
+
+        // The angle between the main line and one of the arrow-head lines
+        float arrowHeadAngle = 45;
+
+        // Creates the arrow-head lines direction vectors
+        Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+        Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+
+        // Draws the arrow head
+        Gizmos.DrawRay(pointOfArrow + direction, right.normalized);
+        Gizmos.DrawRay(pointOfArrow + direction, left.normalized);
+
+        // Resets the color
+        Gizmos.color = oldColor;
+    }
+    #endregion
 }
