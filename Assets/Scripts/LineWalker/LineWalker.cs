@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class LineWalker : MonoBehaviour
 {
     [SerializeField]
@@ -24,7 +25,6 @@ public class LineWalker : MonoBehaviour
     private bool stop = false;
     private bool isRotating = false;
 
-
     // Use this for initialization
     private void Start()
     {
@@ -44,7 +44,6 @@ public class LineWalker : MonoBehaviour
             // If the walker has reached ist current destination...
             if (WalkerReachedDestination())
             {
-
                 switch (mode)
                 {
                     //... and the mode is 'Once'.
@@ -115,12 +114,9 @@ public class LineWalker : MonoBehaviour
             // If we are not rotating...
             if (!isRotating)
             {
-                //Debug.DrawRay(transform.position, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), Color.green);
-
                 //... we move towards the target
-                transform.position += HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position) * moveSpeed * Time.deltaTime;
-
-                //transform.Translate(HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position) * moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, path[currentTargetIndex].transform.position, moveSpeed * Time.deltaTime);
+                Debug.DrawRay(transform.position, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), Color.green);
             }
         }
     }
