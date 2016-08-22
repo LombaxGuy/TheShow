@@ -49,24 +49,28 @@ public class MusicBehaviour : MonoBehaviour {
     /// </summary>
     private void ThisSpecificBehaviour()
     {
-        if(playerCam.enabled == true)
-        {
-            if (musicMode == false)
-            {
-                playerCam.GetComponent<Transform>().LookAt(transform);
 
-                GetComponent<MusicRecord>().PlayerClicked = !GetComponent<MusicRecord>().PlayerClicked;
-            }
-            else
-            {
-                cam.SetActive(!cam.activeSelf);
-                playerCam.enabled = !playerCam.enabled;
-                GetComponent<MusicRecord>().PlayerClicked = !GetComponent<MusicRecord>().PlayerClicked;
-            }
-        }
+
+        Debug.Log("Add something to music?");
         
     }
 
+    private void Test()
+    {
+        if (musicMode == false)
+        {
+            playerCam.GetComponent<Transform>().LookAt(transform);
+
+            GetComponent<MusicRecord>().PlayerClicked = !GetComponent<MusicRecord>().PlayerClicked;
+        }
+        else
+        {
+            cam.SetActive(!cam.activeSelf);
+            playerCam.enabled = !playerCam.enabled;
+            GetComponent<MusicRecord>().PlayerClicked = !GetComponent<MusicRecord>().PlayerClicked;
+        }
+    }
+    
     public void GetOut()
     {
         cam.SetActive(!cam.activeSelf);

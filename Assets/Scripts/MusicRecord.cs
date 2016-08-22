@@ -41,39 +41,37 @@ public class MusicRecord : MonoBehaviour {
         audio = GetComponent<AudioSource>();
         audio.loop = false;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        if (PlayerClicked == true)
+
+        timeBetween += Time.deltaTime;
+        timeBetweenPlay -= Time.deltaTime;
+
+        //HandleKeys();
+
+    }
+
+    private void PlayLoop()
+    {
+
+        if (test == true)
         {
 
-
-            //cd -= Time.deltaTime;
-            timeBetween += Time.deltaTime;
-            timeBetweenPlay -= Time.deltaTime;
-
-            HandleKeys();
-
-            if (test == true)
+            if (timeBetweenPlay <= 0)
             {
-
-                if (timeBetweenPlay <= 0)
+                timeBetweenPlay = timeBetweenClip[whatToPlay];
+                audio.PlayOneShot(clipsQueue[whatToPlay]);
+                whatToPlay++;
+                if (whatToPlay >= clipsQueue.Count - 1)
                 {
-                    timeBetweenPlay = timeBetweenClip[whatToPlay];
-                    audio.PlayOneShot(clipsQueue[whatToPlay]);
-                    whatToPlay++;
-                    if (whatToPlay >= clipsQueue.Count - 1)
-                    {
-                        whatToPlay = 0;
-                    }
-
+                    whatToPlay = 0;
                 }
 
-
             }
-        }
 
+        }
     }
 
     private void HandleKeys()
@@ -133,7 +131,7 @@ public class MusicRecord : MonoBehaviour {
         }
     }
 
-    private void Add(int number)
+    public void Add(int number)
     {
 
         if (firstTimePress == true)
@@ -151,6 +149,7 @@ public class MusicRecord : MonoBehaviour {
 
         audio.PlayOneShot(clips[number]);
     }
+
 
 
 }
