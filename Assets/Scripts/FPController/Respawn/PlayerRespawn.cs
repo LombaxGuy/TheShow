@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.IO;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -29,10 +30,8 @@ public class PlayerRespawn : MonoBehaviour
     private string gameResetManagerName = "GameResetManager";
 
     //Initialize the master spawn and image
-    void Start ()
+    void Start()
     {
-        SaveGame save = SaveLoad.Load();
-        transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);
         isAlive = true;
         CCScript = GetComponentInChildren<DeathFadeComponent>();
         animator = GetComponentInChildren<Animator>();
@@ -54,12 +53,17 @@ public class PlayerRespawn : MonoBehaviour
         {
             Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
         }
+        if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+        {
+            SaveGame save = SaveLoad.Load();
+            transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);
+        }
     }
-	
+
     /// <summary>
     /// Use rigmt mouse atm
     /// </summary>
-	void Update ()
+    void Update()
     {
         if (!Pause.GetPauseState())
         {

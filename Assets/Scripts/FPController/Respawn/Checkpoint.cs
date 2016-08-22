@@ -30,24 +30,23 @@ public class Checkpoint : MonoBehaviour
     /// </summary> 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
-            
+
             // Only if the player is alive can a checkpoint be triggered
             if (respawnScript.IsAlive)
             {
-                SaveGame save = new SaveGame();
-                save.playerPosX = this.transform.position.x;
-                save.playerPosY = this.transform.position.y;
-                save.playerPosZ = this.transform.position.z;
-                save.playerRotX = this.transform.rotation.x;
-                save.playerRotY = this.transform.rotation.y;
-                save.playerRotZ = this.transform.rotation.z;
-                save.playerRotW = this.transform.rotation.w;
+                if (this.tag == "MasterRespawn")
+                {
+                    SaveGame save = new SaveGame();
+                    save.playerPosX = this.transform.position.x;
+                    save.playerPosY = this.transform.position.y;
+                    save.playerPosZ = this.transform.position.z;
+                    SaveLoad.Save(save);
+                }
                 respawnScript.targetSpawnpoint = transform.gameObject;
                 GetComponent<Collider>().enabled = false;
-                SaveLoad.Save(save);
 
                 // If the 'savePositionsWithinBox' is not left blank (is not null)
                 if (savePositionsWithinBox)
@@ -57,7 +56,7 @@ public class Checkpoint : MonoBehaviour
                 else
                 {
                     Debug.Log("Checkpoint.cs: No positions will be saved because 'savePositionsWithinBox' has not been set!");
-                }               
+                }
             }
         }
     }
@@ -88,7 +87,7 @@ public class Checkpoint : MonoBehaviour
 
         // Draws the forward vector for the SpawnRotation gameobject. Position is already set by the new matrix.
         Gizmos.color = Color.blue;
-        Gizmos.DrawRay(new Vector3(0,0,0), transform.GetChild(0).transform.forward);
+        Gizmos.DrawRay(new Vector3(0, 0, 0), transform.GetChild(0).transform.forward);
 
         // Draws the up vector for the SpawnRotation gameobject. Position is already set by the new matrix.
         Gizmos.color = Color.green;

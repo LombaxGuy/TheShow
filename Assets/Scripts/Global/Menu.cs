@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
 
 
 public class Menu : MonoBehaviour
@@ -9,7 +11,9 @@ public class Menu : MonoBehaviour
 
     //Used by the UI Manager to find the gameobjects that are used.
     private GameObject player;
+    private GameObject newGameMenu;
     private GameObject menu;
+    private GameObject button;
     private GameObject settingsMenu;
     private SaveGame saveGame;
 
@@ -23,6 +27,8 @@ public class Menu : MonoBehaviour
     void Start()
     {
         //Find all the objects using name
+        newGameMenu = GameObject.Find("NewGameUI");
+        button = GameObject.Find("Continue");
         menu = GameObject.Find("Menu");
         settingsMenu = GameObject.Find("SettingsMenu");
         player = GameObject.Find("Player");
@@ -38,6 +44,17 @@ public class Menu : MonoBehaviour
         {
             Debug.Log("Null Exception caused by no found 'Menu'");
         }
+
+        //Sends a Debug.log if the NewGameUI canvas does not exist
+        try
+        {
+            newGameMenu.SetActive(false);
+        }
+        catch (Exception)
+        {
+
+            Debug.Log("Menu.cs: Null Exception caused by no found 'NewGameUI'");
+        }
     }
 
     /// <summary>
@@ -45,6 +62,20 @@ public class Menu : MonoBehaviour
     /// </summary>
     void Update()
     {
+        //If the Main Menu is the active scene the Continue button will/will not be greyed out depending on if a save file exists
+            if (SceneManager.GetActiveScene().name == "Menu")
+            {
+                if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+                {
+                    button.GetComponent<Button>().interactable = true;
+                }
+                else
+                {
+                    button.GetComponent<Button>().interactable = false;
+                }
+
+            }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (menu != null && menu.gameObject.activeInHierarchy == false)
@@ -90,14 +121,18 @@ public class Menu : MonoBehaviour
     }
 
     /// <summary>
-    /// Used on the Menu screen, new game button to load a scene
+    /// Used on the Menu screen, new game button will make the NewGameUI active
     /// </summary>
     public void NewGame()
     {
-        SceneManager.LoadScene("fp-ctlr");
-        SaveLoad.DeleteSaveData();
+        newGameMenu.SetActive(true);
     }
 
+    /// <summary>
+    /// Used on the Menu Screen. 
+    /// If pressed the game will load the save file and all values will be set to the saved values.
+    /// Loads the last level the player was on.
+    /// </summary>
     public void Continue()
     {
         saveGame = SaveLoad.Load();
@@ -139,6 +174,29 @@ public class Menu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    /// <summary>
+    /// Deletes the savedata and loads a level
+    /// </summary>
+    public void YesButton()
+    {
+        SceneManager.LoadScene("fp-ctlr");
+        SaveLoad.DeleteSaveData();
+    }
+
+    /// <summary>
+    /// Hides the NewGameUI
+    /// </summary>
+    public void NoButton()
+    {
+        newGameMenu.SetActive(false);
+    }
+
+    public void BackButton()
+    {
+        settingsMenu.SetActive(false);
+    }
+
     /// <summary>
     /// Used to exit the game in main menu
     /// </summary>

@@ -8,23 +8,38 @@ public static class SaveLoad
 {
 
 
-    //This is a save/load system. Using Unity PlayerPrefs to create or get data from a place on the local computer.
+    //This is a save/load system. Uses PlayerPref for settings and file streaming for values
     //Settings not done
     //Host mind not done
     private static Canvas[] canvas;
     private static Canvas soundCanvas;
     private static float[] value;
+    private static SaveGame save = new SaveGame();
 
     private static List<string> prefKeys = new List<string>();
+
+    public static List<string> PrefKeys
+    {
+        get
+        {
+            return prefKeys;
+        }
+
+        set
+        {
+            prefKeys = value;
+        }
+    }
 
     // Use this for initialization
     static void Start()
     {
-        for (int i = 0; i < prefKeys.Capacity; i++)
+        //Gets the saved PlayerPrefKeys from the regestry
+        for (int i = 0; i < save.prefKeys.Capacity; i++)
         {
-            if(PlayerPrefs.HasKey(prefKeys[i]))
+            if(PlayerPrefs.HasKey(save.prefKeys[i]))
             {
-                PlayerPrefs.GetFloat(prefKeys[i]);
+                PlayerPrefs.GetFloat(save.prefKeys[i]);
             }
         }
     }
@@ -32,7 +47,8 @@ public static class SaveLoad
 
 
     /// <summary>
-    /// Save Method, Only for completed levels. Room for change in future.
+    /// Creates a save directory if the user dosen't have one.
+    /// Creates a file which is saved in the directory
     /// </summary>
     public static void Save(SaveGame save)
     {
@@ -51,6 +67,7 @@ public static class SaveLoad
         formatter.Serialize(fileStream, save);
 
         fileStream.Close();
+        SavePrefs();
 
 
         //try
@@ -71,7 +88,7 @@ public static class SaveLoad
 
 
     /// <summary>
-    /// LOAd methoD, also only for completed atm. 
+    /// Loads the save file if it exists
     /// </summary>
     public static SaveGame Load()
     {
@@ -120,30 +137,38 @@ public static class SaveLoad
 
     }
 
+    /// <summary>
+    /// Saves all settings in PlayerPrefs
+    /// </summary>
     public static void SavePrefs()
     {
-        canvas = Canvas.FindObjectsOfType<Canvas>();
 
+        canvas = GameObject.FindObjectsOfType<Canvas>();
         for (int i = 0; i < canvas.Length; i++)
         {
-            if (canvas[i].name == "SoundSettings")
+            Debug.Log(canvas[i].name);
+            if (canvas[i].name == "SettingsMenu")
             {
                 soundCanvas = canvas[i];
             }
         }
-
         soundCanvas.GetComponent<SoundSettings>().Mixer[0].GetFloat("masterVol", out value[0]);
         soundCanvas.GetComponent<SoundSettings>().Mixer[1].GetFloat("musicVol", out value[1]);
         soundCanvas.GetComponent<SoundSettings>().Mixer[2].GetFloat("fxVol", out value[2]);
         soundCanvas.GetComponent<SoundSettings>().Mixer[3].GetFloat("voiceVol", out value[3]);
         PlayerPrefs.SetFloat("masterVol", value[0]);
-        prefKeys.Add("masterVol");
+        PrefKeys.Add("masterVol");
         PlayerPrefs.SetFloat("musicVol", value[1]);
-        prefKeys.Add("musicVol");
+        PrefKeys.Add("musicVol");
         PlayerPrefs.SetFloat("fxVol", value[2]);
-        prefKeys.Add("fxVol");
+        PrefKeys.Add("fxVol");
         PlayerPrefs.SetFloat("voiceVol", value[3]);
-        prefKeys.Add("voiceVol");
+        PrefKeys.Add("voiceVol");
+        Debug.Log(value[0]);
+        Debug.Log(value[1]);
+        Debug.Log(value[2]);
+        Debug.Log(value[3]);
+
     }
 
     public static void LoadPrefs()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 // If we need different types of save classes this class should be made abstract and the other classes needs to inheirit from this one
 //These different classe could be HighScore, PlayerData, our StatTracker and more
@@ -17,10 +18,6 @@ public class SaveGame
     public float playerPosX;
     public float playerPosY;
     public float playerPosZ;
-    public float playerRotW;
-    public float playerRotX;
-    public float playerRotY;
-    public float playerRotZ;
-
+    public List<string> prefKeys = SaveLoad.PrefKeys;
 }
 
