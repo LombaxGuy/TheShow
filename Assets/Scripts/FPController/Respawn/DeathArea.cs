@@ -15,7 +15,7 @@ public class DeathArea : MonoBehaviour
             PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
             
             //... and the player is still alive...
-            if (!respawnScript.IsAlive)
+            if (respawnScript.IsAlive)
             {
                 //... the player is killed.
                 respawnScript.Death();

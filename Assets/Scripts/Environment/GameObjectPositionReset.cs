@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class GameObjectPositionReset : MonoBehaviour {
 
@@ -16,10 +17,15 @@ public class GameObjectPositionReset : MonoBehaviour {
 
     private int gameObjectWithTagCount;
 
+    public delegate void ResetAllObjects();
+
+    public static event ResetAllObjects resetObjects;
+
+
     // Use this for initialization
     void Start ()
     {
-        gameObjects = new List<GameObject>();
+        resetObjects();
     }
 	
 	// Update is called once per frame
@@ -118,6 +124,8 @@ public class GameObjectPositionReset : MonoBehaviour {
                 gameObjects[i].GetComponent<Rigidbody>().angularVelocity = gameObjectsAngularVelocity[i];
             }
         }
+
+        //resetObjects();
 
     }
 

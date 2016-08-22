@@ -92,5 +92,16 @@ public class Checkpoint : MonoBehaviour
         // Draws the up vector for the SpawnRotation gameobject. Position is already set by the new matrix.
         Gizmos.color = Color.green;
         Gizmos.DrawRay(new Vector3(0, 0, 0), transform.GetChild(0).transform.up);
+
+        if (savePositionsWithinBox != null && savePositionsWithinBox.isTrigger)
+        {
+            newMatrix = Matrix4x4.TRS(savePositionsWithinBox.transform.position, savePositionsWithinBox.transform.rotation, savePositionsWithinBox.transform.lossyScale);
+            Gizmos.matrix = newMatrix;
+
+            Gizmos.color = new Color(0, 0, 1, 0.2f);
+            Gizmos.DrawCube(savePositionsWithinBox.center, savePositionsWithinBox.size);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(savePositionsWithinBox.center, savePositionsWithinBox.size);
+        }
     }
 }

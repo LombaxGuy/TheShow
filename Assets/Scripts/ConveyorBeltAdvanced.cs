@@ -95,6 +95,7 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         
         //Instantiate(gameObjectsSpawn, startGameObject.transform.position, Quaternion.identity);
 	}
+
 	
 	// Update is called once per frame
 	void Update ()
@@ -103,6 +104,19 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         SpawnTheObjects();
         ActiveListUpdate();
 	}
+
+
+    void OnEnable()
+    {
+        GameObjectPositionReset.resetObjects += ResetMethod;
+    }
+
+    void OnDisable()
+    {
+        GameObjectPositionReset.resetObjects -= ResetMethod;
+    }
+
+   
 
     void OnCollisionStay(Collision collision)
     {
@@ -234,6 +248,11 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
                 remove = false;
             }
         }
+    }
+
+    public void ResetMethod()
+    {
+        Debug.Log("Event Called");
     }
 
 }
