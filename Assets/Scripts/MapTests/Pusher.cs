@@ -2,85 +2,108 @@
 using System.Collections;
 
 public class Pusher : MonoBehaviour {
+    
+    private float speed = 5000;
 
-    private float maxPosition;
-    private float minPosition;
-    private float currentPossition;
-    private bool state;
-    private float speed = 1000;
+    private bool isOut = false;
+
+    private bool isMoving = false;
 
 
     [SerializeField]
-    private float cooldown = 2;
-    [SerializeField]
-    private float wait;
-    [SerializeField]
-    private float offset;
-    private float waitOffset;
+    private float distance = 5;
 
-    private Rigidbody rig;
-    private Vector3 dimentions;
+    private float pushOutTime = 0.2f;
 
-	// Use this for initialization
-	void Start () {
-        rig = gameObject.GetComponent<Rigidbody>();
-        minPosition = gameObject.transform.position.x;
-        dimentions = gameObject.GetComponent<Renderer>().bounds.size;
-        maxPosition = minPosition + dimentions.x;
-	}
+    private float offsetSeconds = 0;
+    private float offsetTimer = 0;
+
+    private float idleTimer = 0;
+
+    private float idleInSeconds = 3;
+    private float idleOutSeconds = 1;
+
+    private BoxCollider stampTrigger;
+
+    private Vector3 startPos;
+
+    private Vector3 extPos;
+
+    // Use this for initialization
+    void Start () {
+
+        stampTrigger = transform.GetChild(0).GetComponent<BoxCollider>();
+        startPos = transform.position;
+        extPos = transform.position + transform.forward * distance;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        currentPossition = gameObject.transform.position.x;
-        waitOffset = waitOffset + 1 * Time.deltaTime;
-        wait = wait + 1 * Time.deltaTime;
+        if(!isMoving)
+        {
+            stampTrigger.enabled = false;
+            if (offsetTimer < offsetSeconds)
+            {
+                
+                offsetTimer += Time.deltaTime;
+            }
+            else
+            {
+                idleTimer += Time.deltaTime;
+            }
+        }   
 
-        if (offset <= waitOffset)
-        {     
-            forward();
-            backward();
+
+        if(isOut)
+        {
+            if(idleTimer > idleOutSeconds)
+            {
+                Move(extPos, startPos, pushOutTime);
+                stampTrigger.enabled = false;
+                isOut = false;
+                idleTimer = 0;
+            }
+
         }
+        else
+        {
+            if (idleTimer > idleInSeconds)
+            {
+                Move(startPos, extPos, pushOutTime);
+                stampTrigger.enabled = true;
+                isOut = true;
+                idleTimer = 0;
+            }
+        }
+
+        
+        
     }
 
-    private void forward()
+    private IEnumerator CoroutineMove(Vector3 from, Vector3 to, float timeInSeconds)
     {
-        if (currentPossition <= maxPosition && !state && cooldown <= wait)
+        isMoving = true;
+        float t = 0;
+
+        while(t < 1)
         {
-            if (rig.velocity.x < 100)
-            {
-                //rig.AddForce(Vector3.right * speed * Time.deltaTime, ForceMode.VelocityChange);
-                rig.velocity = new Vector3(speed * Time.deltaTime,0,0);
-               
-            }
+            transform.position = Vector3.Lerp(from, to, t);
+
+            t += Time.deltaTime / timeInSeconds;
+
+            yield return null;
         }
 
-            if (currentPossition >= maxPosition && state == false && cooldown <= wait)
-            {
-                state = true;
-                rig.velocity = new Vector3(0, 0, 0);
-                //Debug.Log("Hit max");
-                wait = 0;
-            
-            }
+
+        transform.position = Vector3.Lerp(from, to, t);
+        isMoving = false;
     }
-    private void backward()
+
+    private void Move( Vector3 from, Vector3 to, float timeInSeconds)
     {
-        if (currentPossition >= minPosition && state == true && cooldown <= wait)
-        {
-            if (rig.velocity.x < 100)
-            {
-                //rig.AddForce(Vector3.left * speed * Time.deltaTime, ForceMode.VelocityChange);
-                rig.velocity = new Vector3(-speed * Time.deltaTime, 0, 0);
-            }
 
-        }
-        if (currentPossition <= minPosition && state == true && cooldown <= wait)
-        {
-            state = false;
-            rig.velocity = new Vector3(0, 0, 0);
-            //Debug.Log("hit min");
-            wait = 0;
-        }
+        StartCoroutine(CoroutineMove(from, to, timeInSeconds));
+
     }
-
 }

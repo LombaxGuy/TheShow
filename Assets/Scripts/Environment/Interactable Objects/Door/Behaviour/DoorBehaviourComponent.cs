@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(InteractableObjectComponent))]
 public class DoorBehaviourComponent : MonoBehaviour
 {
-
     // The script containing the delegate
     InteractableObjectComponent interactableObjectComponent;
 
@@ -20,14 +19,39 @@ public class DoorBehaviourComponent : MonoBehaviour
     [SerializeField]
     // Interaction cooldown in seconds
     private float interactionCooldown = 0.5f;
-    
+
     private float yRotation;
+    private Quaternion startRotation;
+
     [SerializeField]
     private bool onCooldown = false;
+
+    void OnEnable()
+    {
+        // Subscribes to the OnRewpawnReset event
+        GameObjectPositionReset.OnResetObjects += OnRespawnReset;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribes from the OnRewpawnReset event
+        GameObjectPositionReset.OnResetObjects -= OnRespawnReset;
+    }
+
+    /// <summary>
+    /// Code is called when the OnRespawnReset even is called
+    /// </summary>
+    void OnRespawnReset()
+    {
+        transform.rotation = startRotation;
+    }
 
     // Use this for initialization
     void Start()
     {
+        // Saves the starting rotation
+        startRotation = transform.rotation;
+
         // Get the script
         interactableObjectComponent = GetComponent<InteractableObjectComponent>();
 

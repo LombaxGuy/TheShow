@@ -56,7 +56,7 @@ public class PlayerRespawn : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
         {
             SaveGame save = SaveLoad.Load();
-            transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);
+            transform.position = save.playerPos;
         }
     }
 
@@ -83,6 +83,7 @@ public class PlayerRespawn : MonoBehaviour
     void Respawn()
     {
         //gameResetManager.GetComponent<GameObjectPositionReset>().GameObjectToStartLocation();
+        GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().ResetObjects();
 
         transform.position = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position;
         transform.rotation = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().rotation;

@@ -16,9 +16,7 @@ public class SaveGame
     public float totalTimeSpend = StatTracker.TotalTimeSpend;
     public int levelsCompleted = StatTracker.LevelsCompleted;
     public string currentLevel = StatTracker.CurrentLevel;
-    public float playerPosX;
-    public float playerPosY;
-    public float playerPosZ;
+    public Vector3 playerPos;
     public List<string> prefKeys = SaveLoad.PrefKeys;
 }
 

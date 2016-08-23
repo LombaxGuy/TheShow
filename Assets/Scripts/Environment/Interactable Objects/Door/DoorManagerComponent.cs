@@ -28,6 +28,7 @@ public class DoorManagerComponent : MonoBehaviour
     void Update()
     {
         yRotation = transform.localEulerAngles.y;
+        //yRotation = transform.rotation.eulerAngles.y;
         //Debug.Log(yRotation);
 
         AutoCloseDoor();
