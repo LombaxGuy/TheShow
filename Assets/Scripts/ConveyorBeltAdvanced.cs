@@ -120,7 +120,7 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
     void OnCollisionStay(Collision collision)
     {
-        if(collision.transform.tag == "Player")
+        if (collision.transform.tag == "Player")
         {
             switch (dir)
             {

@@ -25,6 +25,14 @@ public class MusicRecord : MonoBehaviour {
 
     private float cd;
 
+    private bool playerClicked = false;
+
+    public bool PlayerClicked
+    {
+        get { return playerClicked; }
+        set { playerClicked = value; }
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -33,152 +41,81 @@ public class MusicRecord : MonoBehaviour {
         audio = GetComponent<AudioSource>();
         audio.loop = false;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        //cd -= Time.deltaTime;
+
         timeBetween += Time.deltaTime;
         timeBetweenPlay -= Time.deltaTime;
 
+        //HandleKeys();
+
+    }
+
+    private void PlayLoop()
+    {
+
+        if (test == true)
+        {
+
+            if (timeBetweenPlay <= 0)
+            {
+                timeBetweenPlay = timeBetweenClip[whatToPlay];
+                audio.PlayOneShot(clipsQueue[whatToPlay]);
+                whatToPlay++;
+                if (whatToPlay >= clipsQueue.Count - 1)
+                {
+                    whatToPlay = 0;
+                }
+
+            }
+
+        }
+    }
+
+    private void HandleKeys()
+    {
         //if (cd <= 0)
         //{
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Add(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
 
-                clipsQueue.Add(clips[0]);
+            Add(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Add(2);
 
-                timeBetween = 0;
+        }
 
-                audio.PlayOneShot(clips[0]);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
 
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
+            Add(3);
+        }
 
-                clipsQueue.Add(clips[1]);
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
 
-                timeBetween = 0;
+            Add(4);
+        }
 
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            Add(5);
+        }
 
-                audio.PlayOneShot(clips[1]);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
+        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            Add(6);
+        }
 
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
-
-                clipsQueue.Add(clips[2]);
-
-                timeBetween = 0;
-
-                audio.PlayOneShot(clips[2]);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
-
-                clipsQueue.Add(clips[3]);
-
-                timeBetween = 0;
-
-
-                audio.PlayOneShot(clips[3]);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
-
-                clipsQueue.Add(clips[4]);
-
-                timeBetween = 0;
-
-
-                audio.PlayOneShot(clips[4]);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
-
-                clipsQueue.Add(clips[5]);
-
-                timeBetween = 0;
-
-
-                audio.PlayOneShot(clips[5]);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Alpha7))
-            {
-
-                if (firstTimePress == true)
-                {
-                    timeBetweenClip.Add(timeBetween);
-                }
-                else
-                {
-                    firstTimePress = true;
-                }
-
-                clipsQueue.Add(clips[6]);
-
-                timeBetween = 0;
-
-
-                audio.PlayOneShot(clips[6]);
-            }
-
-          //  cd = 0.2f;
+        //  cd = 0.2f;
         //}
 
         if (Input.GetKeyDown(KeyCode.Alpha9))
@@ -188,25 +125,31 @@ public class MusicRecord : MonoBehaviour {
             whatToPlay = 0;
         }
 
-
-
-        if(test == true)
+        if(Input.GetKeyDown(KeyCode.E))
         {
+            GetComponent<MusicBehaviour>().GetOut();
+        }
+    }
 
-            if(timeBetweenPlay <= 0)
-            {
-                timeBetweenPlay = timeBetweenClip[whatToPlay];
-                audio.PlayOneShot(clipsQueue[whatToPlay]);
-                whatToPlay++;
-                if(whatToPlay >= clipsQueue.Count - 1)
-                {
-                    whatToPlay = 0;
-                }
+    public void Add(int number)
+    {
 
-            }
-
-
+        if (firstTimePress == true)
+        {
+            timeBetweenClip.Add(timeBetween);
+        }
+        else
+        {
+            firstTimePress = true;
         }
 
+        clipsQueue.Add(clips[number]);
+
+        timeBetween = 0;
+
+        audio.PlayOneShot(clips[number]);
     }
+
+
+
 }
