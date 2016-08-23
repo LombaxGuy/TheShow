@@ -52,14 +52,7 @@ public static class SaveLoad
     // Use this for initialization
     static void Start()
     {
-        //Gets the saved PlayerPrefKeys from the regestry
-        for (int i = 0; i < save.prefKeys.Capacity; i++)
-        {
-            if (PlayerPrefs.HasKey(save.prefKeys[i]))
-            {
-                PlayerPrefs.GetFloat(save.prefKeys[i]);
-            }
-        }
+ 
     }
 
     /// <summary>
