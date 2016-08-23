@@ -27,6 +27,9 @@ public class FPSController : MonoBehaviour {
     [SerializeField]
     float crouchHeight = 1.0f;
 
+    [SerializeField]
+    float maxMagnitude = 7f;
+
     Vector3 moveVector;
     Vector3 moveVelocity;
     #endregion
@@ -185,11 +188,11 @@ public class FPSController : MonoBehaviour {
             moveVelocity.y = 0f;
             moveVelocity.z = moveVector.z * speedMultiplier;
 
-            if(grounded)
+            if (grounded && rigid.velocity.magnitude <= maxMagnitude)
                 //If grounded, add the velocity.
                 rigid.AddRelativeForce((moveVelocity * 500) * Time.deltaTime);
 
-            else
+            else if(!grounded && rigid.velocity.magnitude <= maxMagnitude)
             {
                 //If not grounded, add the velocity multiplied by the inAirSpeedModifier.
                 rigid.AddRelativeForce(((moveVelocity * inAirSpeedModifier) * 500) * Time.deltaTime);
@@ -201,8 +204,13 @@ public class FPSController : MonoBehaviour {
         if(grounded)
             rigid.velocity *= 0.9f;
 
+        if(!jumpKey && jumping && grounded)
+        {
+            jumping = false;
+        }
+
         //Called when first jumping, adds the initial jump velocity.
-        if (jumpKey && grounded)
+        if (jumpKey && grounded && !jumping)
         {
             curJumpVelocity = rigid.velocity;
             curJumpVelocity.y = initialJumpVelocity;
