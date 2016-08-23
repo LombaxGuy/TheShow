@@ -101,7 +101,7 @@ public class SplineWalker : MonoBehaviour
             // If the spline walker is going forward on the track. (progress going towards 1.0f)
             if (goingForward)
             {
-                Debug.Log("Going forward!");
+                //Debug.Log("Going forward!");
                 progress += Time.deltaTime / duration;
 
                 if (progress > 1.0f)
@@ -126,7 +126,7 @@ public class SplineWalker : MonoBehaviour
             // If the spline walker is going backwards on the track. (progress going towards 0.0f
             else
             {
-                Debug.Log("Going backward!");
+                //Debug.Log("Going backward!");
                 progress -= Time.deltaTime / duration;
 
                 if (progress < 0f)
