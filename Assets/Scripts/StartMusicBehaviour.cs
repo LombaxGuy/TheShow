@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(InteractableObjectComponent))]
-public class Node2Behaviour : MonoBehaviour {
+public class StartMusicBehaviour : MonoBehaviour {
 
     // The script containing the delegate
     InteractableObjectComponent interactableObjectComponent;
@@ -17,7 +17,7 @@ public class Node2Behaviour : MonoBehaviour {
         if (interactableObjectComponent != null)
         {
             interactableObjectComponent.behaviourDelegate = ThisSpecificBehaviour;
-            Debug.Log("Node assigned to the BehaviourDelegate.");
+            Debug.Log("Music Start assigned to the BehaviourDelegate.");
         }
         else
         {
@@ -30,7 +30,7 @@ public class Node2Behaviour : MonoBehaviour {
     /// </summary>
     private void ThisSpecificBehaviour()
     {
-        transform.parent.GetComponent<MusicRecord>().Add(1);
-        Debug.Log("Node touched 2");
+        transform.parent.GetComponent<MusicRecord>().PlaySounds();
+        Debug.Log("Start Music touched");
     }
 }
