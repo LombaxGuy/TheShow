@@ -23,6 +23,11 @@ public class Checkpoint : MonoBehaviour
         {
             Debug.Log("Checkpoint.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
         }
+
+        if (!savePositionsWithinBox)
+        {
+            Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
+        }
     }
 
     /// <summary>
@@ -47,7 +52,7 @@ public class Checkpoint : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Checkpoint.cs: No positions will be saved because 'savePositionsWithinBox' has not been set!");
+                    Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
                 }               
             }
         }

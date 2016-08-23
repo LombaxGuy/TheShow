@@ -11,19 +11,59 @@ public class LineWalker : MonoBehaviour
     private int currentTargetIndex = 0;
 
     [SerializeField]
-    private SplineWalkerMode mode;
+    private WalkerMode mode;
 
     [SerializeField]
     private float moveSpeed = 10f;
 
     [SerializeField]
     [Tooltip("The amount of seconds it would take to rotate 360 degrees.")]
-    private float rotationSpeed = 3;
+    private float secondsPerRotation = 3;
+
+    private Quaternion startRotation;
 
     private float threshold = 0.1f;
     private bool goingForward = true;
     private bool stop = false;
     private bool isRotating = false;
+
+    void OnEnable()
+    {
+        // Subscribes to the OnRewpawnReset event
+        GameObjectPositionReset.OnResetObjects += OnRespawnReset;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribes from the OnRewpawnReset event
+        GameObjectPositionReset.OnResetObjects -= OnRespawnReset;
+    }
+
+    /// <summary>
+    /// Code is called when the OnRespawnReset even is called
+    /// </summary>
+    void OnRespawnReset()
+    {
+        // Resets the variables
+        currentTargetIndex = 0;
+        stop = false;
+        goingForward = true;
+
+        // Stops any rotation coroutines that might run
+        StopCoroutine("CoroutineRotateForwardTo");
+
+        // Resets the rotations to the start rotation
+        if (startRotation != null)
+        {
+            transform.rotation = startRotation;
+        }
+
+        // Resets the position to the starting position
+        if (path.Length > 0)
+        {
+            transform.position = path[0].transform.position;
+        }
+    }
 
     // Use this for initialization
     private void Start()
@@ -32,7 +72,10 @@ public class LineWalker : MonoBehaviour
         if (path.Length > 0)
         {
             transform.position = path[0].transform.position;
-        }
+
+            startRotation = Quaternion.LookRotation(HelperFunctions.DirectionFromTo(path[0].transform.position, path[1].transform.position));
+            transform.rotation = startRotation;
+        }   
     }
 
     // Update is called once per frame
@@ -47,7 +90,7 @@ public class LineWalker : MonoBehaviour
                 switch (mode)
                 {
                     //... and the mode is 'Once'.
-                    case SplineWalkerMode.Once:
+                    case WalkerMode.Once:
 
                         // If the target index is also the last index in the path array 'stop' is set to true
                         if (currentTargetIndex >= path.Length - 1)
@@ -58,12 +101,12 @@ public class LineWalker : MonoBehaviour
                         else if (currentTargetIndex < path.Length - 1)
                         {
                             currentTargetIndex += 1;
-                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), rotationSpeed);
+                            RotateForwardTo(HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position));
                         }
                         break;
 
                     //... and the mode is 'Loop'.
-                    case SplineWalkerMode.Loop:
+                    case WalkerMode.Loop:
 
                         // The target index is increased
                         currentTargetIndex += 1;
@@ -75,12 +118,12 @@ public class LineWalker : MonoBehaviour
                         }
 
                         // Rotate towards the current target
-                        RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), rotationSpeed);
+                        RotateForwardTo(HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position));
 
                         break;
 
                     //... and the mode is 'PingPong'.
-                    case SplineWalkerMode.PingPong:
+                    case WalkerMode.PingPong:
 
                         // If the target index is larger than or equal to the length of the path array 'goingForward' is set to false
                         if (currentTargetIndex >= path.Length - 1)
@@ -98,14 +141,14 @@ public class LineWalker : MonoBehaviour
                         {
                             //... the target index is increased and we rotate towards the new target
                             currentTargetIndex += 1;
-                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), rotationSpeed);
+                            RotateForwardTo(HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position));
                         }
                         // Otherwise...
                         else
                         {
                             //... the target index is decreased and we rotate towards the new target
                             currentTargetIndex -= 1;
-                            RotateForwardTo(transform, HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position), rotationSpeed);
+                            RotateForwardTo(HelperFunctions.DirectionFromTo(transform.position, path[currentTargetIndex].transform.position));
                         }
                         break;
                 }
@@ -142,21 +185,17 @@ public class LineWalker : MonoBehaviour
     /// <summary>
     /// Rotates the forward-vector of a given transform towards the targetDirection over an amount of time.
     /// </summary>
-    /// <param name="rotatingTransform">The transform that will be rotated.</param>
     /// <param name="targetDirection">Roughly the direction the transform will face after the rotation is done.</param>
-    /// <param name="secondsPerRotation">The amount of seconds it takes to rotate the transform 360 degrees.</param>
-    public void RotateForwardTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
+    public void RotateForwardTo(Vector3 targetDirection)
     {
-        StartCoroutine(CoroutineRotateForwardTo(rotatingTransform, targetDirection, secondsPerRotation));
+        StartCoroutine("CoroutineRotateForwardTo", targetDirection);      
     }
 
     /// <summary>
     /// A coroutine that rotates the forward-vector of a given transform towards a targetDirection over an amount of time.
     /// </summary>
-    /// <param name="rotatingTransform">The transform that will be rotated.</param>
     /// <param name="targetDirection">Roughly the direction the transform will face after the rotation is done.</param>
-    /// <param name="secondsPerRotation">The amount of seconds it takes to rotate the transform 360 degrees.</param>
-    private IEnumerator CoroutineRotateForwardTo(Transform rotatingTransform, Vector3 targetDirection, float secondsPerRotation)
+    private IEnumerator CoroutineRotateForwardTo(Vector3 targetDirection)
     {
         isRotating = true;
 
@@ -164,7 +203,7 @@ public class LineWalker : MonoBehaviour
         float rotationSpeed = 360 / secondsPerRotation;
 
         // Saves the starting direction of the forward vector.
-        Vector3 startDirection = rotatingTransform.forward;
+        Vector3 startDirection = transform.forward;
 
         // 't' value used to Slerp the rotation
         float t = 0.0f;
@@ -176,7 +215,7 @@ public class LineWalker : MonoBehaviour
         float totalRotationTime = deltaAngle / rotationSpeed;
 
         // Saves the starting rotation as a Quaternion
-        Quaternion startRotation = rotatingTransform.localRotation;
+        Quaternion startRotation = transform.localRotation;
         // Gets the target rotation as a Quaternion
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
@@ -184,7 +223,7 @@ public class LineWalker : MonoBehaviour
         while (t < 1.0f)
         {
             //... the rotation is Slerp'ed...
-            rotatingTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             //... and 't' is increased.
             t += Time.deltaTime / totalRotationTime;
@@ -194,7 +233,7 @@ public class LineWalker : MonoBehaviour
 
         t = 1.0f;
         // When the method leaves the while loop we run one last Slerp to make sure that we arrive at exactly the rotation we wanted.
-        rotatingTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+        transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
         // The rotation is now done and 'isRotating' is set to false
         isRotating = false;
@@ -228,7 +267,7 @@ public class LineWalker : MonoBehaviour
                         switch (mode)
                         {
                             //... and the mode is 'Once'.
-                            case SplineWalkerMode.Once:
+                            case WalkerMode.Once:
 
                                 // Draws the endpoint as a red cube
                                 Gizmos.color = new Color(1, 0, 0, 0.2f);
@@ -238,14 +277,14 @@ public class LineWalker : MonoBehaviour
                                 break;
 
                             //... and the mode is 'Loop'.
-                            case SplineWalkerMode.Loop:
+                            case WalkerMode.Loop:
 
                                 // Draws an arrow line from the end point to the start point
                                 HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[0].transform.position, Color.blue);
                                 break;
 
                             //... and the mode is 'PingPong'.
-                            case SplineWalkerMode.PingPong:
+                            case WalkerMode.PingPong:
 
                                 // Draws a yellow cube at the end to indicate a direction change point
                                 Gizmos.color = new Color(1, 0.92f, 0.016f, 0.2f);
@@ -271,21 +310,21 @@ public class LineWalker : MonoBehaviour
                         switch (mode)
                         {
                             //... and the mode is 'Once'.
-                            case SplineWalkerMode.Once:
+                            case WalkerMode.Once:
 
                                 // An arrow line is drawn to the next point in the path
                                 HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[i + 1].transform.position, Color.blue);
                                 break;
 
                             //... and the mode is 'Once'.
-                            case SplineWalkerMode.Loop:
+                            case WalkerMode.Loop:
 
                                 // An arrow line is drawn to the next point in the path
                                 HelperFunctions.GizmoLineWithDirection(path[i].transform.position, path[i + 1].transform.position, Color.blue);
                                 break;
 
                             //... and the mode is 'Once'.
-                            case SplineWalkerMode.PingPong:
+                            case WalkerMode.PingPong:
 
                                 // Draws a yellow cube at the end to indicate a direction change point
                                 Gizmos.color = new Color(1, 0.92f, 0.016f, 0.2f);
@@ -303,7 +342,7 @@ public class LineWalker : MonoBehaviour
                     else
                     {
                         //... and the mode is 'PingPong'...
-                        if (mode == SplineWalkerMode.PingPong)
+                        if (mode == WalkerMode.PingPong)
                         {
                             //... we draw a normal blue line to the next waypoint
                             Gizmos.color = Color.blue;

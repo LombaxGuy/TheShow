@@ -11,12 +11,12 @@ public class GameObjectPositionResetTemplate : MonoBehaviour {
 
     void OnEnable()
     {
-        GameObjectPositionReset.resetObjects += Name;
+        GameObjectPositionReset.OnResetObjects += Name;
     }
 
     void OnDisable()
     {
-        GameObjectPositionReset.resetObjects -= Name;
+        GameObjectPositionReset.OnResetObjects -= Name;
     }
 
     void Name()
