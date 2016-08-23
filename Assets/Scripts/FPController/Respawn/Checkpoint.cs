@@ -23,6 +23,11 @@ public class Checkpoint : MonoBehaviour
         {
             Debug.Log("Checkpoint.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
         }
+
+        if (!savePositionsWithinBox)
+        {
+            Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
+        }
     }
 
     /// <summary>
@@ -37,6 +42,13 @@ public class Checkpoint : MonoBehaviour
             // Only if the player is alive can a checkpoint be triggered
             if (respawnScript.IsAlive)
             {
+                if(this.tag == "MasterRespawn")
+                {
+                    //Saves the current position of the player
+                    SaveGame save = new SaveGame();
+                    save.playerPos = this.transform.position;
+                    SaveLoad.Save(save);
+                }
                 respawnScript.targetSpawnpoint = transform.gameObject;
                 GetComponent<Collider>().enabled = false;
 
@@ -47,7 +59,7 @@ public class Checkpoint : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Checkpoint.cs: No positions will be saved because 'savePositionsWithinBox' has not been set!");
+                    Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
                 }               
             }
         }

@@ -153,19 +153,9 @@ public class PlayerInteractionComponent : MonoBehaviour
     private void HandleInput()
     {
         RaycastHit hit;
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-                   //delete plz
-            SubtitleControl.Instance.StartSub("sub1", 5);
-            //end of delete
-
-        }
 
         if (Input.GetKeyDown(KeyBindings.KeyInteraction))
         {
-            //delete plz
-            SubtitleControl.Instance.StartSub("sub2", 5);
-            //end of delete
             if (Physics.Raycast(viewRay, out hit, interactionDistance))
             {
                 // If the hit object is an interactable object, interact with it

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class StatTracker : MonoBehaviour
@@ -35,7 +36,7 @@ public class StatTracker : MonoBehaviour
     private static float timeSpendOnCurrentLevel = 0;
 
     private static int levelsCompleted = 0;
-    private static int currentLevel = 0;
+    private static string currentLevel = "";
 
     public static int TotalTimesDead
     {
@@ -97,7 +98,7 @@ public class StatTracker : MonoBehaviour
         set { levelsCompleted = value; }
     }
 
-    public static int CurrentLevel
+    public static string CurrentLevel
     {
         get { return currentLevel; }
         set { currentLevel = value; }
@@ -107,6 +108,7 @@ public class StatTracker : MonoBehaviour
 
     private void Awake()
     {
+        currentLevel = SceneManager.GetActiveScene().name;
         DontDestroyOnLoad(gameObject);
     }
 

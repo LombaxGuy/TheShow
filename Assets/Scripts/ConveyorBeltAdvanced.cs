@@ -108,12 +108,12 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
     void OnEnable()
     {
-        GameObjectPositionReset.resetObjects += ResetMethod;
+        GameObjectPositionReset.OnResetObjects += ResetMethod;
     }
 
     void OnDisable()
     {
-        GameObjectPositionReset.resetObjects -= ResetMethod;
+        GameObjectPositionReset.OnResetObjects -= ResetMethod;
     }
 
    
