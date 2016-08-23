@@ -56,7 +56,7 @@ public class PlayerRespawn : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
         {
             SaveGame save = SaveLoad.Load();
-            transform.position = save.playerPos;
+            transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);
         }
     }
 
