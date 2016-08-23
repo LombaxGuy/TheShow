@@ -42,6 +42,13 @@ public class Checkpoint : MonoBehaviour
             // Only if the player is alive can a checkpoint be triggered
             if (respawnScript.IsAlive)
             {
+                if(this.tag == "MasterRespawn")
+                {
+                    //Saves the current position of the player
+                    SaveGame save = new SaveGame();
+                    save.playerPos = this.transform.position;
+                    SaveLoad.Save(save);
+                }
                 respawnScript.targetSpawnpoint = transform.gameObject;
                 GetComponent<Collider>().enabled = false;
 
