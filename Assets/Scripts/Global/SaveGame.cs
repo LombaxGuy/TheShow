@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [Serializable]
 public class SaveGame
 {
+    //The variables we save
     public int totalTimesDead = StatTracker.TotalTimesDead;
     public int timesKilledBySpikes = StatTracker.TimesKilledBySpikes;
     public int timesKilledBySpinners = StatTracker.TimesKilledBySpinners;

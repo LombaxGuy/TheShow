@@ -12,14 +12,28 @@ public static class SaveLoad
     //This is a save/load system. Uses PlayerPref for settings and file streaming for values
     //Settings not done
     //Host mind not done
-    private static GameObject[] gObject;
-    private static GameObject soundObject;
+
+    //Serialized fields. Used for the Settings Canvas slider names
+    [SerializeField]
+    private static string masterSliderName = "MasterSlider";
+    [SerializeField]
+    private static string musicSliderName = "MusicSlider";
+    [SerializeField]
+    private static string fxSliderName = "FXSlider";
+    [SerializeField]
+    private static string voiceSliderName = "VoiceSlider";
+
+
     private static Canvas[] cObject;
     private static Canvas soundCanvas;
-    private static float[] value = new float[8];
+
+    //The variable that stores the slider values
+    [SerializeField]
+    private static float[] value = new float[4];
 
     private static SaveGame save = new SaveGame();
 
+    //List that stores our PlayerPref keys
     private static List<string> prefKeys = new List<string>();
 
     public static List<string> PrefKeys
@@ -69,21 +83,6 @@ public static class SaveLoad
         formatter.Serialize(fileStream, save);
 
         fileStream.Close();
-        SavePrefs();
-
-
-        //try
-        //{
-        //    for (int i = 0; i < completedLevels.Length; i++)
-        //    {
-        //        PlayerPrefs.SetInt("Level" + i, completedLevels[i] ? 1 : 0);
-        //        Debug.Log("Saved : Level" + i + " : " + completedLevels[i]);
-        //    }
-        //}
-        //catch (System.Exception)
-        //{
-        //    Debug.Log("SAVE FAILED: DANGER");
-        //}
 
 
     }
@@ -105,6 +104,54 @@ public static class SaveLoad
 
             fileStream.Close();
 
+            return save;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Saves all settings in PlayerPrefs
+    /// </summary>
+    public static void SavePrefs()
+    {
+        //Finds the Settings canvas
+        cObject = Canvas.FindObjectsOfType<Canvas>();
+        for (int i = 0; i < cObject.Length; i++)
+        {
+            if (cObject[i].name == "SettingsObject")
+            {
+                soundCanvas = cObject[i];
+            }
+        }
+
+        //Saves our slider values in the value variable
+
+        value[0] = soundCanvas.transform.Find(masterSliderName).GetComponent<Slider>().value;
+        value[1] = soundCanvas.transform.Find(musicSliderName).GetComponent<Slider>().value;
+        value[2] = soundCanvas.transform.Find(fxSliderName).GetComponent<Slider>().value;
+        value[3] = soundCanvas.transform.Find(voiceSliderName).GetComponent<Slider>().value;
+        
+        //Saves the slider values in playerprefs
+        PlayerPrefs.SetFloat("masterVol", value[0]);
+        PrefKeys.Add("masterVol");
+        PlayerPrefs.SetFloat("musicVol", value[1]);
+        PrefKeys.Add("musicVol");
+        PlayerPrefs.SetFloat("fxVol", value[2]);
+        PrefKeys.Add("fxVol");
+        PlayerPrefs.SetFloat("voiceVol", value[3]);
+        PrefKeys.Add("voiceVol");
+    }
+
+
+    /// <summary>
+    /// Loads the saved preferrences 
+    /// </summary>
+    public static void LoadPrefs()
+    {
+        //Goes through our Playerpref Key array and gets the values if we have the keys stored
         try
         {
             for (int i = 0; i < prefKeys.Count; i++)
@@ -120,73 +167,27 @@ public static class SaveLoad
         {
             Debug.Log("LOADED FAILED: DANGER");
         }
-            return save;
-        }
-        else
-        {
-            return null;
-        }
 
-
-
-
-    }
-
-    /// <summary>
-    /// Saves all settings in PlayerPrefs
-    /// </summary>
-    public static void SavePrefs()
-    {
-        gObject = GameObject.FindObjectsOfType<GameObject>();
-        for (int i = 0; i < gObject.Length; i++)
-        {
-            if (gObject[i].name == "SettingsObject")
-            {
-                soundObject = gObject[i];
-                Debug.Log(soundObject.name);
-            }
-            Debug.Log(gObject[i].name);
-        }
-
-        soundObject.GetComponent<SoundSettings>().Mixer[0].GetFloat("masterVol", out value[0]);
-        soundObject.GetComponent<SoundSettings>().Mixer[1].GetFloat("musicVol", out value[1]);
-        soundObject.GetComponent<SoundSettings>().Mixer[2].GetFloat("fxVol", out value[2]);
-        soundObject.GetComponent<SoundSettings>().Mixer[3].GetFloat("voiceVol", out value[3]);
-
-        PlayerPrefs.SetFloat("masterVol", value[0]);
-        PrefKeys.Add("masterVol");
-        PlayerPrefs.SetFloat("musicVol", value[1]);
-        PrefKeys.Add("musicVol");
-        PlayerPrefs.SetFloat("fxVol", value[2]);
-        PrefKeys.Add("fxVol");
-        PlayerPrefs.SetFloat("voiceVol", value[3]);
-        PrefKeys.Add("voiceVol");
-        //Debug.Log(value1);
-        //Debug.Log(value2);
-        //Debug.Log(value3);
-        //Debug.Log(value4);
-
-    }
-
-    public static void LoadPrefs()
-    {
+        //Finds our settings canvas
         cObject = Canvas.FindObjectsOfType<Canvas>();
         for (int i = 0; i < cObject.Length; i++)
         {
             if (cObject[i].name == "SettingsMenu")
             {
                 soundCanvas = cObject[i];
-                Debug.Log(soundCanvas.name);
             }
-            Debug.Log(cObject[i].name);
         }
 
-        //soundCanvas.transform.GetChild(0).GetComponent<Slider>().value = value[0];
-        //soundCanvas.transform.GetChild(1).GetComponent<Slider>().value = value[1];
-        //soundCanvas.transform.GetChild(2).GetComponent<Slider>().value = value[2];
-        //soundCanvas.transform.GetChild(3).GetComponent<Slider>().value = value[3];
+        //Sets our sliders
+        soundCanvas.transform.Find(masterSliderName).GetComponent<Slider>().value = value[0];
+        soundCanvas.transform.Find(musicSliderName).GetComponent<Slider>().value = value[1];
+        soundCanvas.transform.Find(fxSliderName).GetComponent<Slider>().value = value[2];
+        soundCanvas.transform.Find(voiceSliderName).GetComponent<Slider>().value = value[3];
     }
 
+    /// <summary>
+    /// Deletes our save file if it exists.
+    /// </summary>
     public static void DeleteSaveData()
     {
         if(File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))

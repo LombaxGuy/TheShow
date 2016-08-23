@@ -79,13 +79,17 @@ public class Menu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (menu != null && menu.gameObject.activeInHierarchy == false)
+            if (menu != null && menu.gameObject.activeInHierarchy == false && settingsMenu.gameObject.activeInHierarchy == false)
             {
                 MenuToggle(true);
             }
             else if (menu != null && menu.gameObject.activeInHierarchy == true)
             {
                 MenuToggle(false);
+            }
+            else if (menu != null && menu.gameObject.activeInHierarchy == false && settingsMenu.gameObject.activeInHierarchy == true)
+            {
+                SettingsToggle(false);
             }
         }
     }
@@ -118,7 +122,10 @@ public class Menu : MonoBehaviour
     /// <param name="state">used to change the state</param>
     public void SettingsToggle(bool state)
     {
-        menu.SetActive(false);
+        if(menu != null)
+        {
+            menu.SetActive(false);
+        }
         settingsMenu.SetActive(state);
     }
 
@@ -166,7 +173,11 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void SettingsBack(bool state)
     {
-        menu.SetActive(true);
+        SaveLoad.SavePrefs();
+        if(menu != null)
+        {
+            menu.SetActive(true);
+        }
         settingsMenu.SetActive(state);
     }
 
