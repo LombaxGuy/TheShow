@@ -19,13 +19,13 @@ public class GameObjectPositionReset : MonoBehaviour {
 
     public delegate void ResetAllObjects();
 
-    public static event ResetAllObjects resetObjects;
+    public static event ResetAllObjects OnResetObjects;
 
 
     // Use this for initialization
     void Start ()
     {
-        resetObjects();
+
     }
 	
 	// Update is called once per frame
@@ -33,6 +33,11 @@ public class GameObjectPositionReset : MonoBehaviour {
     {
 
 	}
+
+    public void ResetObjects()
+    {
+        OnResetObjects();
+    }
 
     /// <summary>
     /// OverlapBox is created with the BoxCollider information in the param. 

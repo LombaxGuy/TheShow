@@ -77,6 +77,7 @@ public class PlayerRespawn : MonoBehaviour
     void Respawn()
     {
         //gameResetManager.GetComponent<GameObjectPositionReset>().GameObjectToStartLocation();
+        GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().ResetObjects();
 
         transform.position = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position;
         transform.rotation = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().rotation;
