@@ -2,7 +2,11 @@
 using System.Collections;
 
 [RequireComponent(typeof(InteractableObjectComponent))]
-public class Node1Behaviour : MonoBehaviour {
+public class NodeBehaviour : MonoBehaviour {
+
+    [Header("Insert number from 0 to sound clips count")]
+    [SerializeField]
+    private int number;
 
     // The script containing the delegate
     InteractableObjectComponent interactableObjectComponent;
@@ -30,7 +34,7 @@ public class Node1Behaviour : MonoBehaviour {
     /// </summary>
     private void ThisSpecificBehaviour()
     {
-        transform.parent.GetComponent<MusicRecord>().Add(0);
+        transform.parent.GetComponent<MusicRecord>().Add(number);
         Debug.Log("Node touched 1");
     }
 }
