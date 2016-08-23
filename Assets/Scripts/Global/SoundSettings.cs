@@ -4,6 +4,7 @@ using UnityEngine.Audio;
 
 public class SoundSettings : MonoBehaviour
 {
+    [SerializeField]
     private AudioMixer[] mixer;
 
     public AudioMixer[] Mixer
@@ -17,6 +18,11 @@ public class SoundSettings : MonoBehaviour
         {
             mixer = value;
         }
+    }
+
+    void Start()
+    {
+        
     }
 
     /// <summary>

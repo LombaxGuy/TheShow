@@ -33,6 +33,7 @@ public class Menu : MonoBehaviour
         settingsMenu = GameObject.Find("SettingsMenu");
         player = GameObject.Find("Player");
 
+        SaveLoad.LoadPrefs();
         //Turning off all menus
         settingsMenu.SetActive(false);
 
@@ -117,6 +118,7 @@ public class Menu : MonoBehaviour
     /// <param name="state">used to change the state</param>
     public void SettingsToggle(bool state)
     {
+        menu.SetActive(false);
         settingsMenu.SetActive(state);
     }
 
@@ -164,6 +166,7 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void SettingsBack(bool state)
     {
+        menu.SetActive(true);
         settingsMenu.SetActive(state);
     }
 
@@ -190,11 +193,6 @@ public class Menu : MonoBehaviour
     public void NoButton()
     {
         newGameMenu.SetActive(false);
-    }
-
-    public void BackButton()
-    {
-        settingsMenu.SetActive(false);
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -11,9 +12,12 @@ public static class SaveLoad
     //This is a save/load system. Uses PlayerPref for settings and file streaming for values
     //Settings not done
     //Host mind not done
-    private static Canvas[] canvas;
+    private static GameObject[] gObject;
+    private static GameObject soundObject;
+    private static Canvas[] cObject;
     private static Canvas soundCanvas;
-    private static float[] value;
+    private static float[] value = new float[8];
+
     private static SaveGame save = new SaveGame();
 
     private static List<string> prefKeys = new List<string>();
@@ -37,14 +41,12 @@ public static class SaveLoad
         //Gets the saved PlayerPrefKeys from the regestry
         for (int i = 0; i < save.prefKeys.Capacity; i++)
         {
-            if(PlayerPrefs.HasKey(save.prefKeys[i]))
+            if (PlayerPrefs.HasKey(save.prefKeys[i]))
             {
                 PlayerPrefs.GetFloat(save.prefKeys[i]);
             }
         }
     }
-
-
 
     /// <summary>
     /// Creates a save directory if the user dosen't have one.
@@ -103,6 +105,21 @@ public static class SaveLoad
 
             fileStream.Close();
 
+        try
+        {
+            for (int i = 0; i < prefKeys.Count; i++)
+            {
+                if (PlayerPrefs.HasKey(prefKeys[i]))
+                {
+                    value[i] = PlayerPrefs.GetFloat(prefKeys[i]);
+                    Debug.Log(value[i]);
+                }
+            }
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("LOADED FAILED: DANGER");
+        }
             return save;
         }
         else
@@ -110,29 +127,7 @@ public static class SaveLoad
             return null;
         }
 
-        //try
-        //{
-        //    for (int i = 0; i < completedLevels.Length; i++)
-        //    {
-        //        if (PlayerPrefs.HasKey("Level" + i))
-        //        {
-        //            if (PlayerPrefs.GetInt("Level" + i) == 0)
-        //            {
-        //                completedLevels[i] = false;
-        //            }
-        //            else
-        //            {
-        //                completedLevels[i] = true;
-        //            }
-        //            Debug.Log("Loaded : Level" + i + " : " + completedLevels[i]);
-        //        }
 
-        //    }
-        //}
-        //catch (System.Exception)
-        //{
-        //    Debug.Log("LOADED FAILED: DANGER");
-        //}
 
 
     }
@@ -142,20 +137,22 @@ public static class SaveLoad
     /// </summary>
     public static void SavePrefs()
     {
-
-        canvas = GameObject.FindObjectsOfType<Canvas>();
-        for (int i = 0; i < canvas.Length; i++)
+        gObject = GameObject.FindObjectsOfType<GameObject>();
+        for (int i = 0; i < gObject.Length; i++)
         {
-            Debug.Log(canvas[i].name);
-            if (canvas[i].name == "SettingsMenu")
+            if (gObject[i].name == "SettingsObject")
             {
-                soundCanvas = canvas[i];
+                soundObject = gObject[i];
+                Debug.Log(soundObject.name);
             }
+            Debug.Log(gObject[i].name);
         }
-        soundCanvas.GetComponent<SoundSettings>().Mixer[0].GetFloat("masterVol", out value[0]);
-        soundCanvas.GetComponent<SoundSettings>().Mixer[1].GetFloat("musicVol", out value[1]);
-        soundCanvas.GetComponent<SoundSettings>().Mixer[2].GetFloat("fxVol", out value[2]);
-        soundCanvas.GetComponent<SoundSettings>().Mixer[3].GetFloat("voiceVol", out value[3]);
+
+        soundObject.GetComponent<SoundSettings>().Mixer[0].GetFloat("masterVol", out value[0]);
+        soundObject.GetComponent<SoundSettings>().Mixer[1].GetFloat("musicVol", out value[1]);
+        soundObject.GetComponent<SoundSettings>().Mixer[2].GetFloat("fxVol", out value[2]);
+        soundObject.GetComponent<SoundSettings>().Mixer[3].GetFloat("voiceVol", out value[3]);
+
         PlayerPrefs.SetFloat("masterVol", value[0]);
         PrefKeys.Add("masterVol");
         PlayerPrefs.SetFloat("musicVol", value[1]);
@@ -164,15 +161,30 @@ public static class SaveLoad
         PrefKeys.Add("fxVol");
         PlayerPrefs.SetFloat("voiceVol", value[3]);
         PrefKeys.Add("voiceVol");
-        Debug.Log(value[0]);
-        Debug.Log(value[1]);
-        Debug.Log(value[2]);
-        Debug.Log(value[3]);
+        //Debug.Log(value1);
+        //Debug.Log(value2);
+        //Debug.Log(value3);
+        //Debug.Log(value4);
 
     }
 
     public static void LoadPrefs()
     {
+        cObject = Canvas.FindObjectsOfType<Canvas>();
+        for (int i = 0; i < cObject.Length; i++)
+        {
+            if (cObject[i].name == "SettingsMenu")
+            {
+                soundCanvas = cObject[i];
+                Debug.Log(soundCanvas.name);
+            }
+            Debug.Log(cObject[i].name);
+        }
+
+        //soundCanvas.transform.GetChild(0).GetComponent<Slider>().value = value[0];
+        //soundCanvas.transform.GetChild(1).GetComponent<Slider>().value = value[1];
+        //soundCanvas.transform.GetChild(2).GetComponent<Slider>().value = value[2];
+        //soundCanvas.transform.GetChild(3).GetComponent<Slider>().value = value[3];
     }
 
     public static void DeleteSaveData()

@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour
     [Tooltip("The box collider used to find all the objects that should be reset on respawn. If left blank no object will be saved.")]
     private BoxCollider savePositionsWithinBox;
     private GameObjectPositionReset resetPositionsScript;
+    private bool load = true;
 
     private Transform resetTransform;
     private string gameResetManagerName = "GameResetManager";
@@ -25,6 +26,14 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            load = false;
+        }
+    }
+
     /// <summary>
     /// Is used to change the spawn point for the player, in the PlayerRespawn script, when the player collides with the checkpoint.
     /// </summary> 
@@ -39,14 +48,17 @@ public class Checkpoint : MonoBehaviour
             {
                 if (this.tag == "MasterRespawn")
                 {
-                    SaveGame save = new SaveGame();
-                    save.playerPosX = this.transform.position.x;
-                    save.playerPosY = this.transform.position.y;
-                    save.playerPosZ = this.transform.position.z;
-                    SaveLoad.Save(save);
+                    if (!load)
+                    {
+                        SaveGame save = new SaveGame();
+                        save.playerPosX = this.transform.position.x;
+                        save.playerPosY = this.transform.position.y;
+                        save.playerPosZ = this.transform.position.z;
+                        SaveLoad.Save(save);
+                        respawnScript.targetSpawnpoint = transform.gameObject;
+                        GetComponent<Collider>().enabled = false;
+                    }
                 }
-                respawnScript.targetSpawnpoint = transform.gameObject;
-                GetComponent<Collider>().enabled = false;
 
                 // If the 'savePositionsWithinBox' is not left blank (is not null)
                 if (savePositionsWithinBox)
