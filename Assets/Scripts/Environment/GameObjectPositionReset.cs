@@ -17,28 +17,6 @@ public class GameObjectPositionReset : MonoBehaviour {
 
     private int gameObjectWithTagCount;
 
-    public delegate void ResetAllObjects();
-
-    public static event ResetAllObjects OnResetObjects;
-
-
-    // Use this for initialization
-    void Start ()
-    {
-
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-
-	}
-
-    public void ResetObjects()
-    {
-        OnResetObjects();
-    }
-
     /// <summary>
     /// OverlapBox is created with the BoxCollider information in the param. 
     /// It takes all the colliders in the area and place it in the gameObjects list, if they have the canRespawn tag.
@@ -129,12 +107,6 @@ public class GameObjectPositionReset : MonoBehaviour {
                 gameObjects[i].GetComponent<Rigidbody>().angularVelocity = gameObjectsAngularVelocity[i];
             }
         }
-
         //resetObjects();
-
     }
-
-
-
-
 }

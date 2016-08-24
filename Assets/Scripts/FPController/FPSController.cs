@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FPSController : MonoBehaviour {
-
+public class FPSController : MonoBehaviour
+{
     Rigidbody rigid;
 
     [SerializeField]
@@ -90,8 +90,39 @@ public class FPSController : MonoBehaviour {
     bool crouching = false;
     bool grounded = false;
 
+    bool locked = false;
+
+    void OnEnable()
+    {
+        // Subscribes to events
+        EventManager.OnPlayerDeath += OnPlayerDeath;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribes from events
+        EventManager.OnPlayerDeath -= OnPlayerDeath;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    private void OnPlayerDeath()
+    {
+        locked = true;
+
+        if (crouching)
+        {
+            EndCrouch();
+        }
+    }
+
+    private void OnPlayerRespawn()
+    {
+        locked = false;
+    }
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         rigid = GetComponent<Rigidbody>();
 
@@ -99,27 +130,38 @@ public class FPSController : MonoBehaviour {
         headPosition = head.transform.localPosition;
         restPosition = headPosition;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        moveVector = Vector3.zero;
-        jumpKey = false;
-        crouchKey = false;
-        sprintKey = false;
-
-        if (Input.anyKey)
+        if (!locked)
         {
-            HandleInput();
-        }
+            moveVector = Vector3.zero;
+            jumpKey = false;
+            crouchKey = false;
+            sprintKey = false;
 
-        if(grounded)
-            HeadBob();
+            if (Input.anyKey)
+            {
+                HandleInput();
+            }
+
+            if (grounded)
+                HeadBob();
+        }
     }
 
     void FixedUpdate()
     {
-        HandleMovement();
+        //Slows the velocity each frame if the player is grounded.
+        //Counteracts the sliding resulting from AddForce.
+        if (grounded)
+            rigid.velocity *= 0.9f;
+
+        if (!locked)
+        {
+            HandleMovement();
+        }
     }
 
     /// <summary>
@@ -178,6 +220,11 @@ public class FPSController : MonoBehaviour {
     /// </summary>
     void HandleMovement()
     {
+        ////Slows the velocity each frame if the player is grounded.
+        ////Counteracts the sliding resulting from AddForce.
+        //if (grounded)
+        //    rigid.velocity *= 0.9f;
+
         //If either W, A, S or D is held.
         if (moveVector != Vector3.zero)
         {
@@ -192,19 +239,14 @@ public class FPSController : MonoBehaviour {
                 //If grounded, add the velocity.
                 rigid.AddRelativeForce((moveVelocity * 500) * Time.deltaTime);
 
-            else if(!grounded && rigid.velocity.magnitude <= maxMagnitude)
+            else if (!grounded && rigid.velocity.magnitude <= maxMagnitude)
             {
                 //If not grounded, add the velocity multiplied by the inAirSpeedModifier.
                 rigid.AddRelativeForce(((moveVelocity * inAirSpeedModifier) * 500) * Time.deltaTime);
             }
         }
 
-        //Slows the velocity each frame if the player is grounded.
-        //Counteracts the sliding resulting from AddForce.
-        if(grounded)
-            rigid.velocity *= 0.9f;
-
-        if(!jumpKey && jumping && grounded)
+        if (!jumpKey && jumping && grounded)
         {
             jumping = false;
         }
@@ -221,13 +263,13 @@ public class FPSController : MonoBehaviour {
         }
 
         //Called when in the air, and the jumpkey is held.
-        if(jumping && jumpKey)
+        if (jumping && jumpKey)
         {
             //Calculates the time since the jump began.
             timeSinceJump = Time.time - jumpStartTime;
 
             //If we haven't yet "jumped" for the maximum amount of time.
-            if(timeSinceJump < maxJumpTime)
+            if (timeSinceJump < maxJumpTime)
             {
                 //t is used to make the jump curve exponential instead of linear.
                 float t = 1 - timeSinceJump / maxJumpTime;
@@ -244,13 +286,13 @@ public class FPSController : MonoBehaviour {
         }
 
         //If the crouch key is held, the player isn't already crouching and is grounded.
-        else if(crouchKey && !crouching && grounded)
+        else if (crouchKey && !crouching && grounded)
         {
             Crouch();
         }
 
         //If the crouch key is no longer held, and the player is crouching.
-        else if(!crouchKey && crouching)
+        else if (!crouchKey && crouching)
         {
             EndCrouch();
         }
@@ -296,14 +338,14 @@ public class FPSController : MonoBehaviour {
     void HeadBob()
     {
         //If sprinting increase the amount of headbobbing.
-        if(sprintKey)
+        if (sprintKey)
         {
             curBobAmount = bobAmountSprinting;
             curBobSpeed = bobSpeedSprinting;
         }
 
         //If not sprinting, change the amount of headbobbing back to normal.
-        if(!sprintKey)
+        if (!sprintKey)
         {
             //Used a lerp to make the transition from sprinting to walking more smooth.
             curBobAmount = Mathf.Lerp(bobAmountSprinting, bobAmount, 0.2f);
@@ -339,7 +381,7 @@ public class FPSController : MonoBehaviour {
         }
 
         //If the bobTimer is too large, reset it to restart the bob.
-        if(bobTimer > Mathf.PI * 2)
+        if (bobTimer > Mathf.PI * 2)
         {
             bobTimer = 0;
         }

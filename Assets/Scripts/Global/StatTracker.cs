@@ -31,9 +31,11 @@ public class StatTracker : MonoBehaviour
     private static int timesKilledByShocks = 0;
     private static int timesKilledByGas = 0;
 
+    private static float savedTotalTimeSpend = 0;
     private static float totalTimeSpend = 0;
     private static float timeSpendInOneSetting = 0;
     private static float timeSpendOnCurrentLevel = 0;
+    private static float timeSpendOnAllLevels = 0;
 
     private static int levelsCompleted = 0;
     private static string currentLevel = "";
@@ -74,6 +76,19 @@ public class StatTracker : MonoBehaviour
         set { timesKilledByGas = value; }
     }
 
+    public static float SavedTotalTimeSpend
+    {
+        get
+        {
+            return savedTotalTimeSpend;
+        }
+
+        set
+        {
+            savedTotalTimeSpend = value;
+        }
+    }
+
     public static float TotalTimeSpend
     {
         get { return totalTimeSpend; }
@@ -92,6 +107,19 @@ public class StatTracker : MonoBehaviour
         set { timeSpendOnCurrentLevel = value; }
     }
 
+    public static float TimeSpendOnAllLevels
+    {
+        get
+        {
+            return timeSpendOnAllLevels;
+        }
+
+        set
+        {
+            timeSpendOnAllLevels = value;
+        }
+    }
+
     public static int LevelsCompleted
     {
         get { return levelsCompleted; }
@@ -103,6 +131,8 @@ public class StatTracker : MonoBehaviour
         get { return currentLevel; }
         set { currentLevel = value; }
     }
+
+
 
     #endregion
 
@@ -129,7 +159,7 @@ public class StatTracker : MonoBehaviour
     /// </summary>
     private void LogTimeSpend()
     {
-        totalTimeSpend = Time.time; // This variable should be set to something else. Need the savesystem to work for it to function as intended.,
+        totalTimeSpend = savedTotalTimeSpend + timeSpendOnAllLevels + Time.timeSinceLevelLoad; // This variable should be set to something else. Need the savesystem to work for it to function as intended.,
 
         timeSpendOnCurrentLevel = Time.timeSinceLevelLoad;
         timeSpendInOneSetting = Time.time;
