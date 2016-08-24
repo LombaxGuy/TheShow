@@ -1,95 +1,144 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
+
 public class Spinner : MonoBehaviour {
-    [SerializeField]
-    private float speed = 5000;
-    [SerializeField]
-    [Tooltip("Use this to set a delay")]
-    private float offset;
-    [SerializeField]
-    private float wait = 0;
-    [SerializeField]
-    [Tooltip("Use this to change max speed")]
-    private float maxRotationSpeed = 2;
 
-    private float posx = 0;
-    private float posy = 50;
-    private float posz = 50;
+    
 
-    private Rigidbody rig;
-    private Vector3 pushPoint;
+    private bool isOut = false;
 
-
+    private bool isMoving = false;
 
     [SerializeField]
-    [Tooltip("Set this for the different rotation options")]
-    private int rotationMode;
+    [Tooltip("")]
+    private int moveMode;
 
+    //Used to set the things people use
+    [SerializeField]
+    [Tooltip("How far this extends")]
+    private float distance = 5;
+    [SerializeField]
+    [Tooltip("How fast this extends")]
+    private float pushOutTime = 0.2f;
+    [SerializeField]
+    [Tooltip("How long in seconds until the script starts running")]
+    private float offsetSeconds = 0;
+    [SerializeField]
+    [Tooltip("How long this stays in")]
+    private float idleInSeconds = 3;
+    [SerializeField]
+    [Tooltip("How long this stays out")]
+    private float idleOutSeconds = 1;
+
+    //used timers
+    private float offsetTimer = 0;
+    private float idleTimer = 0;
+
+
+
+    private Vector3 startPos;
+
+    private Vector3 extPos;
 
     // Use this for initialization
+    //set positions and casing the rotation/piston mode
     void Start () {
-        rig = gameObject.GetComponent<Rigidbody>();
-        pushPoint = new Vector3(transform.position.x - posy, transform.position.y - posx, transform.position.z - posz);
-        rig.maxAngularVelocity = maxRotationSpeed;
 
+        
+        startPos = transform.position;
+        extPos = transform.position + transform.forward * distance;
 
-        //hinge = GetComponent<HingeJoint>();
+        switch (moveMode)
+        {
+            case 1:
+                extPos = transform.position + transform.forward * distance;
+                break;
+            case 2:
+                extPos = transform.position + transform.right * distance;
+                break;
+        }
     }
 	
 	// Update is called once per frame
+    /// <summary>
+    /// controlling the time and checking positionS
+    /// </summary>
 	void Update () {
-        if(rig == null)
-        {
-            Debug.Log("GameObjetct: " + gameObject.name + " needs a rgidbody");
-            
-        }
-        else
-        {
-            if (wait >= offset)
+        if (!isMoving)
+        {            
+            if (offsetTimer < offsetSeconds)
             {
-                Spin();
+
+                offsetTimer += Time.deltaTime;
             }
             else
             {
-                wait = wait + 1 * Time.deltaTime;
+                idleTimer += Time.deltaTime;
+            }
+        }
+
+        if (isOut)
+        {
+            if (idleTimer > idleOutSeconds)
+            {
+
+                Move(extPos, startPos, pushOutTime);               
+                isOut = false;
+                idleTimer = 0;
             }
 
-            
         }
-    }
-
-    private void Spin()
-    {
-
-        switch(rotationMode)
+        else
         {
-
-            case 1:
-                {
-                    rig.AddForceAtPosition((Vector3.back * speed * Time.deltaTime), pushPoint);
-
-
-                    break;
-                }
-            case 2:
-                {
-                    rig.AddTorque((Vector3.forward * speed * Time.deltaTime), ForceMode.VelocityChange);
-
-                    break;
-                }
-
-            case 3:
-                {
-                    rig.AddForce((Vector3.right * speed * Time.deltaTime), ForceMode.VelocityChange);
-                    break;
-                }     
+            if (idleTimer > idleInSeconds)
+            {
+                Move(startPos, extPos, pushOutTime);             
+                isOut = true;
+                idleTimer = 0;
+            }
         }
+
     }
 
-    private void spintest()
+    /// <summary>
+    /// Coroutine for the movement of the object
+    /// </summary>
+    /// <param name="from">The vector used as start position</param>
+    /// <param name="to">The vector we want to move to</param>
+    /// <param name="timeInSeconds">The time we want the move action to take</param>
+    /// <returns></returns>
+    private IEnumerator CoroutineMove(Vector3 from, Vector3 to, float timeInSeconds)
     {
-        rig.velocity = new Vector3(0,0,0);
+        isMoving = true;
+        float t = 0;
+
+        while (t < 1)
+        {
+            transform.position = Vector3.Lerp(from, to, t);
+
+            t += Time.deltaTime / timeInSeconds;
+
+            yield return null;
+        }
+
+
+        transform.position = Vector3.Lerp(from, to, t);
+        isMoving = false;
     }
+
+    /// <summary>
+    /// Coroutine for the movement of the object
+    /// </summary>
+    /// <param name="from">The vector used as start position</param>
+    /// <param name="to">The vector we want to move to</param>
+    /// <param name="timeInSeconds">The time we want the move action to take</param>
+    private void Move(Vector3 from, Vector3 to, float timeInSeconds)
+    {
+
+        StartCoroutine(CoroutineMove(from, to, timeInSeconds));
+
+    }
+
+
 }

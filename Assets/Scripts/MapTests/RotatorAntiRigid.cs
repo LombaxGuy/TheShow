@@ -2,35 +2,43 @@
 using System.Collections;
 
 public class RotatorAntiRigid : MonoBehaviour {
+
+    //Used vectors
     private Quaternion breakPoint;
     private Quaternion backPoint;
     private Vector3 current;
-    [SerializeField]
+
+    // Two timers
     private float timer;
-    [SerializeField]
     private float offTimer;
+
+    //Settings
     [SerializeField]
+    [Tooltip("Time it takes to wait")]
     private float wait = 2;
     [SerializeField]
+    [Tooltip("How long it takes until script starts running")]
     private float offset;
+
+
     private bool offsetstop;
-
-    private Transform thing;
-
     private bool mode = false;
 
-    private Vector3 stop;
 
 	// Use this for initialization
+    /// <summary>
+    /// Setting up the points where start and where stop is.
+    /// </summary>
 	void Start () {
-        //thing = gameObject.transform;
-        //gameObject.transform.rotation = Quaternion.Euler(0,180,225);
+
         backPoint = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 225);
         breakPoint = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 310);
         
-        stop = new Vector3(0,0,225);
 	}
 
+    /// <summary>
+    /// Where the object is moved
+    /// </summary>
     void FixedUpdate()
     {
         if(offTimer > offset)
@@ -42,6 +50,9 @@ public class RotatorAntiRigid : MonoBehaviour {
     }
 	
 	// Update is called once per frame
+    /// <summary>
+    /// Running the timers and setting the current transform
+    /// </summary>
 	void Update () {
         current = gameObject.transform.rotation.eulerAngles;
         timer = timer + 1 * Time.deltaTime;
@@ -52,20 +63,20 @@ public class RotatorAntiRigid : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Checking position and doing the rotating
+    /// </summary>
     private void StepRotate()
     {
 
 
         if (current.z >= breakPoint.eulerAngles.z && mode == false)
-        {
-            
-            Debug.Log("breakhit");
+        {            
             mode = true;
             timer = 0;
         }
         else if (current.z <=  backPoint.eulerAngles.z && mode == true)
         {
-            Debug.Log("back hit");
             mode = false;
             timer = 0;
         }

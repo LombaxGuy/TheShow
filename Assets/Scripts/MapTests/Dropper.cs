@@ -1,119 +1,136 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
+
 public class Dropper : MonoBehaviour {
 
-    private Transform thing;
-    private Rigidbody rig;
 
-    private float timer;
-    private float offTimer;
+    private Vector3 top;
 
-    [SerializeField]
-    private float speed;
-    [SerializeField]
-    private float upWait = 2;
-    [SerializeField]
-    private float downWait = 2;
-    [SerializeField]
-    private float offset;
+    private Vector3 bot;
 
-    [SerializeField]
-    private Vector3 maxRange;
-    [SerializeField]
-    private Vector3 start;
-    [SerializeField]
-    private Vector3 destination;
+    private bool isDown = false;
 
+    private bool isMoving = false;
 
-    private Vector3 down;
+    private float offsetTimer = 0;
 
+    private float idleTimer = 0;
 
+    private float distance;
 
     [SerializeField]
-    private bool mode;
+    [Tooltip("Time it takes to move down")]
+    private float dropDownTime = 0.4f;
+    [SerializeField]
+    [Tooltip("Time it takes to move up")]
+    private float dropUpTime = 1f;
+    [SerializeField]
+    [Tooltip("How long in seconds until the script starts running")]
+    private float offsetSeconds = 0;
 
-	// Use this for initialization
-	void Start () {
-        thing = gameObject.transform;
-        rig = gameObject.GetComponent<Rigidbody>();
-        start = thing.position;
-        destination = new Vector3(0, 0 ,0);
-        
+
+    [SerializeField]
+    [Tooltip("How long until this starts going down")]
+    private float idleInSeconds = 3;
+    [SerializeField]
+    [Tooltip("How long until this starts going up")]
+    private float idleOutSeconds = 1;
+
+
+
+
+    void Start()
+    {
+        top = transform.position;
+        bot = transform.position;
+
 
         RaycastHit hit;
 
-        if (Physics.Raycast(thing.position, Vector3.down, out hit ,20))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 20))
         {
-            Debug.DrawRay(thing.position, Vector3.down * 20, Color.red);
-            
-            
-            destination.y = hit.distance;
-            Debug.Log(destination);
-        }
-        maxRange = start - destination;
-       
-    }
-	
-	// Update is called once per frame
-	void Update () {
+            Debug.DrawRay(transform.position, Vector3.down * 20, Color.red);
 
-        if (offTimer < offset)
-            offTimer += Time.deltaTime;
+            bot = new Vector3(transform.position.x, transform.position.y - hit.distance + 0.5f, transform.position.z);
 
-        if (offTimer > offset)
-        {
-            timer += Time.deltaTime;
-           // Drop();
+            Debug.Log(distance);
         }
 
     }
-
-    void Drop()
+    void Update()
     {
 
-        if (thing.position.y == maxRange.y + 0.5f && mode == false && timer > upWait)
+        if (!isMoving)
         {
-            mode = true;
-            rig.velocity = new Vector3(0,0,0);
-            timer = 0;
-            Debug.Log("first");
+
+            if (offsetTimer < offsetSeconds)
+            {
+
+                offsetTimer += Time.deltaTime;
+            }
+            else
+            {
+                idleTimer += Time.deltaTime;
+            }
         }
-        else if (thing.position.y == start.y && mode == true && timer > downWait)
+
+
+        if (isDown)
         {
-            Debug.Log("sec");
-            mode = false;
-            rig.velocity = new Vector3(0, 0, 0);
-            timer = 0;
+            if (idleTimer > idleOutSeconds)
+            {
+                Move(bot, top, dropUpTime);
+                isDown = false;
+                idleTimer = 0;
+            }
+
         }
-
-
-        switch (mode)
+        else
         {
-            case true:
-                {
-                    //DownTop
-                    if (timer > downWait)
-                    {
-                        //
-                        Debug.Log("nt");
-                    }
-
-                    break;
-                }
-            case false:
-                {
-                    //TopDown
-                    if (timer > upWait)
-                    {
-                        //rig.velocity = new Vector3(thing.position.x, -(speed * Time.deltaTime), thing.position.z);                                                                
-                        
-                        Debug.Log("dt");
-                    }
-
-                    break;
-                }               
+            if (idleTimer > idleInSeconds)
+            {
+                Move(top, bot, dropDownTime);
+                isDown = true;
+                idleTimer = 0;
+            }
         }
+        //if (Input.GetKey(KeyCode.Alpha1))
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, top, speed * Time.deltaTime);
+        //}
+
+        //if (Input.GetKey(KeyCode.Alpha2))
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, bot, speed * Time.deltaTime);
+        //}
+
+
+    }
+
+    private IEnumerator CoroutineMove(Vector3 from, Vector3 to, float timeInSeconds)
+    {
+        isMoving = true;
+        float t = 0;
+
+        while (t < 1)
+        {
+            transform.position = Vector3.Lerp(from, to, t);
+
+            t += Time.deltaTime / timeInSeconds;
+
+            yield return null;
+        }
+
+
+        transform.position = Vector3.Lerp(from, to, t);
+        isMoving = false;
+    }
+
+    private void Move(Vector3 from, Vector3 to, float timeInSeconds)
+    {
+
+        StartCoroutine(CoroutineMove(from, to, timeInSeconds));
+
     }
 }

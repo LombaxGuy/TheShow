@@ -5,14 +5,12 @@ public class SpinnerFan : MonoBehaviour {
 
     private Vector3 current;
 
-    private Transform hinge;
-
     [SerializeField]
-    private int state;
+    [Tooltip("Speed")]
+    private float speed = 5;
 
 	// Use this for initialization
 	void Start () {
-        hinge = GetComponentInParent<Transform>();
         
 
 	
@@ -22,30 +20,7 @@ public class SpinnerFan : MonoBehaviour {
 	void Update () {
         current = this.transform.localRotation.eulerAngles;
 
-        switch(state)
-        {
-            case 1:
-                {
-                    transform.rotation = Quaternion.Euler(current) * Quaternion.Euler(0, 1, 0);
-                    break;
-                }
-            case 2:
-                {
-                    transform.localRotation = Quaternion.Euler(current) * Quaternion.Euler(0, 2, 0);
-                    break;
-                }
-            case 3:
-                {
-
-
-                    break;
-                }
-
-
-        }
+        transform.localRotation = Quaternion.Euler(current) * Quaternion.Euler(0, speed, 0);
         
-        
-        
-
 	}
 }
