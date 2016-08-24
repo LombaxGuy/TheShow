@@ -64,18 +64,18 @@ public class Menu : MonoBehaviour
     void Update()
     {
         //If the Main Menu is the active scene the Continue button will/will not be greyed out depending on if a save file exists
-            if (SceneManager.GetActiveScene().name == "Menu")
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
             {
-                if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
-                {
-                    button.GetComponent<Button>().interactable = true;
-                }
-                else
-                {
-                    button.GetComponent<Button>().interactable = false;
-                }
-
+                button.GetComponent<Button>().interactable = true;
             }
+            else
+            {
+                button.GetComponent<Button>().interactable = false;
+            }
+
+        }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -122,7 +122,7 @@ public class Menu : MonoBehaviour
     /// <param name="state">used to change the state</param>
     public void SettingsToggle(bool state)
     {
-        if(menu != null)
+        if (menu != null)
         {
             menu.SetActive(false);
         }
@@ -146,15 +146,19 @@ public class Menu : MonoBehaviour
     {
         saveGame = SaveLoad.Load();
 
-        StatTracker.TotalTimesDead = saveGame.totalTimesDead;
-        StatTracker.TimesKilledBySpikes = saveGame.timesKilledBySpikes;
-        StatTracker.TimesKilledBySpinners = saveGame.timesKilledBySpinners;
-        StatTracker.TimesKilledByFalling = saveGame.timesKilledByFalling;
-        StatTracker.TimesKilledByShocks = saveGame.timesKilledByShocks;
-        StatTracker.TimesKilledByGas = saveGame.timesKilledByGas;
-        StatTracker.TotalTimeSpend = saveGame.totalTimeSpend;
-        StatTracker.LevelsCompleted = saveGame.levelsCompleted;
-        StatTracker.CurrentLevel = saveGame.currentLevel;
+
+        if (StatTracker.TotalTimeSpend == 0)
+        {
+            StatTracker.TotalTimesDead = saveGame.totalTimesDead;
+            StatTracker.TimesKilledBySpikes = saveGame.timesKilledBySpikes;
+            StatTracker.TimesKilledBySpinners = saveGame.timesKilledBySpinners;
+            StatTracker.TimesKilledByFalling = saveGame.timesKilledByFalling;
+            StatTracker.TimesKilledByShocks = saveGame.timesKilledByShocks;
+            StatTracker.TimesKilledByGas = saveGame.timesKilledByGas;
+            StatTracker.SavedTotalTimeSpend = saveGame.totalTimeSpend;
+            StatTracker.LevelsCompleted = saveGame.levelsCompleted;
+            StatTracker.CurrentLevel = saveGame.currentLevel;
+        }
 
         SceneManager.LoadScene(saveGame.currentLevel);
     }
@@ -164,6 +168,7 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void MainMenu()
     {
+        StatTracker.TimeSpendOnAllLevels += StatTracker.TimeSpendOnCurrentLevel;
         Pause.SetPauseState(false);
         SceneManager.LoadScene("Menu");
     }
@@ -174,7 +179,7 @@ public class Menu : MonoBehaviour
     public void SettingsBack(bool state)
     {
         SaveLoad.SavePrefs();
-        if(menu != null)
+        if (menu != null)
         {
             menu.SetActive(true);
         }
@@ -194,7 +199,19 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void YesButton()
     {
-        SceneManager.LoadScene("fp-ctlr");
+        StatTracker.TotalTimesDead = 0;
+        StatTracker.TimesKilledBySpikes = 0;
+        StatTracker.TimesKilledBySpinners = 0;
+        StatTracker.TimesKilledByFalling = 0;
+        StatTracker.TimesKilledByShocks = 0;
+        StatTracker.TimesKilledByGas = 0;
+        StatTracker.SavedTotalTimeSpend = 0;
+        StatTracker.TotalTimeSpend = 0;
+        StatTracker.TimeSpendOnAllLevels = 0;
+        StatTracker.LevelsCompleted = 0;
+        StatTracker.CurrentLevel = SceneManager.GetActiveScene().name;
+
+        SceneManager.LoadScene("TestMap");
         SaveLoad.DeleteSaveData();
     }
 
