@@ -29,19 +29,19 @@ public class DoorBehaviourComponent : MonoBehaviour
     void OnEnable()
     {
         // Subscribes to the OnRewpawnReset event
-        GameObjectPositionReset.OnResetObjects += OnRespawnReset;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
     }
 
     void OnDisable()
     {
         // Unsubscribes from the OnRewpawnReset event
-        GameObjectPositionReset.OnResetObjects -= OnRespawnReset;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
     /// <summary>
     /// Code is called when the OnRespawnReset even is called
     /// </summary>
-    void OnRespawnReset()
+    void OnPlayerRespawn()
     {
         transform.rotation = startRotation;
     }

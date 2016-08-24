@@ -24,20 +24,20 @@ public class AudioEffectTrigger : MonoBehaviour
         // Subscribes to the OnRewpawnReset event if the player should reset on respawn
         if (resetOnRespawn)
         {
-            GameObjectPositionReset.OnResetObjects += OnRespawnReset;
+            EventManager.OnPlayerRespawn += OnPlayerRespawn;
         }
     }
 
     void OnDisable()
     {
         // Unsubscribes from the OnRewpawnReset event
-        GameObjectPositionReset.OnResetObjects -= OnRespawnReset;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
     /// <summary>
     /// Code is called when the OnRespawnReset even is called
     /// </summary>
-    void OnRespawnReset()
+    void OnPlayerRespawn()
     {
         gameObject.GetComponent<Collider>().enabled = true;
     }

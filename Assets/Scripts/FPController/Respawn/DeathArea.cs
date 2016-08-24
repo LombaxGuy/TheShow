@@ -18,7 +18,7 @@ public class DeathArea : MonoBehaviour
             if (respawnScript.IsAlive)
             {
                 //... the player is killed.
-                respawnScript.Death();
+                respawnScript.Kill();
             }
         }
     }

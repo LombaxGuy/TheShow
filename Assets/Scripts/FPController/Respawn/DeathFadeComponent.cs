@@ -37,6 +37,36 @@ public class DeathFadeComponent : MonoBehaviour
 
     private bool continueFade = true;
 
+    void OnEnable()
+    {
+        // Subscribes to events
+        EventManager.OnPlayerDeath += OnPlayerDeath;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribes from events
+        EventManager.OnPlayerDeath -= OnPlayerDeath;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    /// <summary>
+    /// Starts a coroutine that initiates the death fade when the OnPlayerDeath event is raised
+    /// </summary>
+    private void OnPlayerDeath()
+    {
+        StartCoroutine(DeathFade());
+    }
+
+    /// <summary>
+    /// Calls the method ResetImageEffects when the OnPlayerRespawn event is raised
+    /// </summary>
+    private void OnPlayerRespawn()
+    {
+        ResetImageEffects();
+    }
+
     /// <summary>
     /// Initialization
     /// </summary>
@@ -50,7 +80,7 @@ public class DeathFadeComponent : MonoBehaviour
     /// Starts a coroutine which fades to black and white and blurs the screen. Used for when the player dies.
     /// </summary>
     /// <returns>IEnumerator (This method starts a coroutine)</returns>
-    public IEnumerator StartDeathFade()
+    public IEnumerator DeathFade()
     {
         // Calculating difference in the changed values
         float deltaSaturation = Mathf.Abs(colorCorrectionEffect.saturation - targetSaturation);

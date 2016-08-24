@@ -7,7 +7,6 @@ public class PlayerRespawn : MonoBehaviour
 {
     //For the respawn cordinates
     private Vector3 spawnCords;
-    private DeathFadeComponent CCScript;
 
     [SerializeField]
     private float defaultDeathCooldown = 2;
@@ -26,24 +25,25 @@ public class PlayerRespawn : MonoBehaviour
     public GameObject targetSpawnpoint;
     private Animator animator;
 
-    private GameObject gameResetManager;
-    private string gameResetManagerName = "GameResetManager";
+    void OnEnable()
+    {
+        // Subscribes to the OnRewpawnReset event
+        EventManager.OnPlayerDeath += OnPlayerDeath;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribes from the OnRewpawnReset event
+        EventManager.OnPlayerDeath -= OnPlayerDeath;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
 
     //Initialize the master spawn and image
     void Start()
     {
         isAlive = true;
-        CCScript = GetComponentInChildren<DeathFadeComponent>();
         animator = GetComponentInChildren<Animator>();
-
-        try
-        {
-            gameResetManager = GameObject.Find(gameResetManagerName);
-        }
-        catch
-        {
-            Debug.Log("PlayerRespawn.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
-        }
 
         try
         {
@@ -53,6 +53,7 @@ public class PlayerRespawn : MonoBehaviour
         {
             Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
         }
+
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
         {
             SaveGame save = SaveLoad.Load();
@@ -69,7 +70,7 @@ public class PlayerRespawn : MonoBehaviour
         {
             if (!isAlive && Input.GetKey(KeyCode.Mouse1) && deathCooldown <= 0)
             {
-                Respawn();
+                EventManager.RaiseOnPlayerRespawn();
             }
 
             if (!isAlive)
@@ -79,44 +80,11 @@ public class PlayerRespawn : MonoBehaviour
         }
     }
 
-    // Sets the respawn position to the current selected checkpoint and moves the player to the checkpoint
-    void Respawn()
-    {
-        //gameResetManager.GetComponent<GameObjectPositionReset>().GameObjectToStartLocation();
-        GameObject.Find("GameResetManager").GetComponent<GameObjectPositionReset>().ResetObjects();
-
-        transform.position = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position;
-        transform.rotation = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().rotation;
-
-        GetComponent<FirstPersonController>().LockControls(false);
-
-        animator.SetBool("playerDead", false);
-
-        CCScript.ResetImageEffects();
-
-        isAlive = true;
-
-    }
-
-    /// <summary>
-    /// This is the method that is called to kill the player.
-    /// </summary>
-    public void Death()
+    public void Kill()
     {
         if (isAlive)
         {
-            deathCooldown = defaultDeathCooldown;
-
-            GetComponent<FirstPersonController>().LockControls(true);
-
-            StartCoroutine(CCScript.StartDeathFade());
-
-            float randomAnim = Random.Range(0, 2);
-
-            animator.SetFloat("random", randomAnim);
-            animator.SetBool("playerDead", true);
-
-            StatTracker.TotalTimesDead += 1;
+            EventManager.RaiseOnPlayerDeath();
 
             isAlive = false;
         }
@@ -124,5 +92,29 @@ public class PlayerRespawn : MonoBehaviour
         {
             Debug.Log("PlayerRespawn.cs: The player is already dead! The player cannot be killed while 'isAlive' is false.");
         }
+    }
+
+    private void OnPlayerDeath()
+    {
+        deathCooldown = defaultDeathCooldown;
+
+        //GetComponent<FirstPersonController>().LockControls(true);
+
+        float randomAnim = Random.Range(0, 2);
+
+        animator.SetFloat("random", randomAnim);
+        animator.SetBool("playerDead", true);
+
+        StatTracker.TotalTimesDead += 1;
+    }
+
+    private void OnPlayerRespawn()
+    {
+        transform.position = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position;
+        transform.rotation = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().rotation;
+
+        animator.SetBool("playerDead", false);
+
+        isAlive = true;
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[AddComponentMenu("Camera-Control/Mouse Look")]
 public class MouseLook : MonoBehaviour {
 
     [SerializeField]
@@ -38,8 +37,32 @@ public class MouseLook : MonoBehaviour {
 
     Camera cam;
 
-	// Use this for initialization
-	void Start ()
+    void OnEnable()
+    {
+        // Subscribes to events
+        EventManager.OnPlayerDeath += OnPlayerDeath;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribes from events
+        EventManager.OnPlayerDeath -= OnPlayerDeath;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    private void OnPlayerDeath()
+    {
+        this.enabled = false;
+    }
+
+    private void OnPlayerRespawn()
+    {
+        this.enabled = true;
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
 

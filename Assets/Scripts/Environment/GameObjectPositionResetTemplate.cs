@@ -11,12 +11,12 @@ public class GameObjectPositionResetTemplate : MonoBehaviour {
 
     void OnEnable()
     {
-        GameObjectPositionReset.OnResetObjects += Name;
+        EventManager.OnPlayerRespawn += Name;
     }
 
     void OnDisable()
     {
-        GameObjectPositionReset.OnResetObjects -= Name;
+        EventManager.OnPlayerRespawn -= Name;
     }
 
     void Name()

@@ -108,12 +108,12 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
     void OnEnable()
     {
-        GameObjectPositionReset.OnResetObjects += ResetMethod;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
     }
 
     void OnDisable()
     {
-        GameObjectPositionReset.OnResetObjects -= ResetMethod;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
    
@@ -250,7 +250,7 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         }
     }
 
-    public void ResetMethod()
+    public void OnPlayerRespawn()
     {
         Debug.Log("Event Called");
     }

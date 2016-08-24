@@ -30,19 +30,19 @@ public class LineWalker : MonoBehaviour
     void OnEnable()
     {
         // Subscribes to the OnRewpawnReset event
-        GameObjectPositionReset.OnResetObjects += OnRespawnReset;
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
     }
 
     void OnDisable()
     {
         // Unsubscribes from the OnRewpawnReset event
-        GameObjectPositionReset.OnResetObjects -= OnRespawnReset;
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
     /// <summary>
     /// Code is called when the OnRespawnReset even is called
     /// </summary>
-    void OnRespawnReset()
+    void OnPlayerRespawn()
     {
         // Resets the variables
         currentTargetIndex = 0;
@@ -292,9 +292,6 @@ public class LineWalker : MonoBehaviour
                                 Gizmos.color = Color.yellow;
                                 Gizmos.DrawWireCube(path[i].transform.position, new Vector3(0.2f, 0.2f, 0.2f));
 
-                                // Draws a normal blue line to the next point
-                                Gizmos.color = Color.blue;
-                                Gizmos.DrawLine(path[i].transform.position, path[0].transform.position);
                                 break;
                         }
                     }
