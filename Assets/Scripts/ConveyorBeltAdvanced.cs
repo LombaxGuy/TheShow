@@ -36,11 +36,31 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     [SerializeField]
     private Direction dir = Direction.FORWARD;
 
+    private List<originalObjectPosAndRot> copyNotActive;
 
+    private int gameObjectCount;
+    private int gameObjectCounter = 0;
     private float timer = 1;
     private float counter = 0;
 
-    //Addes senere. Hvis der skal være spawn i nærheden af det originale spawn position
+    struct originalObjectPosAndRot
+    {
+        private Vector3 objPos;
+        private Quaternion objRot;
+
+        public Vector3 ObjPos
+        {
+            get { return objPos; }
+            set { objPos = value; }
+        }
+
+        public Quaternion ObjRot
+        {
+            get { return objRot; }
+            set { objRot = value; }
+        }
+
+    }
 
     [System.Serializable]
      struct gameObjectData
@@ -77,6 +97,7 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     void Start ()
     {
 
+        copyNotActive = new List<originalObjectPosAndRot>();
 
         if (gameObjectsSpawn.transform.childCount != 0)
         {
@@ -89,11 +110,20 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         }
         else
         {
-            Debug.Log("There is no children.");
+            Debug.Log("There is no child objects");
         }
 
+        gameObjectCount = notActive.Count;
+
+        for (int i = 0; i < notActive.Count; i++)
+        {
+            originalObjectPosAndRot temp = new originalObjectPosAndRot();
+            temp.ObjPos = notActive[i].transform.localPosition;
+            temp.ObjRot = notActive[i].transform.localRotation;
+            copyNotActive.Add(temp);
+        }
         
-        //Instantiate(gameObjectsSpawn, startGameObject.transform.position, Quaternion.identity);
+
 	}
 
 	
@@ -176,7 +206,6 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         }
     }
 
-
     private void ActiveListUpdate()
     {
 
@@ -214,7 +243,6 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
     }
 
-
     private void RotateGameObject()
     {
         rotationGameObject.transform.Rotate(Vector3.right * Time.deltaTime * rotationSpeed);
@@ -244,10 +272,25 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
                 objectData.Obj.transform.parent = null;
                 GameObject gameObj = objectData.Obj;
                 rotationList.Remove(objectData);
-                Destroy(gameObj);
+                LoopGameObjects(gameObj);
                 remove = false;
             }
         }
+    }
+
+    private void LoopGameObjects(GameObject obj)
+    {
+        if(gameObjectCounter >= gameObjectCount)
+        {
+            gameObjectCounter = 0;
+        }
+
+        obj.transform.SetParent(gameObjectsSpawn.transform);
+        obj.transform.localPosition = copyNotActive[gameObjectCounter].ObjPos;
+        obj.transform.localRotation = copyNotActive[gameObjectCounter].ObjRot;
+
+        gameObjectCounter++;
+        notActive.Add(obj);
     }
 
     public void OnPlayerRespawn()
