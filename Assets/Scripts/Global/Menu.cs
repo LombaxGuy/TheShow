@@ -149,15 +149,7 @@ public class Menu : MonoBehaviour
 
         if (StatTracker.TotalTimeSpend == 0)
         {
-            StatTracker.TotalTimesDead = saveGame.totalTimesDead;
-            StatTracker.TimesKilledBySpikes = saveGame.timesKilledBySpikes;
-            StatTracker.TimesKilledBySpinners = saveGame.timesKilledBySpinners;
-            StatTracker.TimesKilledByFalling = saveGame.timesKilledByFalling;
-            StatTracker.TimesKilledByShocks = saveGame.timesKilledByShocks;
-            StatTracker.TimesKilledByGas = saveGame.timesKilledByGas;
-            StatTracker.SavedTotalTimeSpend = saveGame.totalTimeSpend;
-            StatTracker.LevelsCompleted = saveGame.levelsCompleted;
-            StatTracker.CurrentLevel = saveGame.currentLevel;
+            saveGame.GetStatTrackerValues();
         }
 
         SceneManager.LoadScene(saveGame.currentLevel);

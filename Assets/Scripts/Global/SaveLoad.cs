@@ -52,7 +52,7 @@ public static class SaveLoad
     // Use this for initialization
     static void Start()
     {
- 
+
     }
 
     /// <summary>
@@ -61,10 +61,12 @@ public static class SaveLoad
     /// </summary>
     public static void Save(SaveGame save)
     {
-        if(!Directory.Exists(Application.persistentDataPath + "/SaveData"))
+        if (!Directory.Exists(Application.persistentDataPath + "/SaveData"))
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/SaveData");
         }
+
+        save.SetStatTrackerValues();
 
 
         BinaryFormatter formatter = new BinaryFormatter();
@@ -93,7 +95,7 @@ public static class SaveLoad
 
             FileStream fileStream = File.Open(Application.persistentDataPath + "/SaveData/SaveGame.blargh", FileMode.Open);
 
-            save = (SaveGame) formatter.Deserialize(fileStream);
+            save = (SaveGame)formatter.Deserialize(fileStream);
 
             fileStream.Close();
 
@@ -126,7 +128,7 @@ public static class SaveLoad
         value[1] = soundCanvas.transform.Find(musicSliderName).GetComponent<Slider>().value;
         value[2] = soundCanvas.transform.Find(fxSliderName).GetComponent<Slider>().value;
         value[3] = soundCanvas.transform.Find(voiceSliderName).GetComponent<Slider>().value;
-        
+
         //Saves the slider values in playerprefs
         PlayerPrefs.SetFloat("masterVol", value[0]);
         PrefKeys.Add("masterVol");
@@ -183,7 +185,7 @@ public static class SaveLoad
     /// </summary>
     public static void DeleteSaveData()
     {
-        if(File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+        if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
         {
             File.Delete(Application.persistentDataPath + "/SaveData/SaveGame.blargh");
         }
