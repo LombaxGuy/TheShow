@@ -6,21 +6,30 @@ public class SpinnerFan : MonoBehaviour {
     private Vector3 current;
 
     [SerializeField]
-    [Tooltip("Speed")]
+    [Tooltip("Spinning speed")]
     private float speed = 5;
+    [SerializeField]
+    [Tooltip("The offset")]
+    private float offset = 0;
 
-	// Use this for initialization
-	void Start () {
-        
-
-	
-	}
+    private float offsetTimer;
 	
 	// Update is called once per frame
+    //For rotating the hingepoint
 	void Update () {
-        current = this.transform.localRotation.eulerAngles;
 
-        transform.localRotation = Quaternion.Euler(current) * Quaternion.Euler(0, speed, 0);
+        if (offsetTimer < offset)
+        {
+            offsetTimer += Time.deltaTime;
+        }
+        else
+        {
+            current = this.transform.localRotation.eulerAngles;
+
+            transform.localRotation = Quaternion.Euler(current) * Quaternion.Euler(0, speed, 0);
+        }
+
+
         
 	}
 }
