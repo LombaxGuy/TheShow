@@ -46,9 +46,7 @@ public class Checkpoint : MonoBehaviour
                 {
                     //Saves the current position of the player
                     SaveGame save = new SaveGame();
-                    save.playerPosX = this.transform.position.x;
-                    save.playerPosY = this.transform.position.y;
-                    save.playerPosZ = this.transform.position.z;
+                    save.SetPlayerValues(this.transform.position.x, this.transform.position.y, this.transform.position.z);                                      
                     SaveLoad.Save(save);
                 }
                 respawnScript.TargetSpawnpoint = transform.gameObject;
