@@ -17,11 +17,11 @@ public class TemplateBehaviourComponent : MonoBehaviour
         if (interactableObjectComponent != null)
         {
             interactableObjectComponent.behaviourDelegate = ThisSpecificBehaviour;
-            Debug.Log("Behaviour assigned to the BehaviourDelegate.");
+            //Debug.Log("Behaviour assigned to the BehaviourDelegate.");
         }
         else
         {
-            Debug.Log("No 'InteractableObjectComponent' was found!");
+            Debug.Log("TemplateBehaviourComponent.cs: No 'InteractableObjectComponent' was found!");
         }
     }
 

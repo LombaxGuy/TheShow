@@ -51,7 +51,7 @@ public class Checkpoint : MonoBehaviour
                     save.playerPosZ = this.transform.position.z;
                     SaveLoad.Save(save);
                 }
-                respawnScript.targetSpawnpoint = transform.gameObject;
+                respawnScript.TargetSpawnpoint = transform.gameObject;
                 GetComponent<Collider>().enabled = false;
 
                 // If the 'savePositionsWithinBox' is not left blank (is not null)

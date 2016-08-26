@@ -11,19 +11,26 @@ public class PlayerRespawn : MonoBehaviour
     [SerializeField]
     private float defaultDeathCooldown = 2;
 
+    [SerializeField]
+    private bool spawnAtCheckpoint = false;
+
     private float deathCooldown = 2;
 
-    [SerializeField]
     private bool isAlive;
+
+    private GameObject targetSpawnpoint;
+    private Animator animator;
 
     public bool IsAlive
     {
         get { return isAlive; }
     }
 
-    //For other scripts to use
-    public GameObject targetSpawnpoint;
-    private Animator animator;
+    public GameObject TargetSpawnpoint
+    {
+        get { return targetSpawnpoint; }
+        set { targetSpawnpoint = value; }
+    }
 
     void OnEnable()
     {
@@ -54,7 +61,7 @@ public class PlayerRespawn : MonoBehaviour
             Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
         }
 
-        if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+        if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh") && spawnAtCheckpoint)
         {
             SaveGame save = SaveLoad.Load();
             transform.position = new Vector3(save.playerPosX, save.playerPosY, save.playerPosZ);

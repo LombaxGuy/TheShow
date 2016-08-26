@@ -4,12 +4,13 @@ using System.Collections;
 public class FPSController : MonoBehaviour
 {
     Rigidbody rigid;
+    Animator animator;
 
     [SerializeField]
     GameObject head;
 
     [SerializeField]
-    CapsuleCollider bottomCollider;
+    Collider bottomCollider;
 
     [SerializeField]
     CapsuleCollider topCollider;
@@ -52,6 +53,10 @@ public class FPSController : MonoBehaviour
     #region Headbob Fields
     [Header("- Headbob Settings -")]
     [SerializeField]
+    [Range(0.001f, 1.0f)]
+    private float headbobDegree = 1.0f;
+
+    [SerializeField]
     [Range(0.5f, 50f)]
     float transitionSpeed = 20f;
 
@@ -88,9 +93,19 @@ public class FPSController : MonoBehaviour
 
     bool jumping = false;
     bool crouching = false;
+
+    [SerializeField]
     bool grounded = false;
 
     bool locked = false;
+
+    private float rayCastLength = 1.01f;
+    private int numberOfRaycasts = 10;
+
+    [SerializeField]
+    private float maximumSlopeAngle = 35;
+
+    #region Events and EventHandlers
 
     void OnEnable()
     {
@@ -110,10 +125,7 @@ public class FPSController : MonoBehaviour
     {
         locked = true;
 
-        if (crouching)
-        {
-            EndCrouch();
-        }
+        animator.SetBool("animateHead", false);
     }
 
     private void OnPlayerRespawn()
@@ -121,19 +133,26 @@ public class FPSController : MonoBehaviour
         locked = false;
     }
 
+    #endregion
+
     // Use this for initialization
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
 
         //Sets the reference to the head position and the rest position.
         headPosition = head.transform.localPosition;
         restPosition = headPosition;
+
+        animator.SetFloat("headbobDegree", headbobDegree);
     }
 
     // Update is called once per frame
     void Update()
     {
+        grounded = IsGrounded();
+
         if (!locked)
         {
             moveVector = Vector3.zero;
@@ -146,7 +165,7 @@ public class FPSController : MonoBehaviour
                 HandleInput();
             }
 
-            if (grounded)
+            if (IsGrounded())
                 HeadBob();
         }
     }
@@ -155,8 +174,16 @@ public class FPSController : MonoBehaviour
     {
         //Slows the velocity each frame if the player is grounded.
         //Counteracts the sliding resulting from AddForce.
-        if (grounded)
-            rigid.velocity *= 0.9f;
+        if (IsGrounded())
+        {
+            rigid.velocity *= 0.8f;
+        }
+        else
+        {
+            rigid.velocity = new Vector3(rigid.velocity.x * 0.98f, rigid.velocity.y, rigid.velocity.z * 0.98f);
+        }
+
+        StopSlideOnSlopes();
 
         if (!locked)
         {
@@ -197,7 +224,7 @@ public class FPSController : MonoBehaviour
             jumpKey = true;
         }
 
-        if (Input.GetKey(KeyBindings.KeyMoveCrouch) && grounded)
+        if (Input.GetKey(KeyBindings.KeyMoveCrouch))
         {
             crouchKey = true;
 
@@ -205,7 +232,7 @@ public class FPSController : MonoBehaviour
             moveVector *= crouchSpeedModifier;
         }
 
-        if (Input.GetKey(KeyBindings.KeyMoveSprint) && !crouchKey)
+        if (Input.GetKey(KeyBindings.KeyMoveSprint) && !crouching && IsGrounded())
         {
             sprintKey = true;
 
@@ -220,11 +247,6 @@ public class FPSController : MonoBehaviour
     /// </summary>
     void HandleMovement()
     {
-        ////Slows the velocity each frame if the player is grounded.
-        ////Counteracts the sliding resulting from AddForce.
-        //if (grounded)
-        //    rigid.velocity *= 0.9f;
-
         //If either W, A, S or D is held.
         if (moveVector != Vector3.zero)
         {
@@ -235,24 +257,24 @@ public class FPSController : MonoBehaviour
             moveVelocity.y = 0f;
             moveVelocity.z = moveVector.z * speedMultiplier;
 
-            if (grounded && rigid.velocity.magnitude <= maxMagnitude)
+            if (IsGrounded() && rigid.velocity.magnitude <= maxMagnitude)
                 //If grounded, add the velocity.
                 rigid.AddRelativeForce((moveVelocity * 500) * Time.deltaTime);
 
-            else if (!grounded && rigid.velocity.magnitude <= maxMagnitude)
+            else if (!IsGrounded() && rigid.velocity.magnitude <= maxMagnitude)
             {
                 //If not grounded, add the velocity multiplied by the inAirSpeedModifier.
                 rigid.AddRelativeForce(((moveVelocity * inAirSpeedModifier) * 500) * Time.deltaTime);
             }
         }
 
-        if (!jumpKey && jumping && grounded)
+        if (!jumpKey && jumping && IsGrounded())
         {
             jumping = false;
         }
 
         //Called when first jumping, adds the initial jump velocity.
-        if (jumpKey && grounded && !jumping)
+        if (jumpKey && IsGrounded() && !jumping)
         {
             curJumpVelocity = rigid.velocity;
             curJumpVelocity.y = initialJumpVelocity;
@@ -284,15 +306,13 @@ public class FPSController : MonoBehaviour
                 rigid.velocity = curJumpVelocity;
             }
         }
-
-        //If the crouch key is held, the player isn't already crouching and is grounded.
-        else if (crouchKey && !crouching && grounded)
+        //If the crouch key is held, the player isn't already crouching.
+        else if (crouchKey && !crouching)
         {
-            Crouch();
+            StartCrouch();
         }
-
         //If the crouch key is no longer held, and the player is crouching.
-        else if (!crouchKey && crouching)
+        else if (!crouchKey && crouching && CanStandUp())
         {
             EndCrouch();
         }
@@ -301,16 +321,14 @@ public class FPSController : MonoBehaviour
     /// <summary>
     /// Disables the upper capsule collider and moves the camera down.
     /// </summary>
-    void Crouch()
+    void StartCrouch()
     {
         crouching = true;
 
-        //Makes the top collider a trigger so it won't collide with the environment.
-        topCollider.isTrigger = true;
+        animator.SetBool("crouched", true);
 
-        //Set's the rest position of the camera to the crouch height. 
-        //The HeadBob method handles the position of the camera.
-        restPosition.y -= crouchHeight;
+        // Disables the top collider so it won't collide with the environment.
+        topCollider.enabled = false;
     }
 
     /// <summary>
@@ -318,18 +336,12 @@ public class FPSController : MonoBehaviour
     /// </summary>
     void EndCrouch()
     {
-        //Get's the position of the top collider.
-        Vector3 topColliderPosition = topCollider.transform.position + topCollider.center;
+        crouching = false;
 
-        //If the OverlapSphere intersects two colliders or less, stand back up.
-        //(Top and bottom collider)
-        if (Physics.OverlapSphere(topColliderPosition, 0.5f).Length <= 2)
-        {
-            crouching = false;
-            topCollider.isTrigger = false;
+        animator.SetBool("crouched", false);
 
-            restPosition.y += crouchHeight;
-        }
+        // Enables the top collider so it won't collide with the environment.
+        topCollider.enabled = true;
     }
 
     /// <summary>
@@ -340,65 +352,164 @@ public class FPSController : MonoBehaviour
         //If sprinting increase the amount of headbobbing.
         if (sprintKey)
         {
-            curBobAmount = bobAmountSprinting;
-            curBobSpeed = bobSpeedSprinting;
+            animator.SetFloat("animationSpeed", 2.0f);
+            //curBobAmount = bobAmountSprinting;
+            //curBobSpeed = bobSpeedSprinting;
         }
 
         //If not sprinting, change the amount of headbobbing back to normal.
         if (!sprintKey)
         {
+            animator.SetFloat("animationSpeed", 1.0f);
             //Used a lerp to make the transition from sprinting to walking more smooth.
-            curBobAmount = Mathf.Lerp(bobAmountSprinting, bobAmount, 0.2f);
-            curBobSpeed = Mathf.Lerp(bobSpeedSprinting, bobSpeed, 0.2f);
+            //curBobAmount = Mathf.Lerp(bobAmountSprinting, bobAmount, 0.2f);
+            //curBobSpeed = Mathf.Lerp(bobSpeedSprinting, bobSpeed, 0.2f);
         }
 
         //If WASD is pressed.
         if (moveVector != Vector3.zero)
         {
-            //Increased the progress of the current "bob" based on the bobSpeed.
-            bobTimer += curBobSpeed * Time.deltaTime;
+            animator.SetBool("animateHead", true);
+            ////Increased the progress of the current "bob" based on the bobSpeed.
+            //bobTimer += curBobSpeed * Time.deltaTime;
 
-            //Calculates the new position of the camera based on the progress of the bob.
-            Vector3 newPosition = new Vector3(Mathf.Cos(bobTimer) * curBobAmount,
-                                                Mathf.Lerp(headPosition.y, restPosition.y + Mathf.Abs((Mathf.Sin(bobTimer) * curBobAmount)), transitionSpeed * Time.deltaTime),
-                                                restPosition.z);
+            ////Calculates the new position of the camera based on the progress of the bob.
+            //Vector3 newPosition = new Vector3(Mathf.Cos(bobTimer) * curBobAmount,
+            //                                    Mathf.Lerp(headPosition.y, restPosition.y + Mathf.Abs((Mathf.Sin(bobTimer) * curBobAmount)), transitionSpeed * Time.deltaTime),
+            //                                    restPosition.z);
 
-            headPosition = newPosition;
+            //headPosition = newPosition;
         }
 
         //If no movement keys are pressed.
         else
         {
+            animator.SetBool("animateHead", false);
             //Reset the bob timer.
-            bobTimer = Mathf.PI / 2;
+            //bobTimer = Mathf.PI / 2;
 
-            //Lerps the position back to the rest position.
-            Vector3 newPosition = new Vector3(Mathf.Lerp(headPosition.x, restPosition.x, transitionSpeed * Time.deltaTime),
-                                              Mathf.Lerp(headPosition.y, restPosition.y, transitionSpeed * Time.deltaTime),
-                                              Mathf.Lerp(headPosition.z, restPosition.z, transitionSpeed * Time.deltaTime));
+            ////Lerps the position back to the rest position.
+            //Vector3 newPosition = new Vector3(Mathf.Lerp(headPosition.x, restPosition.x, transitionSpeed * Time.deltaTime),
+            //                                  Mathf.Lerp(headPosition.y, restPosition.y, transitionSpeed * Time.deltaTime),
+            //                                  Mathf.Lerp(headPosition.z, restPosition.z, transitionSpeed * Time.deltaTime));
 
-            headPosition = newPosition;
+            //headPosition = newPosition;
         }
 
-        //If the bobTimer is too large, reset it to restart the bob.
-        if (bobTimer > Mathf.PI * 2)
+        ////If the bobTimer is too large, reset it to restart the bob.
+        //if (bobTimer > Mathf.PI * 2)
+        //{
+        //    bobTimer = 0;
+        //}
+
+        ////Set the localPosition of the head.
+        //head.transform.localPosition = headPosition;
+    }
+
+    /// <summary>
+    /// Returns a bool based on whether or not the player is currently on the ground.
+    /// </summary>
+    /// <returns>Returns true if the player is on the ground.</returns>
+    private bool IsGrounded()
+    {
+        // For-loop used to create the specified number of raycasts
+        for (int i = 0; i < numberOfRaycasts; i++)
         {
-            bobTimer = 0;
+            Vector3 raycastPos;
+
+            // Calculates the the values used to make the circle
+            float step = (i * 1.0f) / numberOfRaycasts;
+            float angle = step * Mathf.PI * 2;
+
+            // Calculates the x and z values for the player
+            float x = Mathf.Sin(angle) * (transform.lossyScale.y / 2 - 0.01f);
+            float z = Mathf.Cos(angle) * (transform.lossyScale.y / 2 - 0.01f);
+
+            // Creates the position of the raycast
+            raycastPos = new Vector3(x, 0, z) + transform.position;
+
+            Debug.DrawRay(raycastPos, -transform.up.normalized * rayCastLength, Color.red);
+
+            RaycastHit hit;
+
+            // Creates the raycast
+            if (Physics.Raycast(raycastPos, -transform.up, out hit, rayCastLength))
+            {
+                if (Vector3.Angle(hit.normal, Vector3.up) < maximumSlopeAngle)
+                {
+                    return true;
+                }
+            }
         }
 
-        //Set the localPosition of the head.
-        head.transform.localPosition = headPosition;
+        return false;
     }
 
-    void OnCollisionEnter(Collision hit)
+    /// <summary>
+    /// Returns a bool based on whether or not the player is under something.
+    /// </summary>
+    /// <returns>Returns true if the player is not under something.</returns>
+    private bool CanStandUp()
     {
-        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            grounded = true;
+        // For-loop used to create the specified number of raycasts
+        for (int i = 0; i < numberOfRaycasts; i++)
+        {
+            Vector3 raycastPos;
+
+            // Calculates the the values used to make the circle
+            float step = (i * 1.0f) / numberOfRaycasts;
+            float angle = step * Mathf.PI * 2;
+
+            // Calculates the x and z values for the player
+            float x = Mathf.Sin(angle) * (transform.lossyScale.y / 2 - 0.01f);
+            float z = Mathf.Cos(angle) * (transform.lossyScale.y / 2 - 0.01f);
+
+            // Creates the position of the raycast
+            raycastPos = new Vector3(x, 0, z) + transform.position;
+
+            Debug.DrawRay(raycastPos, transform.up * rayCastLength, Color.blue);
+
+            RaycastHit hit;
+
+            // Creates the raycast
+            if (Physics.Raycast(raycastPos, transform.up, out hit, rayCastLength))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    void OnCollisionExit(Collision hit)
+    /// <summary>
+    /// Disables gravity on the player when the player is not moving.
+    /// </summary>
+    private void StopSlideOnSlopes()
     {
-        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-            grounded = false;
+        if (moveVector == Vector3.zero)
+        {
+            Debug.DrawRay(transform.position, -transform.up * transform.lossyScale.y * 2, Color.yellow);
+
+            RaycastHit hit;
+
+            // Creates the raycast
+            if (Physics.Raycast(transform.position, -transform.up, out hit, transform.lossyScale.y * 2))
+            {
+                float currentSlope = Vector3.Angle(hit.normal, Vector3.up);
+
+                if (currentSlope < maximumSlopeAngle && IsGrounded())
+                {
+                    rigid.useGravity = false;
+                }
+                else if (!IsGrounded())
+                {
+                    rigid.useGravity = true;
+                }
+            }
+        }
+        else if (!rigid.useGravity)
+        {
+            rigid.useGravity = true;
+        }
     }
 }
