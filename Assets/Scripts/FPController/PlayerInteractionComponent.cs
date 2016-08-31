@@ -4,16 +4,27 @@ using System.Collections;
 public class PlayerInteractionComponent : MonoBehaviour
 {
     [SerializeField]
+    [Tooltip("The force of the spring joint that keeps the object in place.")]
     private float force = 1500;
+
     [SerializeField]
+    [Tooltip("The force applied to the object when it is thrown.")]
     private float throwForce = 15;
+
     [SerializeField]
+    [Tooltip("The distance the player can interact with things.")]
     private float interactionDistance = 2;
 
+    [SerializeField]
+    [Tooltip("The maximum mass of an object the player can carry.")]
+    private float maximumMass = 50;
+
+    [SerializeField]
     private string nameOfPickUpLayer = "PickUp";
+    [SerializeField]
     private string nameOfInteractableLayer = "Interactable";
 
-    private float damping = 6;
+    private float damping = 5000;
     private Transform jointTransform;
     private bool isCurrentlyCarring = false;
 
@@ -135,12 +146,11 @@ public class PlayerInteractionComponent : MonoBehaviour
     /// Creates a joint drive with a specified spring force and damping
     /// </summary>
     /// <param name="force">The force of the "spring".</param>
-    /// <param name="damping">Damping (does not seem to affect anything).</param>
+    /// <param name="damping">Damping.</param>
     /// <returns>A joint drive with the specified values.</returns>
     private JointDrive NewJointDrive(float force, float damping)
     {
         JointDrive drive = new JointDrive();
-        drive.mode = JointDriveMode.Position;
         drive.positionSpring = force;
         drive.positionDamper = damping;
         drive.maximumForce = Mathf.Infinity;
@@ -167,19 +177,22 @@ public class PlayerInteractionComponent : MonoBehaviour
                 // If the hit object is an object that can be picked up, pick it up
                 else if (hit.transform.gameObject.layer == LayerMask.NameToLayer(nameOfPickUpLayer))
                 {
-                    // If no object is currently being carried pick up the object
-                    if (!isCurrentlyCarring)
+                    if (hit.rigidbody.mass <= maximumMass)
                     {
-                        oldHit = hit;
+                        // If no object is currently being carried pick up the object
+                        if (!isCurrentlyCarring)
+                        {
+                            oldHit = hit;
 
-                        DragBegin(hit);
-                        Debug.Log("Picked up object.");
-                    }
-                    // If an object is currently being carried drop it
-                    else
-                    {
-                        DragEnd();
-                        Debug.Log("Dropped object.");
+                            DragBegin(hit);
+                            Debug.Log("Picked up object.");
+                        }
+                        // If an object is currently being carried drop it
+                        else
+                        {
+                            DragEnd();
+                            Debug.Log("Dropped object.");
+                        }
                     }
                 }
             }
@@ -207,7 +220,6 @@ public class PlayerInteractionComponent : MonoBehaviour
         if (isCurrentlyCarring)
         {
             Dragging();
-            Debug.Log("Carring object...");
         }
     }
 }

@@ -6,18 +6,25 @@ public class FootstepSoundComponent : MonoBehaviour
     [Header("- Walking/Running Sound -")]
     // Serialized Fields
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on dirt.")]
     private AudioClip[] dirtSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on grass.")]
     private AudioClip[] grassSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on metal.")]
     private AudioClip[] metalSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks in water.")]
     private AudioClip[] waterSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on wood.")]
     private AudioClip[] woodSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on concrete.")]
     private AudioClip[] concreteSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on cloth.")]
     private AudioClip[] clothSounds;
 
     private AudioSource audioSource;
