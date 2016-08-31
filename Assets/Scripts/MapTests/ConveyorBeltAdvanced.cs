@@ -277,10 +277,9 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
             for (int i = 0; i < rotationList.Count; i++)
             {
-                rotationList[i].Obj.transform.SetParent(transform);
-                if (Vector3.Distance(rotationList[i].Obj.transform.localPosition, 
-                    new Vector3(endGameObject.transform.localPosition.x + rotationList[i].Lane, 
-                    endGameObject.transform.localPosition.y, endGameObject.transform.localPosition.z)) <= 0.7f)
+                if (Vector3.Distance(rotationList[i].Obj.transform.position, 
+                    new Vector3(endGameObject.transform.position.x + rotationList[i].Lane, 
+                    endGameObject.transform.position.y, endGameObject.transform.position.z)) <= 0.7f)
                 {
                     objectData = rotationList[i];
                     remove = true;
