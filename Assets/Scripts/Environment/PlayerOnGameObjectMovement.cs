@@ -29,15 +29,20 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     }
 
 
+    void FixedUpdate()
+    {
+        if (moveOnPlayerTouch == false)
+        {
+            GameObjectMove();
+        }
+    }
+
     /// <summary>
     /// If moveOnPlayerTouch is false, then the GameObject will move on its own.
     /// </summary>
     void Update ()
     {
-        if(moveOnPlayerTouch == false)
-        {
-            GameObjectMove();
-        }	
+	
 
         
 	}

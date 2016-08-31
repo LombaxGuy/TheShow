@@ -43,6 +43,10 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     private float timer = 1;
     private float counter = 0;
 
+    private GameObject player;
+
+    private bool playerOnConveyor = false;
+
     struct originalObjectPosAndRot
     {
         private Vector3 objPos;
@@ -129,7 +133,6 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
 	}
 
-	
     
     	// Update is called once per frame
 	void Update ()
@@ -150,38 +153,29 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
         EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
-   /// <summary>
-   /// Controls the players movement.
-   /// </summary>
-   /// <param name="collision"></param>
 
-    void OnCollisionStay(Collision collision)
+    void FixedUpdate()
+    {
+        if(playerOnConveyor == true)
+        {
+            player.GetComponent<Rigidbody>().MovePosition(player.transform.position + transform.forward * Time.deltaTime * 2);
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag == "Player")
         {
-            switch (dir)
-            {
-                case Direction.FORWARD:
-                    collision.rigidbody.MovePosition(collision.transform.position + transform.forward * Time.deltaTime * 2);
-                    break;
-                case Direction.BACK:
-                    collision.rigidbody.MovePosition(collision.transform.position + -transform.forward * Time.deltaTime * 2);
-                    break;
-                case Direction.LEFT:
-                    collision.rigidbody.MovePosition(collision.transform.position + -transform.right * Time.deltaTime * 2);
-                    break;
-                case Direction.RIGHT:
-                    collision.rigidbody.MovePosition(collision.transform.position + transform.right * Time.deltaTime * 2);
-                    break;
-                case Direction.UP:
-                    collision.rigidbody.MovePosition(collision.transform.position + transform.up * Time.deltaTime * 2);
-                    break;
-                case Direction.DOWN:
-                    collision.rigidbody.MovePosition(collision.transform.position + -transform.up * Time.deltaTime * 2);
-                    break;
-                default:
-                    break;
-            }
+            playerOnConveyor = true;
+            player = collision.gameObject;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            playerOnConveyor = false;
         }
     }
 
