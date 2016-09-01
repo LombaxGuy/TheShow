@@ -29,6 +29,10 @@ public class FPSController : MonoBehaviour
     [Tooltip("The players velocity is not increased further if it's magnitude >= this amount.")]
     float maxMagnitude = 7f;
 
+    [SerializeField]
+    [Tooltip("The maximum angle of the slope the player can walk on without sliding.")]
+    private float maximumSlopeAngle = 35;
+
     Vector3 moveVector;
     Vector3 moveVelocity;
     #endregion
@@ -85,10 +89,6 @@ public class FPSController : MonoBehaviour
 
     private float rayCastLength = 1.01f;
     private int numberOfRaycasts = 10;
-
-    [SerializeField]
-    [Tooltip("The maximum angle of the slope the player can walk on without sliding.")]
-    private float maximumSlopeAngle = 35;
 
     #region Events and EventHandlers
 

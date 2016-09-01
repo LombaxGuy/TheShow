@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum GroundType {None, Dirt, Grass, Metal, Water, Wood, Concrete, Cloth };
+
 public class FootstepSoundComponent : MonoBehaviour
 {
     [Header("- Walking/Running Sound -")]
