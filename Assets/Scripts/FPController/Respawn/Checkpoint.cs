@@ -4,16 +4,16 @@ using System.Collections;
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("The the the box collider used to find all the objects that should be reset on respawn. If left blank no object will be saved.")]
+    [Tooltip("The box collider used to find all the objects that should be reset on respawn. If left blank no object will be saved.")]
     private BoxCollider savePositionsWithinBox;
     private GameObjectPositionReset resetPositionsScript;
 
-    private Transform resetTransform;
+    private Transform resetPlayerDirectionTransform;
     private string gameResetManagerName = "GameResetManager";
 
     private void Start()
     {
-        resetTransform = transform.GetChild(0).transform;
+        resetPlayerDirectionTransform = transform.GetChild(0).transform;
 
         try
         {
@@ -71,7 +71,7 @@ public class Checkpoint : MonoBehaviour
     /// <returns>The transform of the child object.</returns>
     public Transform GetRespawnTransform()
     {
-        return resetTransform;
+        return resetPlayerDirectionTransform;
     }
 
     /// <summary>
