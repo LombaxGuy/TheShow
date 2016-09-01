@@ -24,7 +24,7 @@ public class PlayerInteractionComponent : MonoBehaviour
     [SerializeField]
     private string nameOfInteractableLayer = "Interactable";
 
-    private float damping = 5000;
+    private float damping = 50;
     private Transform jointTransform;
     private bool isCurrentlyCarring = false;
 
@@ -216,7 +216,10 @@ public class PlayerInteractionComponent : MonoBehaviour
         viewRay = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
         HandleInput();
+    }
 
+    private void FixedUpdate()
+    {
         if (isCurrentlyCarring)
         {
             Dragging();
