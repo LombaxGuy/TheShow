@@ -7,28 +7,26 @@ public class FPSController : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    GameObject head;
-
-    [SerializeField]
-    Collider bottomCollider;
-
-    [SerializeField]
+    [Tooltip("The top collider in the player object.")]
     CapsuleCollider topCollider;
 
     #region Move fields
     [Header("- Movement Settings -")]
     [SerializeField]
+    [Tooltip("Overall scaling of the movespeed, regardless of sprinting, crouching or in air.")]
     float speedMultiplier = 80f;
     [SerializeField]
+    [Tooltip("The speed is multiplied by this amount when sprinting.")]
     float sprintSpeedModifier = 2.0f;
     [SerializeField]
+    [Tooltip("The speed is multiplied by thia amount when crouching.")]
     float crouchSpeedModifier = 0.5f;
     [SerializeField]
+    [Tooltip("The speed is multiplied by thia amount when in the air.")]
     float inAirSpeedModifier = 0.2f;
-    [SerializeField]
-    float crouchHeight = 1.0f;
 
     [SerializeField]
+    [Tooltip("The players velocity is not increased further if it's magnitude >= this amount.")]
     float maxMagnitude = 7f;
 
     Vector3 moveVector;
@@ -37,10 +35,13 @@ public class FPSController : MonoBehaviour
 
     #region Jump fields
     [SerializeField]
+    [Tooltip("The minimum velocity when jumping, regardless of how long the jump key is held.")]
     float initialJumpVelocity = 2.0f;
     [SerializeField]
+    [Tooltip("The maximum acceleration of the players velocity when jumping.")]
     float maxJumpAccelleration = .6f;
     [SerializeField]
+    [Tooltip("The maximum amount of time a jump can last.")]
     float maxJumpTime = 1.5f;
 
     float jumpStartTime;
@@ -53,36 +54,20 @@ public class FPSController : MonoBehaviour
     #region Headbob Fields
     [Header("- Headbob Settings -")]
     [SerializeField]
-    [Range(0.001f, 1.0f)]
-    private float headbobDegree = 1.0f;
-
-    [SerializeField]
-    [Range(0.5f, 50f)]
-    float transitionSpeed = 20f;
-
-    [SerializeField]
-    [Range(0.001f, 10.0f)]
-    float bobSpeed = 3.5f;
-
-    [SerializeField]
-    [Range(0.001f, 10.0f)]
-    float bobSpeedSprinting = 6.5f;
-
-    [SerializeField]
+    [Tooltip("The speed of bobbing when walking.")]
     [Range(0.001f, 2f)]
-    float bobAmount = 0.05f;
+    float bobSpeed = 1f;
 
     [SerializeField]
+    [Tooltip("The speed of bobbing when sprinting.")]
     [Range(0.001f, 2f)]
-    float bobAmountSprinting = 0.15f;
+    float bobSpeedSprinting = 2f;
 
-    Vector3 restPosition;
-    Vector3 headPosition;
 
-    float curBobAmount = 0f;
-    float curBobSpeed = 0f;
-
-    float bobTimer = Mathf.PI / 2;
+    [SerializeField]
+    [Tooltip("Amount used to scale the movements of the headbobbing animation.")]
+    [Range(0.001f, 1f)]
+    float headbobDegree = 1f;
     #endregion
 
     #region KeyPressed bools
@@ -94,7 +79,6 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
-    [SerializeField]
     bool grounded = false;
 
     bool locked = false;
@@ -103,6 +87,7 @@ public class FPSController : MonoBehaviour
     private int numberOfRaycasts = 10;
 
     [SerializeField]
+    [Tooltip("The maximum angle of the slope the player can walk on without sliding.")]
     private float maximumSlopeAngle = 35;
 
     #region Events and EventHandlers
@@ -140,10 +125,6 @@ public class FPSController : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
-
-        //Sets the reference to the head position and the rest position.
-        headPosition = head.transform.localPosition;
-        restPosition = headPosition;
 
         animator.SetFloat("headbobDegree", headbobDegree);
     }
@@ -352,58 +333,26 @@ public class FPSController : MonoBehaviour
         //If sprinting increase the amount of headbobbing.
         if (sprintKey)
         {
-            animator.SetFloat("animationSpeed", 2.0f);
-            //curBobAmount = bobAmountSprinting;
-            //curBobSpeed = bobSpeedSprinting;
+            animator.SetFloat("animationSpeed", bobSpeedSprinting);
         }
 
         //If not sprinting, change the amount of headbobbing back to normal.
         if (!sprintKey)
         {
-            animator.SetFloat("animationSpeed", 1.0f);
-            //Used a lerp to make the transition from sprinting to walking more smooth.
-            //curBobAmount = Mathf.Lerp(bobAmountSprinting, bobAmount, 0.2f);
-            //curBobSpeed = Mathf.Lerp(bobSpeedSprinting, bobSpeed, 0.2f);
+            animator.SetFloat("animationSpeed", bobSpeed);
         }
 
         //If WASD is pressed.
         if (moveVector != Vector3.zero)
         {
             animator.SetBool("animateHead", true);
-            ////Increased the progress of the current "bob" based on the bobSpeed.
-            //bobTimer += curBobSpeed * Time.deltaTime;
-
-            ////Calculates the new position of the camera based on the progress of the bob.
-            //Vector3 newPosition = new Vector3(Mathf.Cos(bobTimer) * curBobAmount,
-            //                                    Mathf.Lerp(headPosition.y, restPosition.y + Mathf.Abs((Mathf.Sin(bobTimer) * curBobAmount)), transitionSpeed * Time.deltaTime),
-            //                                    restPosition.z);
-
-            //headPosition = newPosition;
         }
 
         //If no movement keys are pressed.
         else
         {
             animator.SetBool("animateHead", false);
-            //Reset the bob timer.
-            //bobTimer = Mathf.PI / 2;
-
-            ////Lerps the position back to the rest position.
-            //Vector3 newPosition = new Vector3(Mathf.Lerp(headPosition.x, restPosition.x, transitionSpeed * Time.deltaTime),
-            //                                  Mathf.Lerp(headPosition.y, restPosition.y, transitionSpeed * Time.deltaTime),
-            //                                  Mathf.Lerp(headPosition.z, restPosition.z, transitionSpeed * Time.deltaTime));
-
-            //headPosition = newPosition;
         }
-
-        ////If the bobTimer is too large, reset it to restart the bob.
-        //if (bobTimer > Mathf.PI * 2)
-        //{
-        //    bobTimer = 0;
-        //}
-
-        ////Set the localPosition of the head.
-        //head.transform.localPosition = headPosition;
     }
 
     /// <summary>
