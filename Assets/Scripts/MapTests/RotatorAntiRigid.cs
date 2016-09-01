@@ -3,64 +3,60 @@ using System.Collections;
 
 public class RotatorAntiRigid : MonoBehaviour {
 
-    //Used vectors
-    private Quaternion breakPoint;
-    private Quaternion backPoint;
-    private Vector3 current;
+
 
     // Two timers
-    private float timer;
-    private float offTimer;
+    private float idleTimer;
+
+    private float offsetTimer;
 
     //Settings
     [SerializeField]
     [Tooltip("Time it takes to wait")]
-    private float wait = 2;
+    private float timeIdleOpen = 2;
+    [SerializeField]
+    [Tooltip("Time it takes to wait")]
+    private float timeIdleClosed = 2;
     [SerializeField]
     [Tooltip("How long it takes until script starts running")]
-    private float offset;
+    private float timeOffset = 0;
 
+    private bool rotationDirection = false;
 
-    private bool offsetstop;
-    private bool mode = false;
+    //The quaternions that this script needs to function
+    private Quaternion furthestRotationStop;
+    private Quaternion standartRotationStop;
+    //Curent rotation on our object
+    private Vector3 currentRotation;
 
-
-	// Use this for initialization
+    // Use this for initialization
     /// <summary>
     /// Setting up the points where start and where stop is.
     /// </summary>
-	void Start () {
+    void Start () {
 
-        backPoint = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 225);
-        breakPoint = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 310);
+        standartRotationStop = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 225);
+        furthestRotationStop = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 310);
         
 	}
-
-    /// <summary>
-    /// Where the object is moved
-    /// </summary>
-    void FixedUpdate()
-    {
-        if(offTimer > offset)
-        {
-            StepRotate();
-           offsetstop = true;
-        }
-        
-    }
 	
 	// Update is called once per frame
     /// <summary>
     /// Running the timers and setting the current transform
     /// </summary>
 	void Update () {
-        current = gameObject.transform.rotation.eulerAngles;
-        timer = timer + 1 * Time.deltaTime;
+        currentRotation = gameObject.transform.rotation.eulerAngles;
+        
+        if(offsetTimer < timeOffset)
+        {
+            offsetTimer = offsetTimer + 1 * Time.deltaTime;
+        }
+        else
+        {
+            idleTimer = idleTimer + 1 * Time.deltaTime;
+        }
 
-        if(!offsetstop)
-        offTimer = offTimer + 1 * Time.deltaTime;
-
-
+        StepRotate();
     }
 
     /// <summary>
@@ -69,33 +65,32 @@ public class RotatorAntiRigid : MonoBehaviour {
     private void StepRotate()
     {
 
-
-        if (current.z >= breakPoint.eulerAngles.z && mode == false)
+        if (currentRotation.z >= furthestRotationStop.eulerAngles.z && rotationDirection == false)
         {            
-            mode = true;
-            timer = 0;
+            rotationDirection = true;
+            idleTimer = 0;
         }
-        else if (current.z <=  backPoint.eulerAngles.z && mode == true)
+        else if (currentRotation.z <=  standartRotationStop.eulerAngles.z && rotationDirection == true)
         {
-            mode = false;
-            timer = 0;
+            rotationDirection = false;
+            idleTimer = 0;
         }
         
-        switch(mode)
+        switch(rotationDirection)
         {
             case true:
                 {
-                    if(timer > wait)
+                    if(idleTimer > timeIdleClosed)
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(current) * Quaternion.Euler(0, 0, -2);
+                        gameObject.transform.rotation = Quaternion.Euler(currentRotation) * Quaternion.Euler(0, 0, -2);
                     }                  
                     break;
                 }
             case false:
                 {
-                    if(timer > wait)
+                    if(idleTimer > timeIdleOpen)
                     {
-                        gameObject.transform.rotation = Quaternion.Euler(current) * Quaternion.Euler(0, 0, 10);
+                        gameObject.transform.rotation = Quaternion.Euler(currentRotation) * Quaternion.Euler(0, 0, 10);
                     }
                     
                     break;

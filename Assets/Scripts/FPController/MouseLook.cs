@@ -16,11 +16,11 @@ public class MouseLook : MonoBehaviour
     private float verticalMouseSensitivity = 5f;
 
     [SerializeField]
-    [Tooltip("The amount the player can look up")]
+    [Tooltip("The amount of degrees the player can look up.")]
     private float maxVerticalRotation = 80;
 
     [SerializeField]
-    [Tooltip("The amount the player can look down")]
+    [Tooltip("The amount of degrees the player can look down.")]
     private float minVerticalRotation = -80;
 
     private Camera playerCamera;

@@ -5,7 +5,8 @@ public class ImpactTrigger : MonoBehaviour {
 
     //THIS SCRIPT IS TO BE USED WITH IMPACT TRIGGERS
     [SerializeField]
-    private float force = 2000;
+    [Tooltip("2500 is default for a hard push")]
+    private float force = 2500;
 
     /// <summary>
     /// See if player is hit and push the player

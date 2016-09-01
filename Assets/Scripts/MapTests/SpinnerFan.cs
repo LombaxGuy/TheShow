@@ -6,7 +6,7 @@ public class SpinnerFan : MonoBehaviour {
     private Vector3 current;
 
     [SerializeField]
-    [Tooltip("Spinning speed")]
+    [Tooltip("Spinning speed, set to negative for reverse spin")]
     private float speed = 5;
     [SerializeField]
     [Tooltip("The offset")]

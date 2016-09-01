@@ -10,10 +10,13 @@ public class Menu : MonoBehaviour
 {
 
     //Used by the UI Manager to find the gameobjects that are used.
-    private GameObject player;
+    [SerializeField]
     private GameObject newGameMenu;
+    [SerializeField]
     private GameObject menu;
-    private GameObject button;
+    [SerializeField]
+    private GameObject continueButton;
+    [SerializeField]
     private GameObject settingsMenu;
     private SaveGame saveGame;
 
@@ -27,12 +30,12 @@ public class Menu : MonoBehaviour
     void Start()
     {
         //Find all the objects using name
-        newGameMenu = GameObject.Find("NewGameUI");
-        button = GameObject.Find("Continue");
-        menu = GameObject.Find("Menu");
-        settingsMenu = GameObject.Find("SettingsMenu");
-        player = GameObject.Find("Player");
+        //newGameMenu = GameObject.Find("NewGameUI");
+        //button = GameObject.Find("Continue");
+        //menu = GameObject.Find("Menu");
+        //settingsMenu = GameObject.Find("SettingsMenu");
 
+        //Loads the players settings
         SaveLoad.LoadPrefs();
         //Turning off all menus
         settingsMenu.SetActive(false);
@@ -68,11 +71,11 @@ public class Menu : MonoBehaviour
         {
             if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
             {
-                button.GetComponent<Button>().interactable = true;
+                continueButton.GetComponent<Button>().interactable = true;
             }
             else
             {
-                button.GetComponent<Button>().interactable = false;
+                continueButton.GetComponent<Button>().interactable = false;
             }
 
         }
@@ -166,7 +169,7 @@ public class Menu : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for the back button in settings menu useful when real settings are implimented.
+    /// Saves the players settings and closes the settings menu.
     /// </summary>
     public void SettingsBack(bool state)
     {

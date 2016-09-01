@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    //For the respawn cordinates
-    private Vector3 spawnCords;
 
     [SerializeField]
+    [Tooltip("The time is takes for the player to respawn")]
     private float defaultDeathCooldown = 2;
 
     [SerializeField]
+    [Tooltip("Debug set this to false to spawn where the player is in the world editor")]
     private bool spawnAtCheckpoint = false;
 
     private float deathCooldown = 2;
@@ -61,6 +61,7 @@ public class PlayerRespawn : MonoBehaviour
             Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
         }
 
+        //Sets the player position to the last saved checkpoints position if there is a savefile
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh") && spawnAtCheckpoint)
         {
             SaveGame save = SaveLoad.Load();
@@ -104,8 +105,6 @@ public class PlayerRespawn : MonoBehaviour
     private void OnPlayerDeath()
     {
         deathCooldown = defaultDeathCooldown;
-
-        //GetComponent<FirstPersonController>().LockControls(true);
 
         float randomAnim = Random.Range(0, 2);
 

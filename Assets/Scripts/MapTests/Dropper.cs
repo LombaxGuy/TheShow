@@ -4,21 +4,21 @@ using System.Collections;
 
 public class Dropper : MonoBehaviour {
 
+    //Used to check position
+    private Vector3 topPosition;
 
-    private Vector3 top;
-
-    private Vector3 bot;
+    private Vector3 botPosition;
 
     private bool isDown = false;
 
     private bool isMoving = false;
 
+    //Timers That are used
     private float offsetTimer = 0;
 
     private float idleTimer = 0;
 
-    private float distance;
-
+    //Settings to change dropper behaviour
     [SerializeField]
     [Tooltip("Time it takes to move down")]
     private float dropDownTime = 0.4f;
@@ -28,8 +28,6 @@ public class Dropper : MonoBehaviour {
     [SerializeField]
     [Tooltip("How long in seconds until the script starts running")]
     private float offsetSeconds = 0;
-
-
     [SerializeField]
     [Tooltip("How long until this starts going down")]
     private float idleInSeconds = 3;
@@ -39,11 +37,14 @@ public class Dropper : MonoBehaviour {
 
 
 
-
+    /// <summary>
+    /// Setting the positions for top and bottom vectors
+    /// Using raycast for the length from first position to the closest object beneath it. Max 20 range down.
+    /// </summary>
     void Start()
     {
-        top = transform.position;
-        bot = transform.position;
+        topPosition = transform.position;
+        botPosition = transform.position;
 
 
         RaycastHit hit;
@@ -52,12 +53,14 @@ public class Dropper : MonoBehaviour {
         {
             Debug.DrawRay(transform.position, Vector3.down * 20, Color.red);
 
-            bot = new Vector3(transform.position.x, transform.position.y - hit.distance + 0.5f, transform.position.z);
-
-            Debug.Log(distance);
+            botPosition = new Vector3(transform.position.x, transform.position.y - hit.distance + 0.5f, transform.position.z);
         }
 
     }
+
+    /// <summary>
+    /// Checking the positions to see which way to move. Handling the timers for offset and wait.
+    /// </summary>
     void Update()
     {
 
@@ -80,7 +83,7 @@ public class Dropper : MonoBehaviour {
         {
             if (idleTimer > idleOutSeconds)
             {
-                Move(bot, top, dropUpTime);
+                Move(botPosition, topPosition, dropUpTime);
                 isDown = false;
                 idleTimer = 0;
             }
@@ -90,24 +93,21 @@ public class Dropper : MonoBehaviour {
         {
             if (idleTimer > idleInSeconds)
             {
-                Move(top, bot, dropDownTime);
+                Move(topPosition, botPosition, dropDownTime);
                 isDown = true;
                 idleTimer = 0;
             }
         }
-        //if (Input.GetKey(KeyCode.Alpha1))
-        //{
-        //    transform.position = Vector3.MoveTowards(transform.position, top, speed * Time.deltaTime);
-        //}
-
-        //if (Input.GetKey(KeyCode.Alpha2))
-        //{
-        //    transform.position = Vector3.MoveTowards(transform.position, bot, speed * Time.deltaTime);
-        //}
-
 
     }
 
+    /// <summary>
+    /// Coroutine for the movement of the object
+    /// </summary>
+    /// <param name="from">The vector used as start position</param>
+    /// <param name="to">The vector we want to move to</param>
+    /// <param name="timeInSeconds">The time we want the move action to take</param>
+    /// <returns></returns>
     private IEnumerator CoroutineMove(Vector3 from, Vector3 to, float timeInSeconds)
     {
         isMoving = true;
@@ -127,6 +127,12 @@ public class Dropper : MonoBehaviour {
         isMoving = false;
     }
 
+    /// <summary>
+    /// This is simply used to call the coroutine.
+    /// </summary>
+    /// <param name="from">The vector used as start position</param>
+    /// <param name="to">The vector we want to move to</param>
+    /// <param name="timeInSeconds">The time we want the move action to take</param>
     private void Move(Vector3 from, Vector3 to, float timeInSeconds)
     {
 
