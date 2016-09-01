@@ -61,6 +61,7 @@ public class PlayerRespawn : MonoBehaviour
             Debug.Log("PlayerRespawn.cs: No GameObject with the tag 'MasterRespawn' could be found in the scene!");
         }
 
+        //Sets the player position to the last saved checkpoints position if there is a savefile
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh") && spawnAtCheckpoint)
         {
             SaveGame save = SaveLoad.Load();

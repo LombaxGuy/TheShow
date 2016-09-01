@@ -33,6 +33,7 @@ public class Menu : MonoBehaviour
         settingsMenu = GameObject.Find("SettingsMenu");
         player = GameObject.Find("Player");
 
+        //Loads the players settings
         SaveLoad.LoadPrefs();
         //Turning off all menus
         settingsMenu.SetActive(false);
@@ -166,7 +167,7 @@ public class Menu : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for the back button in settings menu useful when real settings are implimented.
+    /// Saves the players settings and closes the settings menu.
     /// </summary>
     public void SettingsBack(bool state)
     {
