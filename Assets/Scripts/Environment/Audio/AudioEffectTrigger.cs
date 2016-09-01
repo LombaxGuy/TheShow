@@ -21,7 +21,7 @@ public class AudioEffectTrigger : MonoBehaviour
 
     void OnEnable()
     {
-        // Subscribes to the OnRewpawnReset event if the player should reset on respawn
+        // Subscribes to the OnRespawnReset event if the player should reset on respawn
         if (resetOnRespawn)
         {
             EventManager.OnPlayerRespawn += OnPlayerRespawn;
@@ -31,11 +31,14 @@ public class AudioEffectTrigger : MonoBehaviour
     void OnDisable()
     {
         // Unsubscribes from the OnRewpawnReset event
-        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+        if (resetOnRespawn)
+        {
+            EventManager.OnPlayerRespawn -= OnPlayerRespawn; 
+        }
     }
 
     /// <summary>
-    /// Code is called when the OnRespawnReset even is called
+    /// Code is called when the OnRespawnReset event is called
     /// </summary>
     void OnPlayerRespawn()
     {
