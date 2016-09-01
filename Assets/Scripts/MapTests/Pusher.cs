@@ -3,11 +3,11 @@ using System.Collections;
 
 public class Pusher : MonoBehaviour {   
 
-    //Used to check mode
+    //Used to check which way the pusher is moving
     private bool isOut = false;
     private bool isMoving = false;
 
-    //Used to 
+    //Used to tweak behaviour on the pusher
     [SerializeField]
     [Tooltip("How far this extends")]
     private float distance = 5;
@@ -24,16 +24,15 @@ public class Pusher : MonoBehaviour {
     [Tooltip("How long this stays out")]
     private float idleOutSeconds = 1;
 
-    //used timers
+    //Timers that are used for delays
     private float offsetTimer = 0;
     private float idleTimer = 0;
 
-    //for knockback effect from trigger on this prop
+    //This is the box collider child for the knockback effect
     private BoxCollider stampTrigger;
 
     //possition when script runs first
     private Vector3 startPos;
-
     //extended possition
     private Vector3 extPos;
 
@@ -52,6 +51,7 @@ public class Pusher : MonoBehaviour {
 	// Update is called once per frame
     /// <summary>
     /// Checking the state this object is in and handling the timers.
+    /// Starting the coroutine.
     /// </summary>
 	void Update () {
         if(!isMoving)

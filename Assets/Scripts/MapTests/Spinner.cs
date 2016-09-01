@@ -62,7 +62,7 @@ public class Spinner : MonoBehaviour {
 	
 	// Update is called once per frame
     /// <summary>
-    /// controlling the time and checking positionS
+    /// controlling the time and checking positions
     /// </summary>
 	void Update () {
         if (!isMoving)
