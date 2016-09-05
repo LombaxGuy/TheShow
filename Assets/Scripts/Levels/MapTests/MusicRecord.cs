@@ -21,9 +21,9 @@ public class MusicRecord : MonoBehaviour {
     private int whatToPlay;
 
     private bool firstTimePress = false;
-
+   
     private bool soundsAllowedToPlay = false;
-
+    [SerializeField]
     private bool allowedLoop = false;
 
     [SerializeField]

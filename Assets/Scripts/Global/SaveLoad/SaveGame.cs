@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 // If we need different types of save classes this class should be made abstract and the other classes needs to inheirit from this one
 //These different classe could be HighScore, PlayerData, our StatTracker and more
@@ -65,6 +66,25 @@ public class SaveGame
         StatTracker.SavedTotalTimeSpend = totalTimeSpend;
         StatTracker.LevelsCompleted = levelsCompleted;
         StatTracker.CurrentLevel = currentLevel;
+    }
+
+    /// <summary>
+    /// Resets the current StatTracker values and deletes the savedata
+    /// </summary>
+    public void DeleteSaveData()
+    {
+        StatTracker.TotalTimesDead = 0;
+        StatTracker.TimesKilledBySpikes = 0;
+        StatTracker.TimesKilledBySpinners = 0;
+        StatTracker.TimesKilledByFalling = 0;
+        StatTracker.TimesKilledByShocks = 0;
+        StatTracker.TimesKilledByGas = 0;
+        StatTracker.SavedTotalTimeSpend = 0;
+        StatTracker.TotalTimeSpend = 0;
+        StatTracker.TimeSpendOnAllLevels = 0;
+        StatTracker.LevelsCompleted = 0;
+        StatTracker.CurrentLevel = SceneManager.GetActiveScene().name;
+        SaveLoad.DeleteSaveData();
     }
 }
 
