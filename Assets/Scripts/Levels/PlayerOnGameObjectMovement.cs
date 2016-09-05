@@ -7,26 +7,21 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     [Header("Change the speed.")]
     [SerializeField]
     private float speed = 2;
+    [Header("Move when Player is on it?")]
     [SerializeField]
     private bool moveOnPlayerTouch = false;
-    [Header("Empty GameObjects")]
+    [Header("Move empty gameObject locations")]
     [SerializeField]
     private GameObject gameObjectLocationOne;
     [SerializeField]
     private GameObject gameObjectLocationTwo;
     [SerializeField]
-    private int detectionSize = 1;
+    private int distance = 1;
     [Tooltip("This is one of the gameobjects it will start moving to.")]
     [SerializeField]
     private bool LocationOneFirst = false;
 
-    
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
+    private bool isMovingWithPlayer = false;
 
 
     void FixedUpdate()
@@ -35,61 +30,113 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
         {
             GameObjectMove();
         }
+        else
+        {
+            if (isMovingWithPlayer == true)
+            {
+                GameObjectMoveOnPlayerTouch();
+            }
+            else
+            {
+                GameObjectMoveBack();
+            }
+            
+        }
     }
 
     /// <summary>
-    /// If moveOnPlayerTouch is false, then the GameObject will move on its own.
-    /// </summary>
-    void Update ()
-    {
-	
-
-        
-	}
-    /// <summary>
     /// Getting collision data and if Player is in it. It will make the GameObject parent to Player.
     /// </summary>
-    /// <param name="collision"></param>
-    void OnTriggerEnter(Collider collision)
+    /// <param name="other"></param>
+    void OnTriggerEnter(Collider other)
     {
       
-        if (collision.gameObject.transform.parent.tag == "Player")
+        if (other.gameObject.transform.parent.tag == "Player")
         {
-            collision.gameObject.transform.parent.transform.parent = transform.parent;
+            other.gameObject.transform.parent.transform.parent = transform.parent;
         }
+
+        isMovingWithPlayer = true;
     }
 
     /// <summary>
     /// When Player is leaving the collision area. Then gameobject will no longer be parent to Player.
     /// </summary>
-    /// <param name="collision"></param>
-    void OnTriggerExit(Collider collision)
+    /// <param name="other"></param>
+    void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.transform.parent.tag == "Player")
+        if (other.gameObject.transform.parent.tag == "Player")
         {
-            collision.gameObject.transform.parent.transform.parent = null;
+            other.gameObject.transform.parent.transform.parent = null;
+        }
+
+        isMovingWithPlayer = false;
+    }
+    
+    /// <summary>
+    /// If move gameobject only when player touch, Then it will move to the distination and then stop moving.
+    /// </summary>
+    private void GameObjectMoveOnPlayerTouch()
+    {
+
+        if (Distance(false) > distance)
+        {
+            Move(false);
+        } 
+    }
+
+    /// <summary>
+    /// If the player is not touching it, it will go back to start location
+    /// </summary>
+    private void GameObjectMoveBack()
+    {
+
+        if (Distance(true) > distance)
+        {
+            Move(true);
+        }
+            
+    }
+
+
+    /// <summary>
+    /// Move the gameObject
+    /// </summary>
+    /// <param name="direction"></param>
+    private void Move(bool direction)
+    {
+        if(direction == true)
+        {
+            transform.parent.Translate((gameObjectLocationOne.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
+        }
+        else
+        {
+            transform.parent.Translate((gameObjectLocationTwo.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
         }
     }
 
 
     /// <summary>
-    /// If moveOnPlayerTouch is true. Then when the Player is on the GameObject, then it will run GameObjectMove, that will make the GameObject move.
+    /// Gets the distance between this gameObject and on of the location gameobjects, and return it as float.
     /// </summary>
-    /// <param name="collision"></param>
-    void OnTriggerStay(Collider collision)
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private float Distance(bool direction)
     {
+        float distanceBetween = 0;
 
-
-        if (moveOnPlayerTouch == true)
+        if(direction == true)
         {
-            if (collision.gameObject.transform.parent.tag == "Player")
-            {
-                GameObjectMove();
-            }
+            distanceBetween = Vector3.Distance(gameObjectLocationOne.transform.position, transform.parent.position);
+        }
+        else
+        {
+            distanceBetween = Vector3.Distance(gameObjectLocationTwo.transform.position, transform.parent.position);
         }
 
-
+        return distanceBetween; 
     }
+
 
     /// <summary>
     /// Will make the GameObject move towards empty GameObject
@@ -99,22 +146,18 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
 
         if (LocationOneFirst == true)
         {
-            transform.parent.Translate((gameObjectLocationOne.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
+            Move(true);
 
-            if (gameObjectLocationOne.transform.position.x - transform.parent.position.x <= detectionSize && gameObjectLocationOne.transform.position.x - transform.parent.position.x >= -detectionSize &&
-                gameObjectLocationOne.transform.position.y - transform.parent.position.y <= detectionSize && gameObjectLocationOne.transform.position.y - transform.parent.position.y >= -detectionSize &&
-                gameObjectLocationOne.transform.position.z - transform.parent.position.z <= detectionSize && gameObjectLocationOne.transform.position.z - transform.parent.position.z >= -detectionSize)
+            if (Distance(true) < distance)
             {
                 LocationOneFirst = false;
             }
         }
         else
         {
-            transform.parent.Translate((gameObjectLocationTwo.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
+            Move(false);
 
-            if (gameObjectLocationTwo.transform.position.x - transform.parent.position.x <= detectionSize && gameObjectLocationTwo.transform.position.x - transform.parent.position.x >= -detectionSize &&
-                gameObjectLocationTwo.transform.position.y - transform.parent.position.y <= detectionSize && gameObjectLocationTwo.transform.position.y - transform.parent.position.y >= -detectionSize &&
-                gameObjectLocationTwo.transform.position.z - transform.parent.position.z <= detectionSize && gameObjectLocationTwo.transform.position.z - transform.parent.position.z >= -detectionSize)
+            if (Distance(false) < distance)
             {
                 LocationOneFirst = true;
             }
