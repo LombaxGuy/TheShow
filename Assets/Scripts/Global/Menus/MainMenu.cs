@@ -4,73 +4,104 @@ using UnityEngine.UI;
 using System.Collections;
 using System.IO;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     private SaveGame saveGame;
-    private bool loadPrefs = true;
-    private Canvas cObject;
 
-	// Use this for initialization
-	void Start ()
+    [SerializeField]
+    private GameObject popupNewGame;
+    [SerializeField]
+    private GameObject popupExit;
+    [SerializeField]
+    private GameObject menuSettings;
+    [SerializeField]
+    private GameObject continueButton;
+
+    // Use this for initialization
+    void Start()
     {
-        cObject = GameObject.Find("MasterCanvas").GetComponent<Canvas>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        SaveLoad.LoadPrefs();
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Menu")
+        if (Input.GetKeyDown(KeyBindings.KeyEscape))
         {
-            if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+            if (popupNewGame.activeInHierarchy || popupExit.activeInHierarchy)
             {
-                //continueButton.GetComponent<Button>().interactable = true;
+                Cancel();
             }
-            else
+            else if (!menuSettings.activeInHierarchy)
             {
-                // continueButton.GetComponent<Button>().interactable = false;
-            }
-
-            if (loadPrefs == true)
-            {
-                SaveLoad.LoadPrefs();
-                loadPrefs = false;
+                Exit();
             }
         }
     }
 
-    private void Continue()
+    private void OnEnable()
+    {
+        GreyOutContinue();
+    }
+
+    private void GreyOutContinue()
+    {
+        if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
+        {
+            continueButton.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            continueButton.GetComponent<Button>().interactable = false;
+        }
+
+    }
+
+    public void Continue()
     {
         saveGame = SaveLoad.Load();
+
+        if (StatTracker.TotalTimeSpend == 0)
+        {
+            saveGame.GetStatTrackerValues();
+        }
+
         SceneManager.LoadScene(saveGame.currentLevel);
-        loadPrefs = true;
-    }
-
-    private void NewGame()
-    {
-        GameObject.Find("Yes").GetComponent<Button>().enabled = true;
-        GameObject.Find("No").GetComponent<Button>().enabled = true;
-    }
-
-    private void Settings()
-    {
 
     }
 
-    private void Quit()
+    public void NewGame()
     {
+        popupNewGame.SetActive(true);
+    }
+
+    public void Settings()
+    {
+        menuSettings.SetActive(true);
+    }
+
+    public void Exit()
+    {
+        popupExit.SetActive(true);
+    }
+
+    public void ConfirmExit()
+    {
+        popupExit.SetActive(false);
         Application.Quit();
     }
 
-    private void ConfirmNewGame()
+    public void ConfirmNewGame()
     {
-        saveGame.DeleteSaveData();   
+        saveGame.DeleteSaveData();
         SceneManager.LoadScene("TestMap");
-        loadPrefs = true;
+        popupNewGame.SetActive(false);
     }
 
-    private void DenyNewGame()
+    public void Cancel()
     {
-        GameObject.Find("Yes").GetComponent<Button>().enabled = false;
-        GameObject.Find("No").GetComponent<Button>().enabled = false;
+        popupExit.SetActive(false);
+        popupNewGame.SetActive(false);
     }
 }

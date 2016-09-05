@@ -12,6 +12,7 @@ public class KeyBindings : MonoBehaviour
     private static KeyCode keyMoveSprint = KeyCode.LeftShift;
     private static KeyCode keyMoveCrouch = KeyCode.LeftControl;
     private static KeyCode keyMoveJump = KeyCode.Space;
+    private static KeyCode keyEscape = KeyCode.Q;
 
     private static KeyCode keyInteraction = KeyCode.E;
     private static KeyCode keyPrimaryAction = KeyCode.Mouse0;
@@ -74,5 +75,10 @@ public class KeyBindings : MonoBehaviour
     {
         get { return keyPrimaryAction; }
         set { keyPrimaryAction = value; }
+    }
+
+    public static KeyCode KeyEscape
+    {
+        get { return keyEscape; }
     }
 }
