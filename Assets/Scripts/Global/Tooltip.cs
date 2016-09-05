@@ -9,89 +9,19 @@ public enum TooltipPosition
 
 public class Tooltip : MonoBehaviour
 {
-    #region Singleton
-    // Code for the singleton
-
-    // The singleton instance
-    private static Tooltip instance;
-
-    /// <summary>
-    /// Returns the instance of Tooltip
-    /// </summary>
-    public static Tooltip Instance
-    {
-        get
-        {
-            // If the instance is null the instance is created.
-            if (instance == null)
-            {
-                GameObject newObject = new GameObject("Tooltip (Singleton)");
-                instance = newObject.AddComponent<Tooltip>();          
-            }
-
-            // Returns the instance
-            return instance;
-        }
-    }
-
-    // Awake() used to initialize the singleton. Duplicates of the singleton is destroyed.
-    private void Awake()
-    {
-        // If there are duplicates of the singleton destroy this
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-
-        // Makes sure that the singleton is carried over from scene to scene
-        DontDestroyOnLoad(this.gameObject);
-
-        #region Not Singleton Code
-        // Creates an array of all the canvases in the scene.
-        Canvas[] temp = GameObject.FindObjectsOfType<Canvas>();
-
-        // Runs through the array until the canvas with the correct name is found.
-        for (int i = 0; i < temp.Length; i++)
-        {
-            // If the correct canvas is found the for-loop is broken.
-            if (temp[i].gameObject.name == canvasName)
-            {
-                inGameUI = temp[i];
-                break;
-            }
-
-            if (i == temp.Length - 1 && inGameUI == null)
-            {
-                // Prints a message to the debug log if no canvas in the scene has the specified name.
-                Debug.Log("Warning: No canvas with the name '" + canvasName + "' was found in the scene. No UI can be displayed without a canvas.");
-            }
-        }
-
-        // If the UI canvas is not null we find the child that should display text in the center of the screen.
-        if (inGameUI != null)
-        {
-            // Finds the child with the specified name and gets the Text component.
-            centerText = inGameUI.transform.Find(textName).GetComponent<Text>();
-        }
-        #endregion
-    }
-    #endregion
-
-    // The canvas used to display the UI ingame
+    [SerializeField]
+    [Tooltip("The canvas you want to use for displaying tooltips.")]
     private Canvas inGameUI;
-    // The name of the canvas to look for
-    private string canvasName = "InGameUI";
 
+    [SerializeField]
+    [Tooltip("The text box used to display text for when objects are hovered.")]
     private Text centerText;
-    private string textName = "CenterText";
 
     private float borderPixelValue = 20;
 
     private float fadePixelMovement = 25;
+
+    private bool stopDisplayingTooltip = false;
 
     [SerializeField]
     [Tooltip("The time in seconds it takes to fade-in or fade-out.")]
@@ -101,6 +31,20 @@ public class Tooltip : MonoBehaviour
     [Tooltip("The color of the text. Always keep the alpha-channel on 0!")]
     // White with the alpha-channel set to 0 (transparent)
     private Color defaultColor = new Color(1, 1, 1, 0);
+
+    // Update should only be used for Debugging in this script
+    private void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    DisplayTooltipUntilStop("MEFEFSAFW");
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    StopDisplayTooltip();
+        //}
+    }
 
     /// <summary>
     /// Displays a text in the center of the screen.
@@ -138,6 +82,65 @@ public class Tooltip : MonoBehaviour
     public void DisplayTooltipForSeconds(string tooltipText, float seconds, TooltipPosition tooltipPosition)
     {
         StartCoroutine(CoroutineTooltipForSeconds(tooltipText, seconds, tooltipPosition));
+    }
+
+    /// <summary>
+    /// Displays a tooltip in the top-center of the screen that remains until the method StopDisplayTooltip is called.
+    /// </summary>
+    /// <param name="tooltipText">The text that will be displayed.</param>
+    public void DisplayTooltipUntilStop(string tooltipText)
+    {
+        stopDisplayingTooltip = false;
+
+        StartCoroutine(CoroutineTooltipUntilStop(tooltipText));
+    }
+
+    /// <summary>
+    /// Stops the displaying tooltips.
+    /// </summary>
+    public void StopDisplayTooltip()
+    {
+        stopDisplayingTooltip = true;
+    }
+
+    /// <summary>
+    /// Coroutine that displays a tooltip in the top-center of the screen that remains until the method StopDisplayTooltip is called.
+    /// </summary>
+    /// <param name="tooltipText">The tooltip that will be displayed</param>
+    private IEnumerator CoroutineTooltipUntilStop(string tooltipText)
+    {
+        // Instantiates a UI text element prefab.
+        Text uiText = Instantiate(Resources.Load<Text>("UI/Elements/Tooltip"));
+
+        // Sets the parrent of the text element to the correct canvas.
+        uiText.transform.SetParent(inGameUI.transform, false);
+
+        // Moves the text element to the default starting position.
+        uiText.rectTransform.anchorMin = new Vector2(0, 1);
+        uiText.rectTransform.anchorMax = new Vector2(1, 1);
+        uiText.rectTransform.pivot = new Vector2(0.5f, 1);
+        uiText.alignment = TextAnchor.UpperCenter;
+        uiText.rectTransform.anchoredPosition = new Vector2(0, -(borderPixelValue + fadePixelMovement));
+
+        // Sets the color of the text to the default color.
+        uiText.color = defaultColor;
+
+        // Sets the text of the tooltip
+        uiText.text = tooltipText;
+
+        // Starts a coroutine for the fade-in and one for the movement.
+        StartCoroutine(FadeIn(uiText));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, fadePixelMovement), 0.5f, true));
+
+        // Makes this coroutine wait for the stopDisplayingTooltip signal.
+        while (!stopDisplayingTooltip)
+        {
+            yield return null;
+        }
+
+        // Starts a coroutine for the fade-out and one for the movement.
+        StartCoroutine(FadeOut(uiText));
+        StartCoroutine(MoveToOverSeconds(uiText, uiText.rectTransform.anchoredPosition + new Vector2(0, 2 * fadePixelMovement), 0.5f, false));
     }
 
     /// <summary>
