@@ -87,7 +87,7 @@ public class FPSController : MonoBehaviour
 
     bool locked = false;
 
-    private float rayCastLength = 1.01f;
+    private float rayCastLength = 1.1f;
     private int numberOfRaycasts = 10;
 
     #region Events and EventHandlers

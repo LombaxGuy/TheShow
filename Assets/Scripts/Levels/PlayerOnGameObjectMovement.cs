@@ -52,10 +52,10 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// <param name="collision"></param>
     void OnTriggerEnter(Collider collision)
     {
-
-        if (collision.gameObject.GetComponent<Rigidbody>() != null)
+      
+        if (collision.gameObject.transform.parent.tag == "Player")
         {
-            collision.gameObject.transform.parent = transform.parent;
+            collision.gameObject.transform.parent.transform.parent = transform.parent;
         }
     }
 
@@ -65,10 +65,9 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// <param name="collision"></param>
     void OnTriggerExit(Collider collision)
     {
-
-        if (collision.gameObject.GetComponent<Rigidbody>() != null)
+        if (collision.gameObject.transform.parent.tag == "Player")
         {
-            collision.gameObject.transform.parent = null;
+            collision.gameObject.transform.parent.transform.parent = null;
         }
     }
 
@@ -83,7 +82,7 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
 
         if (moveOnPlayerTouch == true)
         {
-            if (collision.gameObject.tag == "Player")
+            if (collision.gameObject.transform.parent.tag == "Player")
             {
                 GameObjectMove();
             }
