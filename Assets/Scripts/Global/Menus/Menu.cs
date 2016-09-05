@@ -127,6 +127,7 @@ public class Menu : MonoBehaviour
     {
         if (menu != null)
         {
+            
             menu.SetActive(false);
         }
         settingsMenu.SetActive(state);
