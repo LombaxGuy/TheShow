@@ -23,7 +23,8 @@ public class SpeakerTriggerScript : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (other.tag == "Player")
         {
-            speakerManeger.GetComponent<SpeakerManeger>().PlayRadioSoundInstance(audioClips);
+            speakerManeger.GetComponent<SpeakerManeger>().PlaySpeakerSoundInstance(audioClips);
         }
+        Destroy(GetComponent<BoxCollider>());
     }
 }
