@@ -69,6 +69,7 @@ public class MainMenu : MonoBehaviour
 
         SceneManager.LoadScene(saveGame.currentLevel);
 
+        gameObject.SetActive(false);
     }
 
     public void NewGame()
@@ -94,9 +95,11 @@ public class MainMenu : MonoBehaviour
 
     public void ConfirmNewGame()
     {
+        saveGame = new SaveGame();
         saveGame.DeleteSaveData();
         SceneManager.LoadScene("TestMap");
         popupNewGame.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void Cancel()

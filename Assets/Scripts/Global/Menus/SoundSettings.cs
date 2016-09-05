@@ -9,20 +9,8 @@ public class SoundSettings : MonoBehaviour
 
     public AudioMixer[] Mixer
     {
-        get
-        {
-            return mixer;
-        }
-
-        set
-        {
-            mixer = value;
-        }
-    }
-
-    void Start()
-    {
-        
+        get { return mixer; }
+        set { mixer = value; }
     }
 
     /// <summary>

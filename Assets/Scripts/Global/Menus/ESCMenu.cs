@@ -5,19 +5,12 @@ using System.Collections;
 
 public class ESCMenu : MonoBehaviour
 {
-
-
     [SerializeField]
     private GameObject popupExit;
     [SerializeField]
     private GameObject menuSettings;
     [SerializeField]
     private GameObject headsUpDisplay;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -38,12 +31,15 @@ public class ESCMenu : MonoBehaviour
     private void OnEnable()
     {
         headsUpDisplay.SetActive(false);
+        CursorManager.LockCursor();
+        Pause.SetPauseState(false);
     }
 
     public void Resume()
     {
         headsUpDisplay.SetActive(true);
         gameObject.SetActive(false);
+        CursorManager.LockCursor();
     }
 
     public void Settings()

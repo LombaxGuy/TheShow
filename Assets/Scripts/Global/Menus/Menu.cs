@@ -22,36 +22,19 @@ public class Menu : MonoBehaviour
 
 
     /// <summary>
-    /// All Menus are set for not being shown by default try is made for the ingame menu that is not supposed to show up in the mainmenu
-    /// </summary>
-    void Start()
-    {
-
-    }
-
-    /// <summary>
     /// Q is used for now 
     /// </summary>
     void Update()
     {
-
         if (Input.GetKeyDown(KeyBindings.KeyEscape))
         {
             if (!menuMain.activeInHierarchy && !menuSettings.activeInHierarchy)
             {
                 menuESC.SetActive(true);
+
+                CursorManager.UnlockCursor();
+                Pause.SetPauseState(true);
             }
         }
     }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    void SetMouseState()
-    {
-        Cursor.lockState = cMode;
-        Cursor.visible = (CursorLockMode.Locked != cMode);
-    }
-
 }

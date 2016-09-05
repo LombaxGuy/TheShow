@@ -139,7 +139,6 @@ public class StatTracker : MonoBehaviour
     private void Awake()
     {
         currentLevel = SceneManager.GetActiveScene().name;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
