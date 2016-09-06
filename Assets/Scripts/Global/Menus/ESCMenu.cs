@@ -28,6 +28,9 @@ public class ESCMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// When the object is enabled this will run
+    /// </summary>
     private void OnEnable()
     {
         headsUpDisplay.SetActive(false);
@@ -35,6 +38,9 @@ public class ESCMenu : MonoBehaviour
         Pause.SetPauseState(true);
     }
 
+    /// <summary>
+    /// Unpauses the game and closes the menu
+    /// </summary>
     public void Resume()
     {
         headsUpDisplay.SetActive(true);
@@ -43,16 +49,25 @@ public class ESCMenu : MonoBehaviour
         Pause.SetPauseState(false);
     }
 
+    /// <summary>
+    /// Enables the SettingsMenu
+    /// </summary>
     public void Settings()
     {
         menuSettings.SetActive(true);
     }
 
+    /// <summary>
+    /// Enables the exit window
+    /// </summary>
     public void Exit()
     {
         popupExit.SetActive(true);
     }
 
+    /// <summary>
+    /// Exits to the main menu
+    /// </summary>
     public void ConfirmExitMainMenu()
     {
         StatTracker.TimeSpendOnAllLevels += StatTracker.TimeSpendOnCurrentLevel;
@@ -60,12 +75,18 @@ public class ESCMenu : MonoBehaviour
         SceneManager.LoadScene("Menu");
     }
 
+    /// <summary>
+    /// Exits the game
+    /// </summary>
     public void ConfirmExitDesktop()
     {
         popupExit.SetActive(false);
         Application.Quit();
     }
 
+    /// <summary>
+    /// Disables the exit window
+    /// </summary>
     public void Cancel()
     {
         popupExit.SetActive(false);
