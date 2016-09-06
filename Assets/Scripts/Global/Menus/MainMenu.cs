@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SaveLoad.LoadPrefs();
+
     }
 
     // Update is called once per frame
@@ -40,11 +40,17 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the object is enabled
+    /// </summary>
     private void OnEnable()
     {
         GreyOutContinue();
     }
 
+    /// <summary>
+    /// Greys out the continue button
+    /// </summary>
     private void GreyOutContinue()
     {
         if (File.Exists(Application.persistentDataPath + "/SaveData/SaveGame.blargh"))
@@ -58,6 +64,9 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Loads the users savegame
+    /// </summary>
     public void Continue()
     {
         saveGame = SaveLoad.Load();
@@ -72,36 +81,54 @@ public class MainMenu : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Enables the newgame window
+    /// </summary>
     public void NewGame()
     {
         popupNewGame.SetActive(true);
     }
 
+    /// <summary>
+    /// Enables the settings window
+    /// </summary>
     public void Settings()
     {
         menuSettings.SetActive(true);
     }
 
+    /// <summary>
+    /// Enables the exit window
+    /// </summary>
     public void Exit()
     {
         popupExit.SetActive(true);
     }
 
+    /// <summary>
+    /// Exits the game
+    /// </summary>
     public void ConfirmExit()
     {
         popupExit.SetActive(false);
         Application.Quit();
     }
 
+    /// <summary>
+    /// Starts a new game and deletes old savedata
+    /// </summary>
     public void ConfirmNewGame()
     {
         saveGame = new SaveGame();
         saveGame.DeleteSaveData();
-        SceneManager.LoadScene("TestMap");
         popupNewGame.SetActive(false);
         gameObject.SetActive(false);
+        SceneManager.LoadScene("TestMap");
     }
 
+    /// <summary>
+    /// Closes the exit and newgame windows
+    /// </summary>
     public void Cancel()
     {
         popupExit.SetActive(false);
