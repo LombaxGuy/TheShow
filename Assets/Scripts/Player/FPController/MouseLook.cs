@@ -59,7 +59,10 @@ public class MouseLook : MonoBehaviour
         playerCamera = GetComponentInChildren<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+
+#if (!DEBUG)
+        Cursor.visible = false;
+#endif
 
         xAngles = playerCamera.transform.rotation.eulerAngles.x;
     }
@@ -90,11 +93,17 @@ public class MouseLook : MonoBehaviour
         xAngles = Mathf.Clamp(xAngles, minVerticalRotation, maxVerticalRotation);
 
         playerCamera.transform.rotation = Quaternion.Euler(xAngles, playerCamera.transform.rotation.eulerAngles.y, playerCamera.transform.rotation.eulerAngles.z);
+
+        // Counteracts the weird tilt the camera is getting when the camera is rotatet while animated
+        playerCamera.transform.localRotation = Quaternion.Euler(playerCamera.transform.localRotation.eulerAngles.x, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleMouseInput();
+        if (!Pause.GetPauseState())
+        {
+            HandleMouseInput();
+        }
     }
 }

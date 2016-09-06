@@ -3,44 +3,58 @@ using System.Collections;
 
 public class PlayerOnGameObjectMovement : MonoBehaviour {
 
-    //GameObject Y scale need to be 1, since it will mess til Player controller
-    [Header("Change the speed.")]
+    //GameObject Y scale need to be 1, since it will mess til Player controller 
     [SerializeField]
     private float speed = 2;
-    [Header("Move when Player is on it?")]
+
     [SerializeField]
     private bool moveOnPlayerTouch = false;
-    [Header("Move empty gameObject locations")]
+
     [SerializeField]
-    private GameObject gameObjectLocationOne;
-    [SerializeField]
-    private GameObject gameObjectLocationTwo;
-    [SerializeField]
-    private int distance = 1;
-    [Tooltip("This is one of the gameobjects it will start moving to.")]
+    private float distance = 1;
+
     [SerializeField]
     private bool LocationOneFirst = false;
 
+    [SerializeField]
+    private float timeDelay = 1;
+
+    [Header("Move empty gameObject locations")]
+    [SerializeField]
+    private GameObject gameObjectLocationOne;
+
+    [SerializeField]
+    private GameObject gameObjectLocationTwo;
+
     private bool isMovingWithPlayer = false;
 
+    private float counter = 0;
 
     void FixedUpdate()
     {
-        if (moveOnPlayerTouch == false)
+
+        if(counter <= 0)
         {
-            GameObjectMove();
-        }
-        else
-        {
-            if (isMovingWithPlayer == true)
+            if (moveOnPlayerTouch == false)
             {
-                GameObjectMoveOnPlayerTouch();
+                GameObjectMove();
             }
             else
             {
-                GameObjectMoveBack();
+                if (isMovingWithPlayer == true)
+                {
+                    GameObjectMoveOnPlayerTouch();
+                }
+                else
+                {
+                    GameObjectMoveBack();
+                }
             }
-            
+        }
+       
+        if(counter >= 0)
+        {
+            counter -= Time.deltaTime;
         }
     }
 
@@ -51,12 +65,18 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
       
-        if (other.gameObject.transform.parent.tag == "Player")
+        if(other.gameObject.transform.parent != null)
         {
-            other.gameObject.transform.parent.transform.parent = transform.parent;
+            if (other.gameObject.transform.parent.tag == "Player")
+            {
+                other.gameObject.transform.parent.transform.parent = transform.parent;
+
+                SetTime(0);
+
+                isMovingWithPlayer = true;
+            }
         }
 
-        isMovingWithPlayer = true;
     }
 
     /// <summary>
@@ -65,12 +85,19 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
     /// <param name="other"></param>
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.transform.parent.tag == "Player")
+
+        if (other.gameObject.transform.parent != null)
         {
-            other.gameObject.transform.parent.transform.parent = null;
+            if (other.gameObject.transform.parent.tag == "Player")
+            {
+                other.gameObject.transform.parent.transform.parent = null;
+
+                SetTime(timeDelay);
+
+                isMovingWithPlayer = false;
+            }
         }
 
-        isMovingWithPlayer = false;
     }
     
     /// <summary>
@@ -83,6 +110,16 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
         {
             Move(false);
         } 
+    }
+
+
+    private void SetTime(float time)
+    {
+        if(moveOnPlayerTouch == true)
+        {
+            counter = time;
+        }
+        
     }
 
     /// <summary>
@@ -111,7 +148,7 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
         }
         else
         {
-            transform.parent.Translate((gameObjectLocationTwo.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);
+            transform.parent.Translate((gameObjectLocationTwo.transform.position - transform.parent.position).normalized * Time.deltaTime * speed);           
         }
     }
 
@@ -151,6 +188,7 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
             if (Distance(true) < distance)
             {
                 LocationOneFirst = false;
+                SetTime(timeDelay);
             }
         }
         else
@@ -160,6 +198,7 @@ public class PlayerOnGameObjectMovement : MonoBehaviour {
             if (Distance(false) < distance)
             {
                 LocationOneFirst = true;
+                SetTime(timeDelay);
             }
         }
     }

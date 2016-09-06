@@ -83,12 +83,18 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
-    bool grounded = false;
-
+    bool stunned = false;
     bool locked = false;
 
     private float rayCastLength = 1.1f;
     private int numberOfRaycasts = 10;
+
+    private bool onGround = true;
+
+    public bool OnGround
+    {
+        get { return onGround; }
+    }
 
     #region Events and EventHandlers
 
@@ -132,8 +138,6 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = IsGrounded();
-
         if (!locked)
         {
             moveVector = Vector3.zero;
@@ -146,8 +150,7 @@ public class FPSController : MonoBehaviour
                 HandleInput();
             }
 
-            if (IsGrounded())
-                HeadBob();
+            HeadBob();
         }
     }
 
@@ -162,11 +165,12 @@ public class FPSController : MonoBehaviour
         else
         {
             rigid.velocity = new Vector3(rigid.velocity.x * 0.98f, rigid.velocity.y, rigid.velocity.z * 0.98f);
+            rigid.useGravity = true;
         }
 
         StopSlideOnSlopes();
 
-        if (!locked)
+        if (!locked && !stunned)
         {
             HandleMovement();
         }
@@ -258,8 +262,10 @@ public class FPSController : MonoBehaviour
         if (jumpKey && IsGrounded() && !jumping)
         {
             curJumpVelocity = rigid.velocity;
-            curJumpVelocity.y = initialJumpVelocity;
-            rigid.velocity = curJumpVelocity;
+            curJumpVelocity += new Vector3(0, initialJumpVelocity, 0);
+            //curJumpVelocity.y = initialJumpVelocity;
+            rigid.velocity += new Vector3(0, initialJumpVelocity, 0);
+            Debug.Log(rigid.velocity);
 
             jumping = true;
             jumpStartTime = Time.time;
@@ -343,11 +349,10 @@ public class FPSController : MonoBehaviour
         }
 
         //If WASD is pressed.
-        if (moveVector != Vector3.zero)
+        if (moveVector != Vector3.zero && IsGrounded())
         {
             animator.SetBool("animateHead", true);
         }
-
         //If no movement keys are pressed.
         else
         {
@@ -460,5 +465,27 @@ public class FPSController : MonoBehaviour
         {
             rigid.useGravity = true;
         }
+    }
+
+    /// <summary>
+    /// Stuns the player for a given amount of seconds.
+    /// </summary>
+    /// <param name="seconds">The amount of seconds the player is stunned.</param>
+    public void StunForSeconds(float seconds)
+    {
+        StartCoroutine(CoroutineStunForSeconds(seconds));
+    }
+
+    /// <summary>
+    /// Coroutine that controls the stunned variable.
+    /// </summary>
+    /// <param name="seconds">The amount of seconds from the player is stunned till the player is no longer stunned.</param>
+    private IEnumerator CoroutineStunForSeconds(float seconds)
+    {
+        stunned = true;
+
+        yield return new WaitForSeconds(seconds);
+
+        stunned = false;
     }
 }

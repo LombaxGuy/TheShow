@@ -37,8 +37,22 @@ public class MusicRecord : MonoBehaviour {
         set { playerClicked = value; }
     }
 
-	// Use this for initialization
-	void Start ()
+    public List<AudioClip> ClipsQueue
+    {
+        get{ return clipsQueue; }
+        set{ clipsQueue = value; }
+    }
+
+    public List<float> TimeBetweenClip
+    {
+        get { return timeBetweenClip; }
+        set { timeBetweenClip = value; }
+    }
+
+
+
+    // Use this for initialization
+    void Start ()
     {
         clipsQueue = new List<AudioClip>();
         timeBetweenClip = new List<float>();
