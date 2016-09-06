@@ -31,7 +31,6 @@ public class MovingPlatform : MonoBehaviour
 
     void FixedUpdate()
     {
-
         if (counter <= 0)
         {
             if (moveOnPlayerTouch == false)
