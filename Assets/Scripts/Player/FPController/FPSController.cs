@@ -83,12 +83,18 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
-
     bool stunned = false;
     bool locked = false;
 
     private float rayCastLength = 1.1f;
     private int numberOfRaycasts = 10;
+
+    private bool onGround = true;
+
+    public bool OnGround
+    {
+        get { return onGround; }
+    }
 
     #region Events and EventHandlers
 
@@ -255,9 +261,8 @@ public class FPSController : MonoBehaviour
         //Called when first jumping, adds the initial jump velocity.
         if (jumpKey && IsGrounded() && !jumping)
         {
-            curJumpVelocity = rigid.velocity;
-            curJumpVelocity.y = initialJumpVelocity;
-            rigid.velocity = curJumpVelocity;
+            rigid.velocity += new Vector3(0, initialJumpVelocity, 0);
+            Debug.Log(rigid.velocity);
 
             jumping = true;
             jumpStartTime = Time.time;
@@ -350,6 +355,24 @@ public class FPSController : MonoBehaviour
         {
             animator.SetBool("animateHead", false);
         }
+    }
+
+    /// <summary>
+    /// Returns the slope of the ground at the specified position.
+    /// </summary>
+    /// <param name="raycastPos">The position of the raycast.</param>
+    private float CurrentGroundSlope(Vector3 raycastPos, float length)
+    {
+        float angle = 0;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(raycastPos, -transform.up, out hit, length))
+        {
+            angle = Vector3.Angle(hit.normal, Vector3.up);
+        }
+
+        return angle;
     }
 
     /// <summary>
