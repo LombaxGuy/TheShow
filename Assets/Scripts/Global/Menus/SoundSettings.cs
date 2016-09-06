@@ -7,6 +7,10 @@ public class SoundSettings : MonoBehaviour
     [SerializeField]
     private AudioMixer[] mixer;
 
+    private bool hasChanged;
+    private bool changePersists;
+    private float[] values = new float[4];
+
     public AudioMixer[] Mixer
     {
         get { return mixer; }
@@ -20,6 +24,8 @@ public class SoundSettings : MonoBehaviour
     public void ChangeVolumeMaster(float value)
     {
         Mixer[0].SetFloat("masterVol", LinearToDecibel(value));
+        hasChanged = true;
+        values[0] = value;
     }
 
     /// <summary>
@@ -29,6 +35,8 @@ public class SoundSettings : MonoBehaviour
     public void ChangeVolumeMusic(float value)
     {
         Mixer[1].SetFloat("musicVol", LinearToDecibel(value));
+        hasChanged = true;
+        values[1] = value;
     }
 
     /// <summary>
@@ -38,6 +46,8 @@ public class SoundSettings : MonoBehaviour
     public void ChangeVolumeFX(float value)
     {
         Mixer[2].SetFloat("fxVol", LinearToDecibel(value));
+        hasChanged = true;
+        values[2] = value;
     }
 
     /// <summary>
@@ -46,7 +56,9 @@ public class SoundSettings : MonoBehaviour
     /// <param name="value">The value to change the volume to. Value between 0 and 1 where 1 is full volume.</param>
     public void ChangeVolumeVoice(float value)
     {
-        Mixer[3].SetFloat("voiceVol", LinearToDecibel(value));  
+        Mixer[3].SetFloat("voiceVol", LinearToDecibel(value));
+        hasChanged = true;
+        values[3] = value;
     }
 
     /// <summary>
@@ -68,5 +80,33 @@ public class SoundSettings : MonoBehaviour
         }
 
         return dB;
+    }
+
+    public bool Changes(float[] prefValues)
+    {
+        changePersists = false;
+        if (hasChanged)
+        {
+            for (int i = 0; i < prefValues.Length; i++)
+            {
+                if (prefValues[i] != values[i])
+                {
+                    changePersists = true;
+                }
+
+            }
+            if (changePersists)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }
