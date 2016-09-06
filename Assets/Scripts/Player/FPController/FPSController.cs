@@ -83,6 +83,8 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
+
+    bool stunned = false;
     bool locked = false;
 
     private float rayCastLength = 1.1f;
@@ -162,7 +164,7 @@ public class FPSController : MonoBehaviour
 
         StopSlideOnSlopes();
 
-        if (!locked)
+        if (!locked && !stunned)
         {
             HandleMovement();
         }
@@ -455,5 +457,27 @@ public class FPSController : MonoBehaviour
         {
             rigid.useGravity = true;
         }
+    }
+
+    /// <summary>
+    /// Stuns the player for a given amount of seconds.
+    /// </summary>
+    /// <param name="seconds">The amount of seconds the player is stunned.</param>
+    public void StunForSeconds(float seconds)
+    {
+        StartCoroutine(CoroutineStunForSeconds(seconds));
+    }
+
+    /// <summary>
+    /// Coroutine that controls the stunned variable.
+    /// </summary>
+    /// <param name="seconds">The amount of seconds from the player is stunned till the player is no longer stunned.</param>
+    private IEnumerator CoroutineStunForSeconds(float seconds)
+    {
+        stunned = true;
+
+        yield return new WaitForSeconds(seconds);
+
+        stunned = false;
     }
 }
