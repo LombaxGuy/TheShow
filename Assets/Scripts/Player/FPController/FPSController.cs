@@ -83,12 +83,18 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
-
     bool stunned = false;
     bool locked = false;
 
     private float rayCastLength = 1.1f;
     private int numberOfRaycasts = 10;
+
+    private bool onGround = true;
+
+    public bool OnGround
+    {
+        get { return onGround; }
+    }
 
     #region Events and EventHandlers
 
@@ -256,8 +262,10 @@ public class FPSController : MonoBehaviour
         if (jumpKey && IsGrounded() && !jumping)
         {
             curJumpVelocity = rigid.velocity;
-            curJumpVelocity.y = initialJumpVelocity;
-            rigid.velocity = curJumpVelocity;
+            curJumpVelocity += new Vector3(0, initialJumpVelocity, 0);
+            //curJumpVelocity.y = initialJumpVelocity;
+            rigid.velocity += new Vector3(0, initialJumpVelocity, 0);
+            Debug.Log(rigid.velocity);
 
             jumping = true;
             jumpStartTime = Time.time;
