@@ -83,8 +83,6 @@ public class FPSController : MonoBehaviour
     bool jumping = false;
     bool crouching = false;
 
-    bool grounded = false;
-
     bool locked = false;
 
     private float rayCastLength = 1.1f;
@@ -132,8 +130,6 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grounded = IsGrounded();
-
         if (!locked)
         {
             moveVector = Vector3.zero;
@@ -146,8 +142,7 @@ public class FPSController : MonoBehaviour
                 HandleInput();
             }
 
-            if (IsGrounded())
-                HeadBob();
+            HeadBob();
         }
     }
 
@@ -162,6 +157,7 @@ public class FPSController : MonoBehaviour
         else
         {
             rigid.velocity = new Vector3(rigid.velocity.x * 0.98f, rigid.velocity.y, rigid.velocity.z * 0.98f);
+            rigid.useGravity = true;
         }
 
         StopSlideOnSlopes();
@@ -343,11 +339,10 @@ public class FPSController : MonoBehaviour
         }
 
         //If WASD is pressed.
-        if (moveVector != Vector3.zero)
+        if (moveVector != Vector3.zero && IsGrounded())
         {
             animator.SetBool("animateHead", true);
         }
-
         //If no movement keys are pressed.
         else
         {
