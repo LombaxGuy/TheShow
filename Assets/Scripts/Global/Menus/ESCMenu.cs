@@ -31,8 +31,8 @@ public class ESCMenu : MonoBehaviour
     private void OnEnable()
     {
         headsUpDisplay.SetActive(false);
-        CursorManager.LockCursor();
-        Pause.SetPauseState(false);
+        CursorManager.UnlockCursor();
+        Pause.SetPauseState(true);
     }
 
     public void Resume()
@@ -40,6 +40,7 @@ public class ESCMenu : MonoBehaviour
         headsUpDisplay.SetActive(true);
         gameObject.SetActive(false);
         CursorManager.LockCursor();
+        Pause.SetPauseState(false);
     }
 
     public void Settings()
