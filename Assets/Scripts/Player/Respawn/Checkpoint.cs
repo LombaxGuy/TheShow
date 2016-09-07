@@ -11,6 +11,17 @@ public class Checkpoint : MonoBehaviour
     private Transform resetPlayerDirectionTransform;
     private string gameResetManagerName = "GameResetManager";
 
+    private void OnEnable()
+    {
+        EventManager.OnSaveGame += SavePlayerPosition;
+
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnSaveGame -= SavePlayerPosition;
+    }
+
     private void Start()
     {
         resetPlayerDirectionTransform = transform.GetChild(0).transform;
@@ -29,18 +40,6 @@ public class Checkpoint : MonoBehaviour
             Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
         }
     }
-
-    private void OnEnable()
-    {
-        EventManager.OnSaveGame += SavePlayerPosition;
-
-    }
-
-    private void OnDisable()
-    {
-        EventManager.OnSaveGame -= SavePlayerPosition;
-    }
-
 
     /// <summary>
     /// Is used to change the spawn point for the player, in the PlayerRespawn script, when the player collides with the checkpoint.
