@@ -19,6 +19,9 @@ public class PlayerInteractionComponent : MonoBehaviour
     [Tooltip("The maximum mass of an object the player can carry.")]
     private float maximumMass = 50;
 
+    private float draggingMass = 1;
+    private float oldMass;
+
     [SerializeField]
     private string nameOfPickUpLayer = "PickUp";
     [SerializeField]
@@ -46,6 +49,8 @@ public class PlayerInteractionComponent : MonoBehaviour
     public void DragBegin(RaycastHit hit)
     {
         jointTransform = AttachJoint(hit.rigidbody, hit.transform.position);
+        oldMass = hit.rigidbody.mass;
+        hit.rigidbody.mass = draggingMass;
         rotationLastFrame = transform.rotation;
         isCurrentlyCarring = true;
     }
@@ -94,6 +99,8 @@ public class PlayerInteractionComponent : MonoBehaviour
     /// </summary>
     public void DragEnd()
     {
+        oldHit.rigidbody.mass = oldMass;
+
         if (jointTransform == null)
         {
             return;
