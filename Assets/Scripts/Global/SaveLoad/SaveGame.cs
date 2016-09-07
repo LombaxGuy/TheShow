@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
 // If we need different types of save classes this class should be made abstract and the other classes needs to inheirit from this one
 //These different classe could be HighScore, PlayerData, our StatTracker and more
@@ -21,6 +22,8 @@ public class SaveGame
     public float playerPosY;
     public float playerPosZ;
     public List<string> prefKeys = SaveLoad.PrefKeys;
+    public List<AudioClip> savedClips;
+    public List<float> savedTimeBetweenClips;
 
 
     /// <summary>
@@ -37,6 +40,22 @@ public class SaveGame
         totalTimeSpend = StatTracker.TotalTimeSpend;
         levelsCompleted = StatTracker.LevelsCompleted;
         currentLevel = StatTracker.CurrentLevel;
+    }
+    
+    public void SetMusicClip(List<AudioClip> audio, List<float> time)
+    {
+        savedClips = audio;
+        savedTimeBetweenClips = time;
+    }
+
+    public List<AudioClip> GetMusicClip()
+    {
+        return savedClips;
+    }
+
+    public List<float> GetTimeBetweenClips()
+    {
+        return savedTimeBetweenClips;
     }
 
     /// <summary>

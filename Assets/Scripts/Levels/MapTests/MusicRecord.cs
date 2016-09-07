@@ -31,6 +31,8 @@ public class MusicRecord : MonoBehaviour {
 
     private bool playerClicked = false;
 
+    private SaveGame saveGame = new SaveGame();
+
     public bool PlayerClicked
     {
         get { return playerClicked; }
@@ -73,7 +75,18 @@ public class MusicRecord : MonoBehaviour {
         {
             HandleKeys();
         }
+    }
 
+    private void OnEnable()
+    {
+        EventManager.OnSaveGame += SaveAudioClip;
+        EventManager.OnLoadGame += LoadAudioClip;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnSaveGame -= SaveAudioClip;
+        EventManager.OnLoadGame -= LoadAudioClip;
     }
 
 
@@ -184,6 +197,17 @@ public class MusicRecord : MonoBehaviour {
         timeBetween = 0;
 
         soundSource.PlayOneShot(clips[number]);
+    }
+
+    private void SaveAudioClip()
+    {
+        saveGame.SetMusicClip(clipsQueue, timeBetweenClip);
+    }
+
+    private void LoadAudioClip()
+    {
+        clipsQueue = saveGame.GetMusicClip();
+        timeBetweenClip = saveGame.GetTimeBetweenClips();
     }
 
 

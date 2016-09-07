@@ -18,6 +18,23 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private GameObject continueButton;
 
+    /// <summary>
+    /// Called when the object is enabled
+    /// </summary>
+    private void OnEnable()
+    {
+        EventManager.OnLoadGame += LoadGame;
+        GreyOutContinue();
+    }
+
+    /// <summary>
+    /// Called when the object is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        EventManager.OnLoadGame -= LoadGame;
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -40,13 +57,6 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when the object is enabled
-    /// </summary>
-    private void OnEnable()
-    {
-        GreyOutContinue();
-    }
 
     /// <summary>
     /// Greys out the continue button
@@ -69,16 +79,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void Continue()
     {
-        saveGame = SaveLoad.Load();
-
-        if (StatTracker.TotalTimeSpend == 0)
-        {
-            saveGame.GetStatTrackerValues();
-        }
-
-        SceneManager.LoadScene(saveGame.currentLevel);
-
-        gameObject.SetActive(false);
+        EventManager.RaiseOnLoadGame();
     }
 
     /// <summary>
@@ -133,5 +134,22 @@ public class MainMenu : MonoBehaviour
     {
         popupExit.SetActive(false);
         popupNewGame.SetActive(false);
+    }
+
+    /// <summary>
+    /// Loads the savedata
+    /// </summary>
+    private void LoadGame()
+    {
+        saveGame = SaveLoad.Load();
+
+        if (StatTracker.TotalTimeSpend == 0)
+        {
+            saveGame.GetStatTrackerValues();
+        }
+
+        SceneManager.LoadScene(saveGame.currentLevel);
+
+        gameObject.SetActive(false);
     }
 }
