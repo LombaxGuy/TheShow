@@ -9,26 +9,8 @@ public class Checkpoint : MonoBehaviour
     private GameObjectPositionReset resetPositionsScript;
 
     private Transform resetPlayerDirectionTransform;
-    private string gameResetManagerName = "GameResetManager";
-
-    private void Start()
-    {
-        resetPlayerDirectionTransform = transform.GetChild(0).transform;
-
-        try
-        {
-            resetPositionsScript = GameObject.Find(gameResetManagerName).GetComponent<GameObjectPositionReset>();
-        }
-        catch
-        {
-            Debug.Log("Checkpoint.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
-        }
-
-        if (!savePositionsWithinBox)
-        {
-            Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
-        }
-    }
+    [SerializeField]
+    private GameObject worldManager;
 
     private void OnEnable()
     {
@@ -41,6 +23,24 @@ public class Checkpoint : MonoBehaviour
         EventManager.OnSaveGame -= SavePlayerPosition;
     }
 
+    private void Start()
+    {
+        resetPlayerDirectionTransform = transform.GetChild(0).transform;
+
+        try
+        {
+            resetPositionsScript = worldManager.GetComponent<GameObjectPositionReset>();
+        }
+        catch
+        {
+            Debug.Log("Checkpoint.cs: No WorldManager could be found in the scene!");
+        }
+
+        if (!savePositionsWithinBox)
+        {
+            Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
+        }
+    }
 
     /// <summary>
     /// Is used to change the spawn point for the player, in the PlayerRespawn script, when the player collides with the checkpoint.

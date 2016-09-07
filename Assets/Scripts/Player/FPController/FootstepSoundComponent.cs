@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum GroundType {None, Dirt, Grass, Metal, Water, Wood, Concrete, Cloth };
+public enum GroundType {None, Dirt, Metal, Water, Wood, RottenWood, Concrete, Cloth };
 
 public class FootstepSoundComponent : MonoBehaviour
 {
@@ -10,9 +10,6 @@ public class FootstepSoundComponent : MonoBehaviour
     [SerializeField]
     [Tooltip("Sounds played when the player walks on dirt.")]
     private AudioClip[] dirtSounds;
-    [SerializeField]
-    [Tooltip("Sounds played when the player walks on grass.")]
-    private AudioClip[] grassSounds;
     [SerializeField]
     [Tooltip("Sounds played when the player walks on metal.")]
     private AudioClip[] metalSounds;
@@ -23,6 +20,9 @@ public class FootstepSoundComponent : MonoBehaviour
     [Tooltip("Sounds played when the player walks on wood.")]
     private AudioClip[] woodSounds;
     [SerializeField]
+    [Tooltip("Sounds played when the player walks on rotten wood.")]
+    private AudioClip[] rottenWoodSounds;
+    [SerializeField]
     [Tooltip("Sounds played when the player walks on concrete.")]
     private AudioClip[] concreteSounds;
     [SerializeField]
@@ -30,7 +30,7 @@ public class FootstepSoundComponent : MonoBehaviour
     private AudioClip[] clothSounds;
 
     private AudioSource audioSource;
-    private float rayCastLength = 1.001f;
+    private float rayCastLength = 1.01f;
 
     // Use this for initialization
     private void Start()
@@ -52,50 +52,50 @@ public class FootstepSoundComponent : MonoBehaviour
                 }
                 break;
 
-            case GroundType.Grass:
-                if (grassSounds.Length > 0)
+            case GroundType.RottenWood:
+                if (rottenWoodSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(grassSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(rottenWoodSounds[Random.Range(0, rottenWoodSounds.Length - 1)]);
                 }
                 break;
 
             case GroundType.Wood:
                 if (woodSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(woodSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(woodSounds[Random.Range(0, woodSounds.Length - 1)]);
                 }
                 break;
 
             case GroundType.Cloth:
                 if (clothSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(clothSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(clothSounds[Random.Range(0, clothSounds.Length - 1)]);
                 }
                 break;
 
             case GroundType.Concrete:
                 if (concreteSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(concreteSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(concreteSounds[Random.Range(0, concreteSounds.Length - 1)]);
                 }
                 break;
 
             case GroundType.Water:
                 if (waterSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(waterSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(waterSounds[Random.Range(0, waterSounds.Length - 1)]);
                 }
                 break;
 
             case GroundType.Metal:
                 if (metalSounds.Length > 0)
                 {
-                    audioSource.PlayOneShot(metalSounds[Random.Range(0, dirtSounds.Length - 1)]);
+                    audioSource.PlayOneShot(metalSounds[Random.Range(0, metalSounds.Length - 1)]);
                 }
                 break;
 
             default:
-                Debug.Log("Played no sound because the ground type is 'None'. (Remember to set the correct tag)");
+                Debug.Log("Played no sound because the ground type is 'None'. (Remember to set the correct physic material)");
                 break;
         }
     }
@@ -109,41 +109,42 @@ public class FootstepSoundComponent : MonoBehaviour
         GroundType groundType = GroundType.None;
 
         RaycastHit hit;
+
         if (Physics.Raycast(transform.parent.position, -transform.up, out hit, rayCastLength))
         {
-            switch (hit.collider.tag)
+            switch (hit.collider.material.name)
             {
-                case "Ground_Dirt":
+                case "Ground_Dirt (Instance)":
                     groundType = GroundType.Dirt;
 
                     break;
 
-                case "Ground_Grass":
-                    groundType = GroundType.Grass;
+                case "Ground_RottenWood (Instance)":
+                    groundType = GroundType.RottenWood;
 
                     break;
 
-                case "Ground_Cloth":
+                case "Ground_Cloth (Instance)":
                     groundType = GroundType.Cloth;
 
                     break;
 
-                case "Ground_Wood":
+                case "Ground_Wood (Instance)":
                     groundType = GroundType.Wood;
 
                     break;
 
-                case "Ground_Concrete":
+                case "Ground_Concrete (Instance)":
                     groundType = GroundType.Concrete;
 
                     break;
 
-                case "Ground_Water":
+                case "Ground_Water (Instance)":
                     groundType = GroundType.Water;
 
                     break;
 
-                case "Ground_Metal":
+                case "Ground_Metal (Instance)":
                     groundType = GroundType.Metal;
 
                     break;
