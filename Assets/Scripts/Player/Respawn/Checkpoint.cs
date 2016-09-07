@@ -9,7 +9,8 @@ public class Checkpoint : MonoBehaviour
     private GameObjectPositionReset resetPositionsScript;
 
     private Transform resetPlayerDirectionTransform;
-    private string gameResetManagerName = "GameResetManager";
+    [SerializeField]
+    private GameObject worldManager;
 
     private void OnEnable()
     {
@@ -28,11 +29,11 @@ public class Checkpoint : MonoBehaviour
 
         try
         {
-            resetPositionsScript = GameObject.Find(gameResetManagerName).GetComponent<GameObjectPositionReset>();
+            resetPositionsScript = worldManager.GetComponent<GameObjectPositionReset>();
         }
         catch
         {
-            Debug.Log("Checkpoint.cs: No GameObject with the name '" + gameResetManagerName + "' could be found in the scene!");
+            Debug.Log("Checkpoint.cs: No WorldManager could be found in the scene!");
         }
 
         if (!savePositionsWithinBox)

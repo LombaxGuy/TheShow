@@ -19,10 +19,6 @@ public static class SaveLoad
     private static string fxSliderName = "FXSlider";
     private static string voiceSliderName = "VoiceSlider";
 
-
-    private static GameObject[] cObject;
-    private static GameObject soundCanvas;
-
     //The variable that stores the slider values
     private static float[] value = new float[4];
 

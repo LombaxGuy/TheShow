@@ -5,68 +5,15 @@ using UnityEngine.UI;
 public class SubtitleControl : MonoBehaviour
 {
     private static SubtitleControl instance;
-    private Text subtitles;
-    private string textName = "Subtitles";
-    private Canvas subtitleUI;
-    private string canvasName = "SubtitleUI";
     private bool isDisplayed = false;
     private string line = "";
 
-    public static SubtitleControl Instance
+    [SerializeField]
+    private Text subtitles;
+
+    private void Start()
     {
-        get
-        {
-            //If the singleton dosen't exist it creates a new one.
-            if (instance == null)
-            {
-                GameObject newGameObject = new GameObject("Subtitle(Singleton)");
-                instance = newGameObject.AddComponent<SubtitleControl>();
-            }
-            return instance;
-        }
 
-    }
-
-    //The awake method which ensures that duplicates of the object is destroyed and the script that finds the desired canvas to use for subs
-    private void Awake()
-    {
-        //Ensures that only one instance exists
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-
-        DontDestroyOnLoad(this.gameObject);
-
-        //Creates an array of Canvas 
-        Canvas[] temp = FindObjectsOfType<Canvas>();
-
-        for (int i = 0; i < temp.Length; i++)
-        {
-            //Searches for a Canvas with the desired name and breaks the loop if it's found.
-            if (temp[i].name == canvasName)
-            {
-                subtitleUI = temp[i];
-                break;
-            }
-
-            //If no Canvas is found a debug.log is made
-            if (i == temp.Length && subtitleUI == null)
-            {
-                Debug.Log("SubtitleControl.cs: No Canvas with the name '" + canvasName + "' could be found in the scene!");
-            }
-        }
-
-        //If a Canvas is found, subtitles is set to a text component of a child object
-        if (subtitleUI != null)
-        {
-            subtitles = subtitleUI.transform.Find(textName).GetComponent<Text>();
-            subtitles.text = line;
-        }
     }
 
     /// <summary>
