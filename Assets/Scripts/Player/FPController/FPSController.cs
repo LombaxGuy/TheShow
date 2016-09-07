@@ -406,11 +406,13 @@ public class FPSController : MonoBehaviour
             {
                 if (Vector3.Angle(hit.normal, Vector3.up) < maximumSlopeAngle)
                 {
+                    onGround = true;
                     return true;
                 }
             }
         }
 
+        onGround = false;
         return false;
     }
 
