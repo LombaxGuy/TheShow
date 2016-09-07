@@ -23,17 +23,28 @@ public class SettingsMenu : MonoBehaviour
     //Float that stores savedata
     private float[] values = new float[4];
 
+    /// <summary>
+    /// Runs when the object is enabled
+    /// </summary>
+    private void OnEnable()
+    {
+        EventManager.OnSavePref += SaveSliders;
+        EventManager.OnLoadPref += LoadSliders;
+    }
+
+    /// <summary>
+    /// Runs when the object is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        EventManager.OnSavePref -= SaveSliders;
+        EventManager.OnLoadPref -= LoadSliders;
+    }
+
     // Use this for initialization
     void Start()
     {
-        //Sets the values variable to be equal to the array returned in the LoadPrefs method.
-        values = SaveLoad.LoadPrefs();
-
-        //Sets the slider values to be equal to the value variable and deactivates the menu
-        masterSlider.GetComponent<Slider>().value = values[0];
-        musicSlider.GetComponent<Slider>().value = values[1];
-        fxSlider.GetComponent<Slider>().value = values[2];
-        voiceSlider.GetComponent<Slider>().value = values[3];
+        EventManager.RaiseOnLoadPref();
 
         this.gameObject.SetActive(false);
     }
@@ -54,20 +65,13 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Saves the new slider values
     /// </summary>
     public void Apply()
     {
-        //Saves our slider values in the value variable
-        values[0] = masterSlider.GetComponent<Slider>().value;
-        values[1] = musicSlider.GetComponent<Slider>().value;
-        values[2] = fxSlider.GetComponent<Slider>().value;
-        values[3] = voiceSlider.GetComponent<Slider>().value;
-
-        popUpApply.SetActive(false);
-
-        SaveLoad.SavePrefs(values[0], values[1], values[2], values[3]);
+        EventManager.RaiseOnSavePref();
     }
     
     /// <summary>
@@ -89,5 +93,36 @@ public class SettingsMenu : MonoBehaviour
     public void Cancel()
     {
         popUpApply.SetActive(false);
+    }
+
+    /// <summary>
+    /// Loads the values of the volumesliders
+    /// </summary>
+    private void LoadSliders()
+    {
+        //Sets the values variable to be equal to the array returned in the LoadPrefs method.
+        values = SaveLoad.LoadPrefs();
+
+        //Sets the slider values to be equal to the value variable and deactivates the menu
+        masterSlider.GetComponent<Slider>().value = values[0];
+        musicSlider.GetComponent<Slider>().value = values[1];
+        fxSlider.GetComponent<Slider>().value = values[2];
+        voiceSlider.GetComponent<Slider>().value = values[3];
+    }
+
+    /// <summary>
+    /// Saves the values of the volumesliders
+    /// </summary>
+    private void SaveSliders()
+    {
+        //Saves our slider values in the value variable
+        values[0] = masterSlider.GetComponent<Slider>().value;
+        values[1] = musicSlider.GetComponent<Slider>().value;
+        values[2] = fxSlider.GetComponent<Slider>().value;
+        values[3] = voiceSlider.GetComponent<Slider>().value;
+
+        popUpApply.SetActive(false);
+
+        SaveLoad.SavePrefs(values[0], values[1], values[2], values[3]);
     }
 }

@@ -30,24 +30,33 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        EventManager.OnSaveGame += SavePlayerPosition;
+
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnSaveGame -= SavePlayerPosition;
+    }
+
+
     /// <summary>
     /// Is used to change the spawn point for the player, in the PlayerRespawn script, when the player collides with the checkpoint.
     /// </summary> 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
-            
+
             // Only if the player is alive can a checkpoint be triggered
             if (respawnScript.IsAlive)
             {
-                if(this.tag == "MasterRespawn")
+                if (this.tag == "MasterRespawn")
                 {
-                    //Saves the current position of the player
-                    SaveGame save = new SaveGame();
-                    save.SetPlayerValues(this.transform.position.x, this.transform.position.y, this.transform.position.z);                                      
-                    SaveLoad.Save(save);
+                    EventManager.RaiseOnSaveGame();
                 }
                 respawnScript.TargetSpawnpoint = transform.gameObject;
                 GetComponent<Collider>().enabled = false;
@@ -60,7 +69,7 @@ public class Checkpoint : MonoBehaviour
                 else
                 {
                     Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
-                }               
+                }
             }
         }
     }
@@ -91,7 +100,7 @@ public class Checkpoint : MonoBehaviour
 
         // Draws the forward vector for the SpawnRotation gameobject. Position is already set by the new matrix.
         Gizmos.color = Color.blue;
-        Gizmos.DrawRay(new Vector3(0,0,0), transform.GetChild(0).transform.forward);
+        Gizmos.DrawRay(new Vector3(0, 0, 0), transform.GetChild(0).transform.forward);
 
         // Draws the up vector for the SpawnRotation gameobject. Position is already set by the new matrix.
         Gizmos.color = Color.green;
@@ -107,5 +116,15 @@ public class Checkpoint : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(savePositionsWithinBox.center, savePositionsWithinBox.size);
         }
+    }
+
+    /// <summary>
+    /// Saves the curent position of the player
+    /// </summary>
+    private void SavePlayerPosition()
+    {
+        SaveGame save = new SaveGame();
+        save.SetPlayerValues(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        SaveLoad.Save(save);
     }
 }
