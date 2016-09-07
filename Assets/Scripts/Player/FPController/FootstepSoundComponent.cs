@@ -112,8 +112,6 @@ public class FootstepSoundComponent : MonoBehaviour
 
         if (Physics.Raycast(transform.parent.position, -transform.up, out hit, rayCastLength))
         {
-            Debug.Log(hit.collider.material.name);
-
             switch (hit.collider.material.name)
             {
                 case "Ground_Dirt (Instance)":

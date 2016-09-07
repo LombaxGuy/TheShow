@@ -140,6 +140,8 @@ public class FPSController : MonoBehaviour
     {
         if (!locked)
         {
+            IsGrounded();
+
             moveVector = Vector3.zero;
             jumpKey = false;
             crouchKey = false;
@@ -158,7 +160,7 @@ public class FPSController : MonoBehaviour
     {
         //Slows the velocity each frame if the player is grounded.
         //Counteracts the sliding resulting from AddForce.
-        if (IsGrounded())
+        if (onGround)
         {
             rigid.velocity *= 0.8f;
         }
@@ -217,7 +219,7 @@ public class FPSController : MonoBehaviour
             moveVector *= crouchSpeedModifier;
         }
 
-        if (Input.GetKey(KeyBindings.KeyMoveSprint) && !crouching && IsGrounded())
+        if (Input.GetKey(KeyBindings.KeyMoveSprint) && !crouching && onGround)
         {
             sprintKey = true;
 
@@ -242,24 +244,24 @@ public class FPSController : MonoBehaviour
             moveVelocity.y = 0f;
             moveVelocity.z = moveVector.z * speedMultiplier;
 
-            if (IsGrounded() && rigid.velocity.magnitude <= maxMagnitude)
+            if (onGround && rigid.velocity.magnitude <= maxMagnitude)
                 //If grounded, add the velocity.
                 rigid.AddRelativeForce((moveVelocity * 500) * Time.deltaTime);
 
-            else if (!IsGrounded() && rigid.velocity.magnitude <= maxMagnitude)
+            else if (!onGround && rigid.velocity.magnitude <= maxMagnitude)
             {
                 //If not grounded, add the velocity multiplied by the inAirSpeedModifier.
                 rigid.AddRelativeForce(((moveVelocity * inAirSpeedModifier) * 500) * Time.deltaTime);
             }
         }
 
-        if (!jumpKey && jumping && IsGrounded())
+        if (!jumpKey && jumping && onGround)
         {
             jumping = false;
         }
 
         //Called when first jumping, adds the initial jump velocity.
-        if (jumpKey && IsGrounded() && !jumping)
+        if (jumpKey && onGround && !jumping)
         {
             rigid.velocity += new Vector3(0, initialJumpVelocity, 0);
             Debug.Log(rigid.velocity);
@@ -346,7 +348,7 @@ public class FPSController : MonoBehaviour
         }
 
         //If WASD is pressed.
-        if (moveVector != Vector3.zero && IsGrounded())
+        if (moveVector != Vector3.zero && onGround)
         {
             animator.SetBool("animateHead", true);
         }
@@ -355,24 +357,6 @@ public class FPSController : MonoBehaviour
         {
             animator.SetBool("animateHead", false);
         }
-    }
-
-    /// <summary>
-    /// Returns the slope of the ground at the specified position.
-    /// </summary>
-    /// <param name="raycastPos">The position of the raycast.</param>
-    private float CurrentGroundSlope(Vector3 raycastPos, float length)
-    {
-        float angle = 0;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(raycastPos, -transform.up, out hit, length))
-        {
-            angle = Vector3.Angle(hit.normal, Vector3.up);
-        }
-
-        return angle;
     }
 
     /// <summary>
@@ -468,11 +452,11 @@ public class FPSController : MonoBehaviour
             {
                 float currentSlope = Vector3.Angle(hit.normal, Vector3.up);
 
-                if (currentSlope < maximumSlopeAngle && IsGrounded())
+                if (currentSlope < maximumSlopeAngle && onGround)
                 {
                     rigid.useGravity = false;
                 }
-                else if (!IsGrounded())
+                else if (!onGround)
                 {
                     rigid.useGravity = true;
                 }

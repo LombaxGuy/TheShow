@@ -67,11 +67,14 @@ public class MovingPlatform : MonoBehaviour
         {
             if (other.parent.tag == "Player")
             {
-                other.parent.transform.parent = transform;
+                if (other.parent.GetComponent<FPSController>().OnGround)
+                {
+                    other.parent.transform.parent = transform;
 
-                SetTime(0);
+                    SetTime(0);
 
-                isMovingWithPlayer = true;
+                    isMovingWithPlayer = true;
+                }
             }
         }
     }
@@ -173,7 +176,6 @@ public class MovingPlatform : MonoBehaviour
     /// </summary>
     private void GameObjectMove()
     {
-
         if (locationOneFirst == true)
         {
             Move(true);
