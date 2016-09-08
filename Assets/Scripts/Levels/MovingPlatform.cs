@@ -9,13 +9,12 @@ public class MovingPlatform : MonoBehaviour
     //GameObject Y scale need to be 1, since it will mess til Player controller 
     [SerializeField]
     private float speed = 2;
-
+    [Tooltip("When the Player is not on the platform(jumping or falling), it will make a stop for a time if true")]
     [SerializeField]
-    private bool moveOnPlayerTouch = false;
-
+    private bool smallBreak = false;
     [SerializeField]
     private float distance = 1;
-
+    [SerializeField]
     private bool locationOneFirst = false;
 
     [SerializeField]
@@ -30,35 +29,99 @@ public class MovingPlatform : MonoBehaviour
 
     private bool isMovingWithPlayer = false;
 
-    private float counter = 0;
+    private bool playerGoldenTouch = false;
 
-    void FixedUpdate()
+    private bool secondPlatformReached = false;
+
+    private float counter = 0;
+    [Tooltip("How the Platform will move. Endlessis for platform moving on its own. PlayerTouchOnly is for platform move when player on it and goes back when player not on it. PlayerTouchExtra is for move when player touch and continue to move location B and then location A and it will stop.")]
+    [SerializeField]
+    private MoveMode moveMode;
+
+    private void Update()
     {
-        if (counter <= 0)
+
+        switch (moveMode)
         {
-            if (moveOnPlayerTouch == false)
+            case MoveMode.PLAYERTOUCHONLY:
+                PlayerTouchOnly();
+                break;
+            case MoveMode.ENDLESS:
+                EndlessLoop();
+                break;
+            case MoveMode.PLAYERTOUCHEXTRA:
+                PlayerTouchExtra();
+                break;
+            default:
+                break;
+        }
+
+        if (counter >= 0)
+        {
+            counter -= Time.deltaTime;
+        }
+    }
+
+
+    private void EndlessLoop()
+    {
+        if (Counter() == true)
+        {
+            GameObjectMove();
+        }
+        
+    }
+
+    private void PlayerTouchOnly()
+    {
+        if(Counter() == true)
+        {
+            if (isMovingWithPlayer == true)
             {
-                GameObjectMove();
+                GameObjectMoveOnPlayerTouch();
             }
             else
             {
-                if (isMovingWithPlayer == true)
-                {
-                    GameObjectMoveOnPlayerTouch();
-                }
-                else
-                {
-                    GameObjectMoveBack();
-                }
+                GameObjectMoveBack();
             }
         }
     }
 
-    private void Update()
+    private void PlayerTouchExtra()
     {
-        if (counter > 0)
+        if(Counter() == true)
         {
-            counter -= Time.deltaTime;
+            if(playerGoldenTouch == true)
+            {
+                if (locationOneFirst == false && secondPlatformReached == true)
+                {
+                    playerGoldenTouch = false;
+                    secondPlatformReached = false;
+                }
+                else
+                {
+                    if(locationOneFirst == true)
+                    {
+                        secondPlatformReached = true;
+                    }
+
+                    GameObjectMove();
+                }
+
+                
+            }
+        }
+    }
+
+    private bool Counter()
+    {
+        if(counter <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -77,6 +140,8 @@ public class MovingPlatform : MonoBehaviour
                     SetTime(0);
 
                     isMovingWithPlayer = true;
+
+                    playerGoldenTouch = true;
                 }
             }
         }
@@ -114,11 +179,10 @@ public class MovingPlatform : MonoBehaviour
 
     private void SetTime(float time)
     {
-        if (moveOnPlayerTouch == true)
+        if(smallBreak == true)
         {
             counter = time;
-        }
-
+        }       
     }
 
     /// <summary>
@@ -126,12 +190,10 @@ public class MovingPlatform : MonoBehaviour
     /// </summary>
     private void GameObjectMoveBack()
     {
-
         if (Distance(true) > distance)
         {
             Move(true);
         }
-
     }
 
 
