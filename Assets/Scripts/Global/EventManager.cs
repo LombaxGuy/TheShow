@@ -9,6 +9,8 @@ public class EventManager : MonoBehaviour
     public delegate void LoadGameDelegate();
     public delegate void SavePrefDelegate();
     public delegate void LoadPrefDelegate();
+    public delegate void CheckForSettingChangesDelegate();
+    public delegate void ApplySettingChangesDelegate();
 
     public static event PlayerDeathDelegate OnPlayerDeath;
     public static event PlayerRespawnDelegate OnPlayerRespawn;
@@ -16,6 +18,8 @@ public class EventManager : MonoBehaviour
     public static event LoadGameDelegate OnLoadGame;
     public static event SavePrefDelegate OnSavePref;
     public static event LoadPrefDelegate OnLoadPref;
+    public static event CheckForSettingChangesDelegate OnCheckForSettingChanges;
+    public static event ApplySettingChangesDelegate OnApplySettingChanges;
 
     public static void RaiseOnPlayerDeath()
     {
@@ -51,5 +55,17 @@ public class EventManager : MonoBehaviour
     {
         Debug.Log("EventManager.cs: Event 'OnLoadPref' raised.");
         OnLoadPref();
+    }
+
+    public static void RaiseOnCheckForSettingChanges()
+    {
+        Debug.Log("EventManager.cs: Event 'OnCheckForSettingChanges' raised.");
+        OnCheckForSettingChanges();
+    }
+
+    public static void RaiseOnApplySettingChanges()
+    {
+        Debug.Log("EventManager.cs: Event 'OnApplySettingChanges' raised.");
+        OnApplySettingChanges();
     }
 }

@@ -23,6 +23,14 @@ public class SettingsMenu : MonoBehaviour
     //Float that stores savedata
     private float[] values = new float[4];
 
+    private bool settingsChanged = false;
+
+    public bool SettingsChanged
+    {
+        get { return settingsChanged; }
+        set {settingsChanged = value; }
+    }
+
     /// <summary>
     /// Runs when the object is enabled
     /// </summary>
@@ -72,6 +80,9 @@ public class SettingsMenu : MonoBehaviour
     public void Apply()
     {
         EventManager.RaiseOnSavePref();
+        EventManager.RaiseOnApplySettingChanges();
+
+        settingsChanged = false;
     }
     
     /// <summary>
@@ -79,10 +90,16 @@ public class SettingsMenu : MonoBehaviour
     /// </summary>
     public void Back()
     {
-        if (soundMenu.GetComponent<SoundSettings>().Changes(values))
+        EventManager.RaiseOnCheckForSettingChanges();
+
+        if (settingsChanged)
         {
-               popUpApply.SetActive(true);
+            popUpApply.SetActive(true);
         }
+        //if (soundMenu.GetComponent<SoundSettings>().Changes(values))
+        //{
+        //       popUpApply.SetActive(true);
+        //}
         else
         {
             gameObject.SetActive(false);

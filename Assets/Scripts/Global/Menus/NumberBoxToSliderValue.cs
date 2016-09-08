@@ -10,30 +10,20 @@ public class NumberBoxToSliderValue : MonoBehaviour
     [SerializeField]
     private InputField numberBox;
 
-	// Use this for initialization
-	void Start ()
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
-
     public void UpdateSlider()
     {
         int value = 0;
         int.TryParse(numberBox.text, out value);
 
-        value = value > 1 ? (1) : (value);
+        value = value > 100 ? (100) : (value);
 
         slider.value = value;
+        numberBox.text = value.ToString();
     }
 
     public void UpdateNumberBox()
     {
-
+        int value = (int)slider.value;
+        numberBox.text = value.ToString();
     }
 }
