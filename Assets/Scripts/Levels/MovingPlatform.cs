@@ -3,6 +3,9 @@ using System.Collections;
 
 public class MovingPlatform : MonoBehaviour
 {
+
+    enum MoveMode { PLAYERTOUCHONLY, ENDLESS, PLAYERTOUCHEXTRA}
+
     //GameObject Y scale need to be 1, since it will mess til Player controller 
     [SerializeField]
     private float speed = 2;

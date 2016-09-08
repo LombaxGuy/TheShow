@@ -182,6 +182,10 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
             playerOnConveyor = true;
             player = collision.gameObject;
         }
+        else if(collision.transform.tag == "PickUp")
+        {
+            collision.gameObject.GetComponent<Rigidbody>().MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
+        }
     }
 
     void OnCollisionExit(Collision collision)
@@ -212,7 +216,6 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
         if(notActive.Count == 0 && counter <= 0 && lastObjectSpawned == false)
         {
-            Debug.Log("YO");
             active.Add(lastObj);
             lastTimeZ = 0;
             lastObjectSpawned = true;
