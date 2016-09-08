@@ -8,14 +8,19 @@ public class ImpactTrigger : MonoBehaviour {
     [Tooltip("2500 is default for a hard push")]
     private float force = 2500;
 
+    
+
     /// <summary>
     /// See if player is hit and push the player
     /// </summary>
     /// <param name="other">player</param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
-            other.GetComponent<Rigidbody>().AddForce(transform.forward * force ,ForceMode.Impulse);
+            if (other.tag == "Player")
+            {
+                other.GetComponent<Rigidbody>().AddForce(transform.forward * force, ForceMode.Impulse);
+            }
+
 
     }
 }
