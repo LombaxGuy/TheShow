@@ -80,6 +80,13 @@ public class FPSController : MonoBehaviour
     bool crouchKey;
     #endregion
 
+    [SerializeField]
+    private float fallDistance;
+
+    private Vector3 oldPlayerPos = new Vector3(0, 0, 0);
+
+    private bool comparePos = false;
+
     bool jumping = false;
     bool crouching = false;
 
@@ -153,6 +160,18 @@ public class FPSController : MonoBehaviour
             }
 
             HeadBob();
+
+            if (onGround && comparePos)
+            {
+                ComparePlayerPos();
+            }
+
+            if (!onGround && !comparePos)
+            {
+                oldPlayerPos = this.transform.position;
+                comparePos = true;
+            }
+
         }
     }
 
@@ -488,5 +507,14 @@ public class FPSController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
 
         stunned = false;
+    }
+
+    public void ComparePlayerPos()
+    {
+        if (oldPlayerPos.y - this.transform.position.y >= fallDistance)
+        {
+            EventManager.RaiseOnPlayerDeath();
+        }
+        comparePos = false;
     }
 }

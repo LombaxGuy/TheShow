@@ -94,7 +94,6 @@ public class PlayerRespawn : MonoBehaviour
         {
             EventManager.RaiseOnPlayerDeath();
 
-            isAlive = false;
         }
         else
         {
@@ -104,6 +103,7 @@ public class PlayerRespawn : MonoBehaviour
 
     private void OnPlayerDeath()
     {
+        isAlive = false;
         deathCooldown = defaultDeathCooldown;
 
         float randomAnim = Random.Range(0, 2);
