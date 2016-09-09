@@ -14,9 +14,6 @@ public class ResolutionSettings : MonoBehaviour
     private Dropdown resolutionDD;
 
     [SerializeField]
-    private Dropdown displayMonitor;
-
-    [SerializeField]
     private Toggle windowedToggle;
 
     private SettingsMenu settingsMenu;
@@ -40,11 +37,8 @@ public class ResolutionSettings : MonoBehaviour
     {
         settingsMenu = GetComponentInParent<SettingsMenu>();
 
-        displayMonitor.ClearOptions();
-
         // Sets the abailable resolutions based on what the monitor supports.
         SetAvailableResolutions();
-        SetAvailableMonitors();
 
         // Gets the current resolution of the game window.
         int[] currentResolution = new int[] { Screen.width, Screen.height, Screen.currentResolution.refreshRate };
@@ -72,33 +66,6 @@ public class ResolutionSettings : MonoBehaviour
         //    EventManager.RaiseOnCheckForSettingChanges();
         //    EventManager.RaiseOnApplySettingChanges();
         //}
-    }
-
-    /// <summary>
-    /// Sets the available monitors.
-    /// </summary>
-    private void SetAvailableMonitors()
-    {
-        displayMonitor.ClearOptions();
-
-        List<string> monitorNames = new List<string>();
-
-        for (int i = 0; i < Display.displays.Length; i++)
-        {
-            monitorNames.Add("Monitor " + (i + 1));
-        }
-
-        displayMonitor.AddOptions(monitorNames);
-
-        displayMonitor.RefreshShownValue();
-        
-    }
-
-    private void ChangeMonitor()
-    {
-        PlayerPrefs.SetInt("UnitySelectMonitor", displayMonitor.value);
-
-        SetAvailableResolutions();
     }
 
     /// <summary>
@@ -173,15 +140,9 @@ public class ResolutionSettings : MonoBehaviour
     /// </summary>
     private void OnApplySettingChanges()
     {
-        
-
-        ChangeMonitor();
-
         int[] values = GetSelectedResolutionValues();
 
         Screen.SetResolution(values[0], values[1], !windowedToggle.isOn, values[2]);
-
-        
     }
 
     /// <summary>

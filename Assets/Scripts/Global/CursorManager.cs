@@ -17,10 +17,7 @@ public class CursorManager : MonoBehaviour
     /// </summary>
     public static void UnlockCursor()
     {
-        Cursor.lockState = CursorLockMode.Confined;
-#if (DEBUG)
         Cursor.lockState = CursorLockMode.None;
-#endif
         Cursor.visible = true;
     }
 }
