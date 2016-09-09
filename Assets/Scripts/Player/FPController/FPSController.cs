@@ -515,6 +515,10 @@ public class FPSController : MonoBehaviour
         {
             EventManager.RaiseOnPlayerDeath();
         }
+        //else if(oldPlayerPos.y - this.transform.position.y >= (fallDistance/2))
+        //{
+        //    //play animation
+        //}
         comparePos = false;
     }
 }
