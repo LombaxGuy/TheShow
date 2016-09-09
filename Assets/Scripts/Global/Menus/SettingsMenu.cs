@@ -25,12 +25,6 @@ public class SettingsMenu : MonoBehaviour
 
     private bool settingsChanged = false;
 
-    public bool SettingsChanged
-    {
-        get { return settingsChanged; }
-        set {settingsChanged = value; }
-    }
-
     /// <summary>
     /// Runs when the object is enabled
     /// </summary>
@@ -38,6 +32,7 @@ public class SettingsMenu : MonoBehaviour
     {
         EventManager.OnSavePref += SaveSliders;
         EventManager.OnLoadPref += LoadSliders;
+        EventManager.OnSettingsChanged += OnSettingsChanged;
     }
 
     /// <summary>
@@ -47,6 +42,7 @@ public class SettingsMenu : MonoBehaviour
     {
         EventManager.OnSavePref -= SaveSliders;
         EventManager.OnLoadPref -= LoadSliders;
+        EventManager.OnSettingsChanged -= OnSettingsChanged;
     }
 
     // Use this for initialization
@@ -83,6 +79,8 @@ public class SettingsMenu : MonoBehaviour
         EventManager.RaiseOnApplySettingChanges();
 
         settingsChanged = false;
+
+        gameObject.SetActive(false);
     }
     
     /// <summary>
@@ -109,7 +107,11 @@ public class SettingsMenu : MonoBehaviour
     //closes the popUp apply window
     public void Cancel()
     {
+        EventManager.RaiseOnResetSettings();
+
         popUpApply.SetActive(false);
+
+        gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -141,5 +143,10 @@ public class SettingsMenu : MonoBehaviour
         popUpApply.SetActive(false);
 
         SaveLoad.SavePrefs(values[0], values[1], values[2], values[3]);
+    }
+
+    private void OnSettingsChanged()
+    {
+        settingsChanged = true;
     }
 }
