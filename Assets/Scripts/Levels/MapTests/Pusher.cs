@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class Pusher : MonoBehaviour {   
 
     //Used to check which way the pusher is moving
@@ -15,11 +16,14 @@ public class Pusher : MonoBehaviour {
     [Tooltip("How fast this extends")]
     private float pushOutTime = 0.2f;
     [SerializeField]
+    [Tooltip("How fast this extends")]
+    private float pushInTime = 1f;
+    [SerializeField]
     [Tooltip("How long in seconds until the script starts running")]
     private float offsetSeconds = 0;
     [SerializeField]
     [Tooltip("How long this stays in")]
-    private float idleInSeconds = 3;
+    private float idleInSeconds = 2.2f;
     [SerializeField]
     [Tooltip("How long this stays out")]
     private float idleOutSeconds = 1;
@@ -36,6 +40,12 @@ public class Pusher : MonoBehaviour {
     //extended possition
     private Vector3 extPos;
 
+    private static AudioSource audioPlayer;
+
+    [SerializeField]
+    [Tooltip("AudioClips. 0 = out, 1 = in")]
+    private AudioClip[] audioClips;
+
     // Use this for initialization
     /// <summary>
     /// Used to set the vectors and our trigger collider.
@@ -45,6 +55,7 @@ public class Pusher : MonoBehaviour {
         stampTrigger = transform.GetChild(0).GetComponent<BoxCollider>();
         startPos = transform.position;
         extPos = transform.position + transform.forward * distance;
+        audioPlayer = GetComponent<AudioSource>();
 
     }
 	
@@ -73,10 +84,11 @@ public class Pusher : MonoBehaviour {
         {
             if(idleTimer > idleOutSeconds)
             {
-                Move(extPos, startPos, pushOutTime);
+                Move(extPos, startPos, pushInTime);
                 stampTrigger.enabled = false;
                 isOut = false;
                 idleTimer = 0;
+                audioPlayer.PlayOneShot(audioClips[1]);
             }
 
         }
@@ -88,6 +100,7 @@ public class Pusher : MonoBehaviour {
                 stampTrigger.enabled = true;
                 isOut = true;
                 idleTimer = 0;
+                audioPlayer.PlayOneShot(audioClips[0]);
             }
         }
 

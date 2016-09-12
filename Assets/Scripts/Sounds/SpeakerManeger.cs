@@ -4,7 +4,7 @@ using System.Collections;
 public class SpeakerManeger : MonoBehaviour
 {
 
-    //Remember SpeakerTriggerScript and SpeakerScript
+    //Remember SpeakerTriggerScript
     //Set on gameobject
 
     private GameObject[] speakers;

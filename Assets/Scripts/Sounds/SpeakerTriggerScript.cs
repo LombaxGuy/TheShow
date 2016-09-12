@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SpeakerTriggerScript : MonoBehaviour {
 
-    //Remember SpeakerManeger and SpeakerScript
+    //Remember SpeakerManeger
     //Set on trigger
 
     //Set this in the editor, has to be the gameobject with AudioManager
