@@ -27,8 +27,10 @@ public class AnisoFiltSetting : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
-        EventManager.OnSavePref += SaveAnisoSettings;
-        EventManager.OnLoadPref += LoadAnisoSettings;
+        EventManager.OnSavePref += OnSavePref;
+        EventManager.OnLoadPref += OnLoadPref;
+
+        settingsMenu = GetComponentInParent<SettingsMenu>();
     }
 
     /// <summary>
@@ -40,17 +42,16 @@ public class AnisoFiltSetting : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
-        EventManager.OnSavePref -= SaveAnisoSettings;
-        EventManager.OnLoadPref -= LoadAnisoSettings;
+        EventManager.OnSavePref -= OnSavePref;
+        EventManager.OnLoadPref -= OnLoadPref;
     }
 
+    /// <summary>
+    /// Sets the current setting.
+    /// </summary>
     void Start()
     {
-        settingsMenu = GetComponentInParent<SettingsMenu>();
-        //currentSetting = defaultAnisotropicFiltering;
-
         SetToCurrentSetting();
-        //Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
     }
 
     private void Update()
@@ -67,8 +68,12 @@ public class AnisoFiltSetting : MonoBehaviour
         //}
     }
 
+    /// <summary>
+    /// Sets the dropdown menus option to the current setting. Sets the global AnisotropicFiltering level too.
+    /// </summary>
     private void SetToCurrentSetting()
     {
+        // Switches on 'currentSetting'
         switch (currentSetting)
         {
             case AnisotropicFilteringSettings.Disabled:
@@ -102,10 +107,15 @@ public class AnisoFiltSetting : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Compares the current AF level with the selected AF level. If the setting has changed true is returned.
+    /// </summary>
+    /// <returns>Returns true if the settings has changed.</returns>
     private bool CompareAnisotropicFilteringLevel()
     {
         bool hasSettingsChanged = false;
 
+        // Switches on the selected option's text in the dropdown menu
         switch (anisotropicFilteringDD.options[anisotropicFilteringDD.value].text)
         {
             case "Disabled":
@@ -134,16 +144,25 @@ public class AnisoFiltSetting : MonoBehaviour
 
     #region Event handlers
 
+    /// <summary>
+    /// Runs when the OnCheckForSettingChanges event is raised.
+    /// </summary>
     private void OnCheckForSettingChanges()
     {
+        // If the settings has been changed...
         if (CompareAnisotropicFilteringLevel())
         {
+            //... raise the following event.
             EventManager.RaiseOnSettingsChanged();
         }
     }
 
+    /// <summary>
+    /// Runs when the OnApplySettingChanges event is raised.
+    /// </summary>
     private void OnApplySettingChanges()
     {
+        // Switches on the selected option's text and sets the settings accordingly
         switch (anisotropicFilteringDD.options[anisotropicFilteringDD.value].text)
         {
             case "Disabled":
@@ -177,8 +196,12 @@ public class AnisoFiltSetting : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Runs when the OnResetSettings event is raised.
+    /// </summary>
     private void OnResetSettings()
     {
+        // Switches on currentSetting and sets the value of the dropdown menu accordingly
         switch (currentSetting)
         {
             case AnisotropicFilteringSettings.Disabled:
@@ -204,8 +227,12 @@ public class AnisoFiltSetting : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Runs when the OnResetToDefaultSettings event is raised.
+    /// </summary>
     private void OnResetToDefaultSettings()
     {
+        // Switches on defaultAnisotropicFiltering and sets the settings accordingly.
         switch (defaultAnisotropicFiltering)
         {
             case AnisotropicFilteringSettings.Disabled:
@@ -234,19 +261,27 @@ public class AnisoFiltSetting : MonoBehaviour
         }
     }
 
-    private void SaveAnisoSettings()
+    /// <summary>
+    /// Runs when the OnSavePref event is raised.
+    /// </summary>
+    private void OnSavePref()
     {
-        Debug.Log(currentSetting.ToString());
+        // Saves the currentSetting to PlayerPrefs
         SaveLoad.SaveAnisoSetting(currentSetting.ToString());
     }
 
-    private void LoadAnisoSettings()
+    /// <summary>
+    /// Runs when the OnLoadPref event is raised.
+    /// </summary>
+    private void OnLoadPref()
     {
-        string aniso = SaveLoad.LoadAnisoSetting();
+        // Loads the setting from prefs
+        string aFSetting = SaveLoad.LoadAnisoSetting();
 
-        if (aniso != null)
+        // If the setting exist in prefs it is set to the loaded value
+        if (aFSetting != null)
         {
-            switch (aniso)
+            switch (aFSetting)
             {
                 case "Disabled":
                     currentSetting = AnisotropicFilteringSettings.Disabled;
