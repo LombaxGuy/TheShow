@@ -69,7 +69,6 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private void SetToCurrentSetting()
     {
-        Debug.Log(currentSetting);
         switch (currentSetting)
         {
             case AnisotropicFilteringSettings.Disabled:
@@ -237,39 +236,39 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private void SaveAnisoSettings()
     {
+        Debug.Log(currentSetting.ToString());
         SaveLoad.SaveAnisoSetting(currentSetting.ToString());
     }
 
     private void LoadAnisoSettings()
     {
         string aniso = SaveLoad.LoadAnisoSetting();
+
         if (aniso != null)
         {
-        Debug.Log(aniso);
             switch (aniso)
             {
                 case "Disabled":
                     currentSetting = AnisotropicFilteringSettings.Disabled;
                     break;
 
-                case "2x":
+                case "x2":
                     currentSetting = AnisotropicFilteringSettings.x2;
                     break;
-
-                case "4x":
+                    
+                case "x4":
                     currentSetting = AnisotropicFilteringSettings.x4;
                     break;
 
-                case "8x":
+                case "x8":
                     currentSetting = AnisotropicFilteringSettings.x8;
                     break;
 
-                case "16x":;
+                case "x16":
+                    ;
                     currentSetting = AnisotropicFilteringSettings.x16;
                     break;
             }
-
-            Debug.Log(currentSetting);
         }
     }
 
