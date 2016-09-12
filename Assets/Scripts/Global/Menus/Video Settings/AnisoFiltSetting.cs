@@ -16,6 +16,8 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private SettingsMenu settingsMenu;
 
+    private SaveGame saveGame = new SaveGame();
+
     /// <summary>
     /// Subscribes to events on awake
     /// </summary>
@@ -25,6 +27,8 @@ public class AnisoFiltSetting : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        EventManager.OnSavePref += SaveAnisoSettings;
+        EventManager.OnLoadPref += LoadAnisoSettings;
     }
 
     /// <summary>
@@ -36,15 +40,17 @@ public class AnisoFiltSetting : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
+        EventManager.OnSavePref -= SaveAnisoSettings;
+        EventManager.OnLoadPref -= LoadAnisoSettings;
     }
 
     void Start()
     {
         settingsMenu = GetComponentInParent<SettingsMenu>();
-        currentSetting = defaultAnisotropicFiltering;
+        //currentSetting = defaultAnisotropicFiltering;
 
-        // SetToCurrentSetting
-        Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
+        SetToCurrentSetting();
+        //Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
     }
 
     private void Update()
@@ -63,30 +69,36 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private void SetToCurrentSetting()
     {
+        Debug.Log(currentSetting);
         switch (currentSetting)
         {
             case AnisotropicFilteringSettings.Disabled:
                 Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
+                anisotropicFilteringDD.value = 0;
                 break;
 
             case AnisotropicFilteringSettings.x2:
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(2, 16);
+                anisotropicFilteringDD.value = 1;
                 break;
 
             case AnisotropicFilteringSettings.x4:
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(4, 16);
+                anisotropicFilteringDD.value = 2;
                 break;
 
             case AnisotropicFilteringSettings.x8:
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(8, 16);
+                anisotropicFilteringDD.value = 3;
                 break;
 
             case AnisotropicFilteringSettings.x16:
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(16, 16);
+                anisotropicFilteringDD.value = 4;
                 break;
         }
     }
@@ -137,26 +149,31 @@ public class AnisoFiltSetting : MonoBehaviour
         {
             case "Disabled":
                 Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
+                currentSetting = AnisotropicFilteringSettings.Disabled;
                 break;
 
             case "2x":
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(2, 16);
+                currentSetting = AnisotropicFilteringSettings.x2;
                 break;
 
             case "4x":
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(4, 16);
+                currentSetting = AnisotropicFilteringSettings.x4;
                 break;
 
             case "8x":
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(8, 16);
+                currentSetting = AnisotropicFilteringSettings.x8;
                 break;
 
             case "16x":
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(16, 16);
+                currentSetting = AnisotropicFilteringSettings.x16;
                 break;
         }
     }
@@ -215,6 +232,44 @@ public class AnisoFiltSetting : MonoBehaviour
                 Texture.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
                 Texture.SetGlobalAnisotropicFilteringLimits(16, 16);
                 break;
+        }
+    }
+
+    private void SaveAnisoSettings()
+    {
+        SaveLoad.SaveAnisoSetting(currentSetting.ToString());
+    }
+
+    private void LoadAnisoSettings()
+    {
+        string aniso = SaveLoad.LoadAnisoSetting();
+        if (aniso != null)
+        {
+        Debug.Log(aniso);
+            switch (aniso)
+            {
+                case "Disabled":
+                    currentSetting = AnisotropicFilteringSettings.Disabled;
+                    break;
+
+                case "2x":
+                    currentSetting = AnisotropicFilteringSettings.x2;
+                    break;
+
+                case "4x":
+                    currentSetting = AnisotropicFilteringSettings.x4;
+                    break;
+
+                case "8x":
+                    currentSetting = AnisotropicFilteringSettings.x8;
+                    break;
+
+                case "16x":;
+                    currentSetting = AnisotropicFilteringSettings.x16;
+                    break;
+            }
+
+            Debug.Log(currentSetting);
         }
     }
 

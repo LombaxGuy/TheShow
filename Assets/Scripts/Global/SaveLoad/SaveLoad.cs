@@ -105,7 +105,7 @@ public static class SaveLoad
     /// <param name="music">The value of the Musicvolume slider</param>
     /// <param name="fx">The value of the Fxvolume slider</param>
     /// <param name="voice">The value of the Voicevolume slider</param>
-    public static void SavePrefs(float master, float music, float fx, float voice)
+    public static void SaveSoundPrefs(float master, float music, float fx, float voice)
     {
         //Saves the slider values in playerprefs
         PlayerPrefs.SetFloat("masterVol", master);
@@ -129,22 +129,43 @@ public static class SaveLoad
             prefKeys.Add("voiceVol");
         }
     }
-
+    
+    public static void SaveAnisoSetting(string aniso)
+    {
+        PlayerPrefs.SetString("aniso", aniso);
+        Debug.Log(aniso);
+        if (!prefKeys.Contains("aniso"))
+        {
+            prefKeys.Add("aniso");
+        }
+    }
 
     /// <summary>
     /// /Loads the saved preferences and returns it in a float array.
     /// </summary>
     /// <returns>Saves all PlayerPref key values in a float array</returns>
-    public static float[] LoadPrefs()
+    public static float[] LoadSoundPrefs()
     {
         //Goes through our Playerpref Key array and gets the values if we have the keys stored
         try
         {
             for (int i = 0; i < prefKeys.Count; i++)
             {
-                if (PlayerPrefs.HasKey(prefKeys[i]))
+                if (PlayerPrefs.HasKey("masterVol"))
                 {
-                    value[i] = PlayerPrefs.GetFloat(prefKeys[i]);
+                    value[0] = PlayerPrefs.GetFloat("masterVol");
+                }
+                if (PlayerPrefs.HasKey("musicVol"))
+                {
+                    value[1] = PlayerPrefs.GetFloat("musicVol");
+                }
+                if (PlayerPrefs.HasKey("fxVol"))
+                {
+                    value[2] = PlayerPrefs.GetFloat("fxVol");
+                }
+                if (PlayerPrefs.HasKey("voiceVol"))
+                {
+                    value[3] = PlayerPrefs.GetFloat("voiceVol");
                 }
             }
         }
@@ -156,6 +177,30 @@ public static class SaveLoad
 
         //returns the playerpref values
         return value;
+    }
+
+    public static string LoadAnisoSetting()
+    {
+        string aniso = "";
+        //Goes through our Playerpref Key array and gets the values if we have the keys stored
+        try
+        {
+            for (int i = 0; i < prefKeys.Count; i++)
+            {
+                if (PlayerPrefs.HasKey("aniso"))
+                {
+                    aniso = PlayerPrefs.GetString("aniso");
+                    return aniso;
+                }
+            }
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("LOADED FAILED: DANGER");
+        }
+
+        return null;
+        //returns the playerpref values
     }
 
     /// <summary>

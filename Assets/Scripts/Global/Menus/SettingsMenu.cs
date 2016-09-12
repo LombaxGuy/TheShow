@@ -30,8 +30,8 @@ public class SettingsMenu : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EventManager.OnSavePref += SaveSliders;
-        EventManager.OnLoadPref += LoadSliders;
+        EventManager.OnSavePref += SaveSoundSliders;
+        EventManager.OnLoadPref += LoadSoundSliders;
         EventManager.OnSettingsChanged += OnSettingsChanged;
     }
 
@@ -40,8 +40,8 @@ public class SettingsMenu : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EventManager.OnSavePref -= SaveSliders;
-        EventManager.OnLoadPref -= LoadSliders;
+        EventManager.OnSavePref -= SaveSoundSliders;
+        EventManager.OnLoadPref -= LoadSoundSliders;
         EventManager.OnSettingsChanged -= OnSettingsChanged;
     }
 
@@ -75,8 +75,8 @@ public class SettingsMenu : MonoBehaviour
     /// </summary>
     public void Apply()
     {
-        EventManager.RaiseOnSavePref();
         EventManager.RaiseOnApplySettingChanges();
+        EventManager.RaiseOnSavePref();
 
         settingsChanged = false;
 
@@ -117,10 +117,10 @@ public class SettingsMenu : MonoBehaviour
     /// <summary>
     /// Loads the values of the volumesliders
     /// </summary>
-    private void LoadSliders()
+    private void LoadSoundSliders()
     {
         //Sets the values variable to be equal to the array returned in the LoadPrefs method.
-        values = SaveLoad.LoadPrefs();
+        values = SaveLoad.LoadSoundPrefs();
 
         //Sets the slider values to be equal to the value variable and deactivates the menu
         masterSlider.GetComponent<Slider>().value = values[0];
@@ -132,7 +132,7 @@ public class SettingsMenu : MonoBehaviour
     /// <summary>
     /// Saves the values of the volumesliders
     /// </summary>
-    private void SaveSliders()
+    private void SaveSoundSliders()
     {
         //Saves our slider values in the value variable
         values[0] = masterSlider.GetComponent<Slider>().value;
@@ -142,11 +142,12 @@ public class SettingsMenu : MonoBehaviour
 
         popUpApply.SetActive(false);
 
-        SaveLoad.SavePrefs(values[0], values[1], values[2], values[3]);
+        SaveLoad.SaveSoundPrefs(values[0], values[1], values[2], values[3]);
     }
 
     private void OnSettingsChanged()
     {
         settingsChanged = true;
     }
+
 }
