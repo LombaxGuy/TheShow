@@ -122,6 +122,7 @@ public class FPSController : MonoBehaviour
     private void OnPlayerDeath()
     {
         locked = true;
+        topCollider.enabled = false;
 
         animator.SetBool("animateHead", false);
     }
@@ -129,6 +130,7 @@ public class FPSController : MonoBehaviour
     private void OnPlayerRespawn()
     {
         locked = false;
+        topCollider.enabled = true;
     }
 
     #endregion
