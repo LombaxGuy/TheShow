@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpeakerManeger : MonoBehaviour
+public class SpeakerManager : MonoBehaviour
 {
-
     //Remember SpeakerTriggerScript and SpeakerScript
     //Set on gameobject
 
@@ -15,6 +14,7 @@ public class SpeakerManeger : MonoBehaviour
     {
         //Tag the speakers "Speaker"
         speakers = GameObject.FindGameObjectsWithTag("Speaker");
+
         if (speakers.Length == 0)
         {
             Debug.Log("No speakers set in scene: SpeakerManager Script");
@@ -24,15 +24,15 @@ public class SpeakerManeger : MonoBehaviour
     /// <summary>
     /// Used to call all the objects tagged with "Speaker"
     /// </summary>
-    /// <param name="acs">Array of audioclips</param>
-    public void PlaySpeakerSoundInstance(AudioClip[] acs)
+    /// <param name="audioClips">Array of audioclips</param>
+    public void PlaySpeakerSoundInstance(AudioClip[] audioClips)
     {
-        StartCoroutine(SendNext(acs));
+        StartCoroutine(SendNext(audioClips));
     }
 
-    IEnumerator SendNext(AudioClip[] acs)
+    IEnumerator SendNext(AudioClip[] audioClips)
     {
-        while (acs.Length > audioIndex)
+        while (audioClips.Length > audioIndex)
         {
             if (speakers.Length > 0)
             {
@@ -40,11 +40,11 @@ public class SpeakerManeger : MonoBehaviour
                 {
                     //if (!speakers[i].GetComponent<AudioSource>().isPlaying)
                     //{
-                        speakers[i].GetComponent<AudioSource>().PlayOneShot(acs[audioIndex]); 
-                   // }
+                    speakers[i].GetComponent<AudioSource>().PlayOneShot(audioClips[audioIndex]);
+                    // }
                 }
             }
-            yield return new WaitForSeconds(acs[audioIndex].length);
+            yield return new WaitForSeconds(audioClips[audioIndex].length);
             audioIndex++;
         }
     }

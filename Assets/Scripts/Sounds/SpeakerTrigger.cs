@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpeakerTriggerScript : MonoBehaviour {
-
+public class SpeakerTrigger : MonoBehaviour
+{
     //Remember SpeakerManeger and SpeakerScript
     //Set on trigger
 
     //Set this in the editor, has to be the gameobject with AudioManager
     [SerializeField]
-    [Tooltip("The GameObject that has the SpeakerManeger-component.")]
-    private GameObject speakerManeger;
+    [Tooltip("The GameObject that has the SpeakerManager-component.")]
+    private GameObject speakerManager;
 
     //Editor list. Remember to drag and drop your sounds
     [SerializeField]
@@ -20,11 +20,13 @@ public class SpeakerTriggerScript : MonoBehaviour {
     /// Used to begin playing an array of audioclips over the speakers.
     /// </summary>
     /// <param name="other">The object that collides with the trigger box</param>
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other)
+    {
         if (other.tag == "Player")
         {
-            speakerManeger.GetComponent<SpeakerManeger>().PlaySpeakerSoundInstance(audioClips);
+            speakerManager.GetComponent<SpeakerManager>().PlaySpeakerSoundInstance(audioClips);
         }
+
         Destroy(GetComponent<BoxCollider>());
     }
 }
