@@ -4,7 +4,7 @@ using System.Collections;
 public class MovingPlatform : MonoBehaviour
 {
 
-    enum MoveMode { PLAYERTOUCHONLY, ENDLESS, PLAYERTOUCHEXTRA}
+    enum MoveMode { PLAYERTOUCHONLY, ENDLESS, PLAYERTOUCHEXTRA, PLAYERTOUCHSPECIAL}
 
     //GameObject Y scale need to be 1, since it will mess til Player controller 
     [SerializeField]
@@ -15,7 +15,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField]
     private float distance = 1;
     [SerializeField]
-    private bool locationOneFirst = false;
+    private bool locationOneFirst = true;
 
     [SerializeField]
     private float timeDelay = 1;
@@ -51,6 +51,9 @@ public class MovingPlatform : MonoBehaviour
                 break;
             case MoveMode.PLAYERTOUCHEXTRA:
                 PlayerTouchExtra();
+                break;
+            case MoveMode.PLAYERTOUCHSPECIAL:
+                PlayerTouchSpecial();
                 break;
             default:
                 break;
@@ -110,6 +113,45 @@ public class MovingPlatform : MonoBehaviour
 
                 
             }
+        }
+    }
+
+    private void PlayerTouchSpecial()
+    {
+        if(Counter() == true)
+        {
+            if (playerGoldenTouch == true)
+            {
+                if (locationOneFirst == true && isMovingWithPlayer == false)
+                {
+                    playerGoldenTouch = false;
+                    secondPlatformReached = false;
+                }
+                else
+                {
+                    if (locationOneFirst == true)
+                    {
+                        secondPlatformReached = true;
+                    }
+                    if(secondPlatformReached == false)
+                    {
+                        GameObjectMove();
+                    }
+                    
+
+                }
+
+
+            }else
+            {
+                if(locationOneFirst == true)
+                {
+                    GameObjectMove();
+                }
+                
+            }
+
+            
         }
     }
 
