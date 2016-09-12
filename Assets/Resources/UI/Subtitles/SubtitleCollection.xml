@@ -5,10 +5,25 @@
       <voiceLine>Greetings New Contestant</voiceLine>
     </Subtitle>
     <Subtitle name="sub2">
-      <voiceLine>Your unintellectual ways amuse me</voiceLine>
+      <voiceLine>We will put you through some games in a moment</voiceLine>
     </Subtitle>
   <Subtitle name="sub3">
-    <voiceLine>BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARGH</voiceLine>
+    <voiceLine>Why don't you walk into the light first</voiceLine>
     </Subtitle>
+	  <Subtitle name="sub4">
+		  <voiceLine>Why don't you do some jumpingjacks for the audience</voiceLine>
+	  </Subtitle>
+	  <Subtitle name="sub5">
+		  <voiceLine>Good job, now try and crawl around for a bit</voiceLine>
+	  </Subtitle>
+	  <Subtitle name="sub6">
+		  <voiceLine>Wonderful, semes like your legs still work, you DID have a rough trip</voiceLine>
+	  </Subtitle>
+	  <Subtitle name="Test1">
+		  <voiceLine>Gj waiting please just go into the light</voiceLine>
+	  </Subtitle>
+	  <Subtitle name="Test2">
+		  <voiceLine>can we please just move on? go into the light</voiceLine>
+	  </Subtitle>
   </Subtitles>
 </SubtitleCollection>
