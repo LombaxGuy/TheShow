@@ -36,6 +36,9 @@ public class ResolutionSettings : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        //EventManager.OnSavePref += OnSavePref;
+        //EventManager.OnLoadPref += OnLoadPref;
+
     }
 
     /// <summary>
@@ -47,6 +50,8 @@ public class ResolutionSettings : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
+        //EventManager.OnSavePref -= OnSavePref;
+        //EventManager.OnLoadPref -= OnLoadPref;
     }
 
     /// <summary>
