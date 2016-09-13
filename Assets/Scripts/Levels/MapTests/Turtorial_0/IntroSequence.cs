@@ -10,10 +10,13 @@ public class IntroSequence : MonoBehaviour {
     private GameObject door;
     [SerializeField]
     private GameObject doorTrigger;
+    [SerializeField]
+    private GameObject wrongWayTrigger;
 
     public static bool lightEntered = false;
     public static bool firstCleared = false;
-
+    public static bool buttonPressed = false;
+    public static bool wrongWay = false;
 
     public static float timer;
     public static float timeInSeconds;
@@ -157,6 +160,17 @@ public class IntroSequence : MonoBehaviour {
                 StagePrep();
             }
 
+            if(buttonPressed)
+            {
+
+            }
+
+            if(wrongWay)
+            {
+
+            }
+
+            
         }
     }
 
