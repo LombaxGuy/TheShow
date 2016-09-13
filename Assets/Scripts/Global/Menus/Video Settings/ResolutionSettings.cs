@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ResolutionSettings : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class ResolutionSettings : MonoBehaviour
     private bool windowedChanged = false;
     private bool resolutionChanged = false;
 
+    private bool startFullscreen = false;
+
+    private List<Resolution> fullscreenResolutions = new List<Resolution>();
+    private List<Resolution> windowedResolutions = new List<Resolution>();
+
     /// <summary>
     /// Subscribes to events on awake
     /// </summary>
@@ -39,6 +45,15 @@ public class ResolutionSettings : MonoBehaviour
         //EventManager.OnSavePref += OnSavePref;
         //EventManager.OnLoadPref += OnLoadPref;
 
+        startFullscreen = Screen.fullScreen;
+
+        Screen.SetResolution(Screen.width, Screen.height, false);
+        windowedResolutions = Screen.resolutions.ToList();
+
+        Screen.SetResolution(Screen.width, Screen.height, true);
+        fullscreenResolutions = Screen.resolutions.ToList();
+
+        Screen.SetResolution(Screen.width, Screen.height, startFullscreen);
     }
 
     /// <summary>
@@ -64,9 +79,6 @@ public class ResolutionSettings : MonoBehaviour
         // Sets the abailable resolutions based on what the monitor supports.
         SetAvailableResolutions();
 #endif
-        // Gets the current resolution of the game window.
-        int[] currentResolution = new int[] { Screen.width, Screen.height, Screen.currentResolution.refreshRate };
-
         // Finds the current resolution and set the value of the dropdown menu accordingly 
         resolutionDD.value = FindCurrentResolutionValue();
         
@@ -76,11 +88,14 @@ public class ResolutionSettings : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    EventManager.RaiseOnCheckForSettingChanges();
-        //    EventManager.RaiseOnApplySettingChanges();
-        //}
+        if (windowedToggle.isOn && Screen.fullScreen)
+        {
+            SetAvailableResolutions(windowedResolutions);
+        }
+        else if (!windowedToggle.isOn && !Screen.fullScreen)
+        {
+            SetAvailableResolutions(fullscreenResolutions);
+        }
     }
 
     /// <summary>
@@ -106,6 +121,26 @@ public class ResolutionSettings : MonoBehaviour
         resolutionDD.RefreshShownValue();
     }
 
+    private void SetAvailableResolutions(List<Resolution> resolutions)
+    {
+        resolutionDD.ClearOptions();
+
+        List<string> options = new List<string>();
+
+
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            if (!(resolutions[i].width < minimumResolutionWidth) && !(resolutions[i].height < minimumResolutionHeight))
+            {
+                options.Add(resolutions[i].width + "x" + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz");
+            }
+        }
+
+        resolutionDD.AddOptions(options);
+
+        resolutionDD.RefreshShownValue();
+    }
+
     /// <summary>
     /// Runs when the OnCheckForSettingChanges event is raised.
     /// </summary>
@@ -119,14 +154,12 @@ public class ResolutionSettings : MonoBehaviour
         {
             // Settings has been changed.
             EventManager.RaiseOnSettingsChanged();
-            //settingsMenu.SettingsChanged = true;
         }
 
         if (Screen.fullScreen == windowedToggle.isOn)
         {
             // Settings has been changed.
             EventManager.RaiseOnSettingsChanged();
-            //settingsMenu.SettingsChanged = true;
         }
     }
 
