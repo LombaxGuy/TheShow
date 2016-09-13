@@ -9,21 +9,7 @@ public class DeathArea : MonoBehaviour
     /// <param name="other">The object that entered the trigger.</param>
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent == null)
-        {
-            if (other.tag == "Player")
-            {
-                PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
-
-                //... and the player is still alive...
-                if (respawnScript.IsAlive)
-                {
-                    //... the player is killed.
-                    respawnScript.Kill();
-                }
-            }
-        }
-        else if(other.transform.parent != null)
+        if(other.transform.parent != null)
         {
             if (other.transform.parent.tag == "Player")
             {

@@ -104,6 +104,11 @@ public class FPSController : MonoBehaviour
         get { return onGround; }
     }
 
+    public bool Stunned
+    {
+        get { return stunned; }
+    }
+
     #region Events and EventHandlers
 
     void OnEnable()

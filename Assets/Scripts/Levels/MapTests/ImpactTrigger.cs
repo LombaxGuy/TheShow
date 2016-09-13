@@ -16,11 +16,20 @@ public class ImpactTrigger : MonoBehaviour {
     /// <param name="other">player</param>
     private void OnTriggerEnter(Collider other)
     {
-            if (other.tag == "Player")
+        if (other.transform.parent != null)
+        {
+            Transform otherTransform = other.transform.parent;
+
+            if (otherTransform.tag == "Player")
             {
-                other.GetComponent<Rigidbody>().AddForce(transform.forward * force, ForceMode.Impulse);
+                FPSController fpsComponent = otherTransform.GetComponent<FPSController>();
+
+                if (!fpsComponent.Stunned)
+                {
+                    otherTransform.GetComponent<Rigidbody>().AddForce(transform.forward * force, ForceMode.Impulse);
+                    fpsComponent.StunForSeconds(0.5f);
+                }  
             }
-
-
+        }
     }
 }
