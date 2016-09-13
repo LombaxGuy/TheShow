@@ -57,6 +57,7 @@ public class PlayerInteractionComponent : MonoBehaviour
         hit.rigidbody.drag = draggingDrag;
         rotationLastFrame = transform.rotation;
         isCurrentlyCarring = true;
+        EventManager.RaiseOnPlayerPickup();
     }
 
     /// <summary>
