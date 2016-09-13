@@ -8,17 +8,46 @@ public class IntroSequence : MonoBehaviour {
     private GameObject trigger;
     [SerializeField]
     private GameObject door;
+    [SerializeField]
+    private GameObject doorTrigger;
 
     public static bool lightEntered = false;
-    [SerializeField]
+    public static bool firstCleared = false;
+
+
     public static float timer;
-    [SerializeField]
     public static float timeInSeconds;
+
+
     private float offtime;
     [SerializeField]
     private int stage;
     private int stageSaved;
 
+    //Tallys
+    [SerializeField]
+    private int jumps;
+    private bool hasJumped;
+    [SerializeField]
+    private int crouches;
+    private bool hasCrouched;
+
+    private void OnEnable()
+    {
+
+        EventManager.OnPlayerJump += OnPlayerJump;
+        EventManager.OnPlayerCrouch += OnPlayerCrouch;
+
+
+    }
+
+    private void OnDisable()
+    {
+
+        EventManager.OnPlayerJump -= OnPlayerJump;
+        EventManager.OnPlayerCrouch -= OnPlayerCrouch;
+
+    }
 
 
     // Use this for initialization
@@ -40,7 +69,6 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 4 && stage == 1)
         {
             manager.GetComponent<SubtitleControl>().StartSub("sub2",3);
-
             stage = stage + 1;
         }
 
@@ -56,48 +84,100 @@ public class IntroSequence : MonoBehaviour {
         if(timer > 26 && stage == 3 && !lightEntered)
         {
             manager.GetComponent<SubtitleControl>().StartSub("Test1", 3);
-
-            
             stage = stage + 1;
             stageSaved = stage;
-
         }
 
         if (timer > 40 && stage == 4 && !lightEntered)
         {
             manager.GetComponent<SubtitleControl>().StartSub("Test2", 3);
-            
-            
             stage = stage + 1;
             stageSaved = stage;
         }
 
+        //After light
         if (lightEntered)
         {
-            if (timer > timeInSeconds && stage == stageSaved)
+            if (!hasJumped && jumps < 3 && stage == stageSaved)
             {
-                offtime = timeInSeconds;
                 manager.GetComponent<SubtitleControl>().StartSub("sub4", 3);
                 manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use space to jump", 3);
-                stage = stage + 1;
+                StagePrep();
+            }
+            else if (hasJumped && jumps < 3 && stage == stageSaved)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("JumpComplete2", 3);
+                StagePrep();
+            }
+            else if(hasJumped && jumps >= 3 && stage == stageSaved)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("JumpComplete1", 3);
+                StagePrep();
             }
 
 
 
-            if (timer > 4 + timeInSeconds && stage == stageSaved + 1)
+            if (timer > 4 && hasJumped && jumps >= 3 && !hasCrouched && stage == stageSaved + 1)
             {
                 manager.GetComponent<SubtitleControl>().StartSub("sub5", 3);
                 manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use control to crouch", 3);
-                stage = stage + 1;
+                StagePrep();
+            }
+            else if(timer > 4 && hasJumped && jumps >= 3 && hasCrouched && stage == stageSaved + 1)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("CrouchComplete2", 3);
+                StagePrep();
+
             }
 
-            if (timer > 8 + timeInSeconds && stage == stageSaved + 2)
+            if (timer > 4 && hasCrouched && stage == stageSaved + 2)
             {
                 manager.GetComponent<SubtitleControl>().StartSub("sub6", 3);
-                //manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use space to jump", 3);                
-                stage = stage + 1;
+                StagePrep();
+                doorTrigger.SetActive(true);
                 door.SetActive(false);
+                stageSaved = stage;
             }
+
+            if (timer > 12 && !firstCleared && stage == stageSaved + 1)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
+                StagePrep();
+            }
+
+            if (timer > 12 && !firstCleared && stage == stageSaved + 1)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
+                StagePrep();
+            }
+
+            if (timer > 12 && firstCleared && stage == stageSaved + 2)
+            {
+                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
+                StagePrep();
+            }
+
         }
+    }
+
+    void StagePrep()
+    {
+        stage = stage + 1;
+        timer = 0;
+
+    }
+
+
+    void OnPlayerJump()
+    {
+        hasJumped = true;
+        jumps++;
+
+    }
+
+    void OnPlayerCrouch()
+    {
+        hasCrouched = true;
+        crouches++;
     }
 }

@@ -17,7 +17,10 @@ public class ToolTipTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        Transform player = other.GetComponent<Collider>().transform;
+
+        if(player.parent != null)
+        if(player.parent.tag == "Player")
         {
             //manager.GetComponent<Tooltip>().DisplayTooltipForSeconds(messege, 5);
             IntroSequence.lightEntered = true;
