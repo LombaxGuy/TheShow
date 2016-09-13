@@ -18,6 +18,8 @@ public class ShadowQualitySetting : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        EventManager.OnSavePref += OnSavePref;
+        EventManager.OnLoadPref += OnLoadPref;
     }
 
     /// <summary>
@@ -29,6 +31,8 @@ public class ShadowQualitySetting : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
+        EventManager.OnSavePref -= OnSavePref;
+        EventManager.OnLoadPref -= OnLoadPref;
     }
 
     private void Start()
@@ -179,5 +183,57 @@ public class ShadowQualitySetting : MonoBehaviour
         QualitySettings.shadowCascades = 2;
         QualitySettings.shadowProjection = ShadowProjection.StableFit;
         shadowQualityDD.value = 2;
+    }
+
+    private void OnSavePref()
+    {
+        SaveLoad.SaveSettings("shadow", shadowQualityDD.options[shadowQualityDD.value].text);
+    }
+
+    private void OnLoadPref()
+    {
+        string ddSetting = SaveLoad.LoadSettingString("shadow");
+
+        if(ddSetting != null)
+        {
+            switch(ddSetting)
+            {
+                case "Disabled":
+                    QualitySettings.shadowDistance = 0;
+                    QualitySettings.shadowResolution = ShadowResolution.Low;
+                    QualitySettings.shadowCascades = 0;
+                    QualitySettings.shadowProjection = ShadowProjection.StableFit;
+                    break;
+
+                case "Low":
+                    QualitySettings.shadowDistance = 50;
+                    QualitySettings.shadowResolution = ShadowResolution.Low;
+                    QualitySettings.shadowCascades = 0;
+                    QualitySettings.shadowProjection = ShadowProjection.StableFit;
+                    break;
+
+                case "Medium":
+                    QualitySettings.shadowDistance = 75;
+                    QualitySettings.shadowResolution = ShadowResolution.Medium;
+                    QualitySettings.shadowCascades = 2;
+                    QualitySettings.shadowProjection = ShadowProjection.StableFit;
+                    break;
+
+                case "High":
+                    QualitySettings.shadowDistance = 100;
+                    QualitySettings.shadowResolution = ShadowResolution.High;
+                    QualitySettings.shadowCascades = 4;
+                    QualitySettings.shadowProjection = ShadowProjection.StableFit;
+                    break;
+
+                case "Very High":
+                    QualitySettings.shadowDistance = 150;
+                    QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
+                    QualitySettings.shadowCascades = 4;
+                    QualitySettings.shadowProjection = ShadowProjection.StableFit;
+                    break;
+
+            }
+        }
     }
 }

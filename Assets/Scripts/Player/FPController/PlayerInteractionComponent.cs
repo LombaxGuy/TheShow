@@ -21,6 +21,8 @@ public class PlayerInteractionComponent : MonoBehaviour
 
     private float draggingMass = 1;
     private float oldMass;
+    private float draggingDrag = 0;
+    private float oldDrag;
 
     [SerializeField]
     private string nameOfPickUpLayer = "PickUp";
@@ -51,8 +53,11 @@ public class PlayerInteractionComponent : MonoBehaviour
         jointTransform = AttachJoint(hit.rigidbody, hit.transform.position);
         oldMass = hit.rigidbody.mass;
         hit.rigidbody.mass = draggingMass;
+        oldDrag = hit.rigidbody.drag;
+        hit.rigidbody.drag = draggingDrag;
         rotationLastFrame = transform.rotation;
         isCurrentlyCarring = true;
+        EventManager.RaiseOnPlayerPickup();
     }
 
     /// <summary>
@@ -100,6 +105,7 @@ public class PlayerInteractionComponent : MonoBehaviour
     public void DragEnd()
     {
         oldHit.rigidbody.mass = oldMass;
+        oldHit.rigidbody.drag = oldDrag;
 
         if (jointTransform == null)
         {
@@ -173,7 +179,13 @@ public class PlayerInteractionComponent : MonoBehaviour
 
         if (Input.GetKeyDown(KeyBindings.KeyInteraction))
         {
-            if (Physics.Raycast(viewRay, out hit, interactionDistance))
+            // If an object is currently being carried drop it
+            if (isCurrentlyCarring)
+            {
+                DragEnd();
+                Debug.Log("Dropped object.");
+            }
+            else if (Physics.Raycast(viewRay, out hit, interactionDistance))
             {
                 // If the hit object is an interactable object, interact with it
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer(nameOfInteractableLayer))
@@ -193,12 +205,6 @@ public class PlayerInteractionComponent : MonoBehaviour
 
                             DragBegin(hit);
                             Debug.Log("Picked up object.");
-                        }
-                        // If an object is currently being carried drop it
-                        else
-                        {
-                            DragEnd();
-                            Debug.Log("Dropped object.");
                         }
                     }
                 }

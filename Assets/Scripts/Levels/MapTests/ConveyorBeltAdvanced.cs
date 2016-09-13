@@ -8,6 +8,8 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     enum Direction { FORWARD, BACK, LEFT, RIGHT, UP, DOWN }
 
     [SerializeField]
+    private float endDistance;
+    [SerializeField]
     private GameObject rotationStartGameObject;
     [SerializeField]
     private GameObject startGameObject;
@@ -48,6 +50,9 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     private float newTimeZ = 0;
     private gameObjectData lastObj;
     private bool lastObjectSpawned = false;
+
+    [SerializeField]
+    private bool rotationDir;
 
     private GameObject player;
 
@@ -146,14 +151,16 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
 	}
 
-    
-    	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
+
         RotateGameObject();
         SpawnTheObjects();
         ActiveListUpdate();
-	}
+
+    }
 
 
     void OnEnable()
@@ -195,8 +202,7 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
             playerOnConveyor = false;
         }
     }
-
-
+    
     /// <summary>
     /// If the counter is under 0, then it will move a gameobject from notActive to the active list.
     /// It will take the gameobjects localposition, set parent to the conveyour belt transform, set the distance between start and rotationstart 
@@ -289,7 +295,15 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
     /// </summary>
     private void RotateGameObject()
     {
-        rotationGameObject.transform.Rotate(Vector3.right * Time.deltaTime * rotationSpeed);
+        if(rotationDir == true)
+        {
+            rotationGameObject.transform.Rotate(Vector3.right * Time.deltaTime * rotationSpeed);
+        }
+        else
+        {
+            rotationGameObject.transform.Rotate(Vector3.left * Time.deltaTime * rotationSpeed);
+        }
+        
 
         if(rotationList.Count != 0)
         {
@@ -300,13 +314,20 @@ public class ConveyorBeltAdvanced : MonoBehaviour {
 
             for (int i = 0; i < rotationList.Count; i++)
             {
-                if (Vector3.Distance(rotationList[i].Obj.transform.position, 
-                    new Vector3(endGameObject.transform.position.x + rotationList[i].Lane, 
-                    endGameObject.transform.position.y - rotationList[i].Height, endGameObject.transform.position.z)) <= 0.7f)
+                //if (Vector3.Distance(rotationList[i].Obj.transform.position, 
+                //    new Vector3(endGameObject.transform.position.x + rotationList[i].Lane, 
+                //    endGameObject.transform.position.y - rotationList[i].Height, endGameObject.transform.position.z)) <= endDistance)
+                //{
+                //    objectData = rotationList[i];
+                //    remove = true;
+                //}
+
+                if (Vector3.Distance(rotationList[i].Obj.transform.position,endGameObject.transform.position) <= endDistance)
                 {
                     objectData = rotationList[i];
                     remove = true;
                 }
+
                 rotationList[i].Obj.transform.SetParent(rotationGameObject.transform);
             }
 

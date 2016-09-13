@@ -4,17 +4,11 @@ using UnityEngine.UI;
 
 public class SubtitleControl : MonoBehaviour
 {
-    private static SubtitleControl instance;
     private bool isDisplayed = false;
     private string line = "";
 
     [SerializeField]
     private Text subtitles;
-
-    private void Start()
-    {
-
-    }
 
     /// <summary>
     /// This is the method other scripts should call in order to display subtitles.
