@@ -1,39 +1,27 @@
 fileFormatVersion: 2
-guid: 2323389951a9b5042be3bdf909e59408
-timeCreated: 1470392865
+guid: 623822ea277f1e84cb8079aa959251bb
+timeCreated: 1473768747
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Door
     100002: //RootNode
-    100004: Window
-    100006: Cube
-    100008: Cube.001
-    100010: Frame
+    100004: Frame
+    100006: Window
     400000: Door
     400002: //RootNode
-    400004: Window
-    400006: Cube
-    400008: Cube.001
-    400010: Frame
+    400004: Frame
+    400006: Window
     2300000: Door
-    2300002: Window
-    2300004: Cube
-    2300006: Cube.001
-    2300008: Frame
-    2300010: //RootNode
+    2300002: Frame
+    2300004: Window
     3300000: Door
-    3300002: Window
-    3300004: Cube
-    3300006: Cube.001
-    3300008: Frame
-    3300010: //RootNode
-    4300000: Door
-    4300002: Window
-    4300004: Frame
-    4300006: Cube.001
-    4300008: Cube
+    3300002: Frame
+    3300004: Window
+    4300000: Window
+    4300002: Frame
+    4300004: Door
   materials:
     importMaterials: 1
     materialName: 0
@@ -58,7 +46,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
