@@ -221,8 +221,6 @@ public class AntiAliasingSettings : MonoBehaviour
     {
         SaveLoad.SaveSettings("aaType", currentType.ToString());
         SaveLoad.SaveSettings("aaMS", currentMS.ToString());
-        Debug.Log(currentMS.ToString());
-
     }
 
     private void OnLoadPref()
@@ -277,7 +275,6 @@ public class AntiAliasingSettings : MonoBehaviour
                     break;
             }
         }
-        Debug.Log(currentMS.ToString());
     }
 
 }
