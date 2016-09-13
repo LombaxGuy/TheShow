@@ -153,7 +153,14 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        IsGrounded();
+        if (!stunned)
+        {
+            IsGrounded();
+        }
+        else
+        {
+            onGround = false;
+        }
 
         if (!locked)
         {
