@@ -16,7 +16,6 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private SettingsMenu settingsMenu;
 
-    private SaveGame saveGame = new SaveGame();
 
     /// <summary>
     /// Subscribes to events on awake
@@ -267,7 +266,7 @@ public class AnisoFiltSetting : MonoBehaviour
     private void OnSavePref()
     {
         // Saves the currentSetting to PlayerPrefs
-        SaveLoad.SaveAnisoSetting(currentSetting.ToString());
+        SaveLoad.SaveSettings("anisoSettings" ,currentSetting.ToString());
     }
 
     /// <summary>
@@ -276,7 +275,7 @@ public class AnisoFiltSetting : MonoBehaviour
     private void OnLoadPref()
     {
         // Loads the setting from prefs
-        string aFSetting = SaveLoad.LoadAnisoSetting();
+        string aFSetting = SaveLoad.LoadSettingString("anisoSettings");
 
         // If the setting exist in prefs it is set to the loaded value
         if (aFSetting != null)

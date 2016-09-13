@@ -38,6 +38,9 @@ public class AntiAliasingSettings : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        EventManager.OnSavePref += OnSavePref;
+        EventManager.OnLoadPref += OnLoadPref;
+        Debug.Log("blargh1");
     }
 
     /// <summary>
@@ -49,6 +52,8 @@ public class AntiAliasingSettings : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
+        EventManager.OnSavePref -= OnSavePref;
+        EventManager.OnLoadPref -= OnLoadPref;
     }
 
     // Update is called once per frame
@@ -211,4 +216,68 @@ public class AntiAliasingSettings : MonoBehaviour
                 break;
         }
     }
+
+    private void OnSavePref()
+    {
+        SaveLoad.SaveSettings("aaType", currentType.ToString());
+        SaveLoad.SaveSettings("aaMS", currentMS.ToString());
+        Debug.Log(currentMS.ToString());
+
+    }
+
+    private void OnLoadPref()
+    {
+        string aatype = SaveLoad.LoadSettingString("aaType");
+        string aaMS = SaveLoad.LoadSettingString("aaMS");
+
+        if (aatype != null)
+        {
+            switch (aatype)
+            {
+                case "Disabled":
+                    currentType = AAType.Disabled;
+                    QualitySettings.antiAliasing = 0;
+                    break;
+
+                case "SSAA":
+                    currentType = AAType.SSAA;
+                    break;
+
+                case "NFAA":
+                    currentType = AAType.NFAA;
+                    break;
+
+                case "FXAA":
+                    currentType = AAType.FXAA;
+                    break;
+
+                case "DLAA":
+                    currentType = AAType.DLAA;
+                    break;
+            }
+        }
+
+        if (aaMS != null)
+        {
+            switch (aaMS)
+            {
+                case "x2":
+                    QualitySettings.antiAliasing = 2;
+                    currentMS = AAMultiSampling.x2;
+                    break;
+
+                case "x4":
+                    QualitySettings.antiAliasing = 4;
+                    currentMS = AAMultiSampling.x4;
+                    break;
+
+                case "x8":
+                    QualitySettings.antiAliasing = 8;
+                    currentMS = AAMultiSampling.x8;
+                    break;
+            }
+        }
+        Debug.Log(currentMS.ToString());
+    }
+
 }

@@ -23,6 +23,8 @@ public class TextureQuality : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        EventManager.OnSavePref += OnSavePref;
+        EventManager.OnLoadPref += OnLoadPref;
     }
 
     /// <summary>
@@ -34,6 +36,8 @@ public class TextureQuality : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
+        EventManager.OnSavePref -= OnSavePref;
+        EventManager.OnLoadPref -= OnLoadPref;
     }
 
     void Start()
@@ -158,6 +162,34 @@ public class TextureQuality : MonoBehaviour
                 textureQualityDD.value = 2;
                 break;
         }
+    }
+
+    private void OnSavePref()
+    {
+        SaveLoad.SaveSettings("textureQuality", QualitySettings.masterTextureLimit);
+        Debug.Log(QualitySettings.masterTextureLimit);
+    }
+
+    private void OnLoadPref()
+    {
+        int textureSetting = SaveLoad.LoadSettingInt("textureQuality");
+        Debug.Log(textureSetting);
+        if(textureSetting != 0)
+        {
+            switch(textureSetting)
+            {
+                case 0:
+                    QualitySettings.masterTextureLimit = 0;
+                    break;
+                case 1:
+                    QualitySettings.masterTextureLimit = 1;
+                    break;
+                case 2:
+                    QualitySettings.masterTextureLimit = 2;
+                    break;
+            }
+        }
+        Debug.Log(QualitySettings.masterTextureLimit);
     }
 
     #endregion

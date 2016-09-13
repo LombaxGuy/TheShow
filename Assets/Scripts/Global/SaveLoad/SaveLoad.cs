@@ -129,16 +129,26 @@ public static class SaveLoad
             prefKeys.Add("voiceVol");
         }
     }
-    
-    public static void SaveAnisoSetting(string aniso)
+
+    public static void SaveSettings(string name, string value)
     {
-        PlayerPrefs.SetString("aniso", aniso);
-        Debug.Log(aniso);
-        if (!prefKeys.Contains("aniso"))
+        PlayerPrefs.SetString(name, value);
+        Debug.Log(value);
+        if (!prefKeys.Contains(name))
         {
-            prefKeys.Add("aniso");
+            prefKeys.Add(name);
         }
     }
+
+    public static void SaveSettings(string name, int intValue)
+    {
+        PlayerPrefs.SetInt(name, intValue);
+        if (!prefKeys.Contains(name))
+        {
+            prefKeys.Add(name);
+        }
+    }
+
 
     /// <summary>
     /// /Loads the saved preferences and returns it in a float array.
@@ -179,28 +189,53 @@ public static class SaveLoad
         return value;
     }
 
-    public static string LoadAnisoSetting()
+    public static string LoadSettingString(string name)
     {
-        string aniso = "";
+        string setting = "";
         //Goes through our Playerpref Key array and gets the values if we have the keys stored
-        try
+
+        if (PlayerPrefs.HasKey(name))
         {
-            for (int i = 0; i < prefKeys.Count; i++)
-            {
-                if (PlayerPrefs.HasKey("aniso"))
-                {
-                    aniso = PlayerPrefs.GetString("aniso");
-                    return aniso;
-                }
-            }
+            setting = PlayerPrefs.GetString(name);
+            return setting;
         }
-        catch (System.Exception)
+        else
         {
-            Debug.Log("LOADED FAILED: DANGER");
+            return null;
         }
 
-        return null;
+
         //returns the playerpref values
+    }
+
+    public static int LoadSettingInt(string name)
+    {
+        int setting = 0;
+        if (PlayerPrefs.HasKey(name))
+        {
+            setting = PlayerPrefs.GetInt(name);
+            return setting;
+        }
+        else
+        {
+            return 0;
+
+        }
+    }
+
+    public static float LoadSettingFloat(string name)
+    {
+        float setting = 0;
+        if (PlayerPrefs.HasKey(name))
+        {
+            setting = PlayerPrefs.GetInt(name);
+            return setting;
+        }
+        else
+        {
+            return 0;
+
+        }
     }
 
     /// <summary>
