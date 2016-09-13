@@ -7,17 +7,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveLoad
 {
-
-
     //This is a save/load system. Uses PlayerPref for settings and file streaming for values
     //Settings not done
     //Host mind not done
-
-    //Fields. Used for the Settings Canvas slider names
-    private static string masterSliderName = "MasterSlider";
-    private static string musicSliderName = "MusicSlider";
-    private static string fxSliderName = "FXSlider";
-    private static string voiceSliderName = "VoiceSlider";
 
     //The variable that stores the slider values
     private static float[] value = new float[4];
@@ -38,12 +30,6 @@ public static class SaveLoad
         {
             prefKeys = value;
         }
-    }
-
-    // Use this for initialization
-    static void Start()
-    {
-
     }
 
     /// <summary>
@@ -130,19 +116,45 @@ public static class SaveLoad
         }
     }
 
+    /// <summary>
+    /// Called in settings methods when apply is pressed. This is for saving strings
+    /// </summary>
+    /// <param name="name">The name of the variable that needs to be saved. This is the same name that should be used in the load function</param>
+    /// <param name="value">The value of the variable which needs to be saved</param>
     public static void SaveSettings(string name, string value)
     {
         PlayerPrefs.SetString(name, value);
-        Debug.Log(value);
+        //If the value is not stored in our playerpref list it is added to the list
         if (!prefKeys.Contains(name))
         {
             prefKeys.Add(name);
         }
     }
 
+    /// <summary>
+    /// Called in settings methods when apply is pressed. This is for saving ints
+    /// </summary>
+    /// <param name="name">The name of the variable that needs to be saved. This is the same name that should be used in the load function</param>
+    /// <param name="intValue">The value of the variable which needs to be saved</param>
     public static void SaveSettings(string name, int intValue)
     {
         PlayerPrefs.SetInt(name, intValue);
+        //If the value is not stored in our playerpref list it is added to the list
+        if (!prefKeys.Contains(name))
+        {
+            prefKeys.Add(name);
+        }
+    }
+
+    /// <summary>
+    /// Called in settings methods when apply is pressed. This is for saving floats
+    /// </summary>
+    /// <param name="name">The name of the variable that needs to be saved. This is the same name that should be used in the load function</param>
+    /// <param name="floatValue">The value of the variable which needs to be saved</param>
+    public static void SaveSettings(string name, float floatValue)
+    {
+        PlayerPrefs.SetFloat(name, floatValue);
+        //If the value is not stored in our playerpref list it is added to the list
         if (!prefKeys.Contains(name))
         {
             prefKeys.Add(name);
@@ -189,10 +201,14 @@ public static class SaveLoad
         return value;
     }
 
+    /// <summary>
+    /// This is for loading string values. It's called in methods when the menu is loaded
+    /// </summary>
+    /// <param name="name">The name which the variable was saved with</param>
+    /// <returns>Retuns the saved setting if it exists. Else the method returns null</returns>
     public static string LoadSettingString(string name)
     {
         string setting = "";
-        //Goes through our Playerpref Key array and gets the values if we have the keys stored
 
         if (PlayerPrefs.HasKey(name))
         {
@@ -205,9 +221,13 @@ public static class SaveLoad
         }
 
 
-        //returns the playerpref values
     }
 
+    /// <summary>
+    /// This is for loading int values. It's called in methods when the menu is loaded
+    /// </summary>
+    /// <param name="name">The name which the variable was saved with</param>
+    /// <returns>Retuns the saved setting if it exists. Else the method returns null</returns>
     public static int LoadSettingInt(string name)
     {
         int setting = 0;
@@ -223,6 +243,11 @@ public static class SaveLoad
         }
     }
 
+    /// <summary>
+    /// This is for loading float values. It's called in methods when the menu is loaded
+    /// </summary>
+    /// <param name="name">The name which the variable was saved with</param>
+    /// <returns>Retuns the saved setting if it exists. Else the method returns null</returns>
     public static float LoadSettingFloat(string name)
     {
         float setting = 0;

@@ -5,6 +5,9 @@ public class EventManager : MonoBehaviour
 {
     public delegate void PlayerDeathDelegate();
     public delegate void PlayerRespawnDelegate();
+    public delegate void PlayerJumpDelegate();
+    public delegate void PlayerPickupDelegate();
+    public delegate void PlayerCrouchDelegate();
     public delegate void SaveGameDelegate();
     public delegate void LoadGameDelegate();
     public delegate void SavePrefDelegate();
@@ -17,6 +20,9 @@ public class EventManager : MonoBehaviour
 
     public static event PlayerDeathDelegate OnPlayerDeath;
     public static event PlayerRespawnDelegate OnPlayerRespawn;
+    public static event PlayerJumpDelegate OnPlayerJump;
+    public static event PlayerPickupDelegate OnPlayerPickup;
+    public static event PlayerCrouchDelegate OnPlayerCrouch;
     public static event SaveGameDelegate OnSaveGame;
     public static event LoadGameDelegate OnLoadGame;
     public static event SavePrefDelegate OnSavePref;
@@ -37,6 +43,24 @@ public class EventManager : MonoBehaviour
     {
         Debug.Log("EventManager.cs: Event 'OnPlayerRespawn' raised");
         OnPlayerRespawn();
+    }
+
+    public static void RaiseOnPlayerJump()
+    {
+        Debug.Log("EventManager.cs: Event 'OnPlayerJump' raised");
+        OnPlayerJump();
+    }
+
+    public static void RaiseOnPlayerPickup()
+    {
+        Debug.Log("EventManager.cs: Event 'OnPlayerPickup' raised");
+        OnPlayerPickup();
+    }
+
+    public static void RaiseOnPlayerCrouch()
+    {
+        Debug.Log("EventManager.cs: Event 'OnPlayerCrouch' raised");
+        OnPlayerCrouch();
     }
 
     public static void RaiseOnSaveGame()

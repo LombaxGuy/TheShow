@@ -19,10 +19,10 @@ public class FPSController : MonoBehaviour
     [Tooltip("The speed is multiplied by this amount when sprinting.")]
     float sprintSpeedModifier = 2.0f;
     [SerializeField]
-    [Tooltip("The speed is multiplied by thia amount when crouching.")]
+    [Tooltip("The speed is multiplied by this amount when crouching.")]
     float crouchSpeedModifier = 0.5f;
     [SerializeField]
-    [Tooltip("The speed is multiplied by thia amount when in the air.")]
+    [Tooltip("The speed is multiplied by this amount when in the air.")]
     float inAirSpeedModifier = 0.2f;
 
     [SerializeField]
@@ -96,11 +96,17 @@ public class FPSController : MonoBehaviour
     private float rayCastLength = 1.1f;
     private int numberOfRaycasts = 10;
 
+    [SerializeField]
     private bool onGround = true;
 
     public bool OnGround
     {
         get { return onGround; }
+    }
+
+    public bool Stunned
+    {
+        get { return stunned; }
     }
 
     #region Events and EventHandlers
@@ -147,10 +153,17 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!locked)
+        if (!stunned)
         {
             IsGrounded();
+        }
+        else
+        {
+            onGround = false;
+        }
 
+        if (!locked)
+        {
             moveVector = Vector3.zero;
             jumpKey = false;
             crouchKey = false;
@@ -266,9 +279,10 @@ public class FPSController : MonoBehaviour
             moveVelocity.z = moveVector.z * speedMultiplier;
 
             if (onGround && rigid.velocity.magnitude <= maxMagnitude)
+            {
                 //If grounded, add the velocity.
                 rigid.AddRelativeForce((moveVelocity * 500) * Time.deltaTime);
-
+            }
             else if (!onGround && rigid.velocity.magnitude <= maxMagnitude)
             {
                 //If not grounded, add the velocity multiplied by the inAirSpeedModifier.
@@ -289,6 +303,8 @@ public class FPSController : MonoBehaviour
 
             jumping = true;
             jumpStartTime = Time.time;
+
+            EventManager.RaiseOnPlayerJump();
         }
 
         //Called when in the air, and the jumpkey is held.
@@ -336,6 +352,8 @@ public class FPSController : MonoBehaviour
 
         // Disables the top collider so it won't collide with the environment.
         topCollider.enabled = false;
+
+        EventManager.RaiseOnPlayerCrouch();
     }
 
     /// <summary>
