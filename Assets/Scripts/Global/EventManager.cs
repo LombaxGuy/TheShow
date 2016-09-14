@@ -35,85 +35,182 @@ public class EventManager : MonoBehaviour
 
     public static void RaiseOnPlayerDeath()
     {
-        Debug.Log("EventManager.cs: Event 'OnPlayerDeath' raised.");
-        OnPlayerDeath();
+        if (OnPlayerDeath != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerDeath' raised.");
+            OnPlayerDeath.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerDeath' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnPlayerRespawn()
     {
-        Debug.Log("EventManager.cs: Event 'OnPlayerRespawn' raised");
-        OnPlayerRespawn();
+        if (OnPlayerRespawn != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerRespawn' raised");
+            OnPlayerRespawn.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerRespawn' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnPlayerJump()
     {
-        Debug.Log("EventManager.cs: Event 'OnPlayerJump' raised");
-        OnPlayerJump();
+        if (OnPlayerJump != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerJump' raised");
+            OnPlayerJump.Invoke();
+        }
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerJump' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnPlayerPickup()
     {
-        Debug.Log("EventManager.cs: Event 'OnPlayerPickup' raised");
-        OnPlayerPickup();
+        if (OnPlayerPickup != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerPickup' raised.");
+            OnPlayerPickup.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerPickup' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnPlayerCrouch()
     {
-        Debug.Log("EventManager.cs: Event 'OnPlayerCrouch' raised");
-        OnPlayerCrouch();
+        if (OnPlayerCrouch != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerCrouch' raised.");
+            OnPlayerCrouch.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnPlayerCrouch' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnSaveGame()
     {
-        Debug.Log("EventManager.cs: Event 'OnSaveGame' raised.");
-        OnSaveGame();
+        if (OnSaveGame != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnSaveGame' raised.");
+            OnSaveGame.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnSaveGame' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnLoadGame()
     {
-        Debug.Log("EventManager.cs: Event 'OnLoadGame' raised.");
-        OnLoadGame();
+        if (OnLoadGame != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnLoadGame' raised.");
+            OnLoadGame.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnLoadGame' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnSavePref()
     {
-        Debug.Log("EventManager.cs: Event 'OnSavePref' raised.");
-        OnSavePref();
+        if (OnSavePref != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnSavePref' raised.");
+            OnSavePref.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnSavePref' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnLoadPref()
     {
-        Debug.Log("EventManager.cs: Event 'OnLoadPref' raised.");
-        OnLoadPref();
+        if (OnLoadPref != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnLoadPref' raised.");
+            OnLoadPref.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnLoadPref' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnCheckForSettingChanges()
     {
-        Debug.Log("EventManager.cs: Event 'OnCheckForSettingChanges' raised.");
-        OnCheckForSettingChanges();
+        if (OnCheckForSettingChanges != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnCheckForSettingChanges' raised.");
+            OnCheckForSettingChanges.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnCheckForSettingChanges' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnApplySettingChanges()
     {
-        Debug.Log("EventManager.cs: Event 'OnApplySettingChanges' raised.");
-        OnApplySettingChanges();
+        if (OnApplySettingChanges != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnApplySettingChanges' raised.");
+            OnApplySettingChanges.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnApplySettingChanges' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnSettingsChanged()
     {
-        Debug.Log("EventManager.cs: Event 'OnSettingsChanged' raised.");
-        OnSettingsChanged();
+        if (OnSettingsChanged != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnSettingsChanged' raised.");
+            OnSettingsChanged.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnSettingsChanged' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnResetSettings()
     {
-        Debug.Log("EventManager.cs: Event 'OnResetSettings' raised.");
-        OnResetSettings();
+        if (OnResetSettings != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnResetSettings' raised.");
+            OnResetSettings.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnResetSettings' not raised because nothing subscibes to it.");
+        }
     }
 
     public static void RaiseOnResetToDefaultSettings()
     {
-        Debug.Log("EventManager.cs: Event 'OnResetToDefaultSettings' raised.");
-        OnResetToDefaultSettings();
+        if (OnResetToDefaultSettings != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnResetToDefaultSettings' raised.");
+            OnResetToDefaultSettings.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnResetToDefaultSettings' not raised because nothing subscibes to it.");
+        }
     }
 }

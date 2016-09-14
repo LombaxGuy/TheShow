@@ -299,7 +299,6 @@ public class FPSController : MonoBehaviour
         if (jumpKey && onGround && !jumping)
         {
             rigid.velocity += new Vector3(0, initialJumpVelocity, 0);
-            Debug.Log(rigid.velocity);
 
             jumping = true;
             jumpStartTime = Time.time;
