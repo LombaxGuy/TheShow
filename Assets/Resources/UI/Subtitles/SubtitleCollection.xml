@@ -1,29 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SubtitleCollection>
   <Subtitles>
-    <Subtitle name="sub1">
-      <voiceLine>Greetings New Contestant</voiceLine>
+    <Subtitle name="T0Sub1">
+      <voiceLine>Hello Contestant. You gotta use your legs in this show, so we better make sure they are working</voiceLine>
     </Subtitle>
-    <Subtitle name="sub2">
-      <voiceLine>We will put you through some games in a moment</voiceLine>
+    <Subtitle name="T0Sub2">
+      <voiceLine>Could you step into the light for a moment?</voiceLine>
     </Subtitle>
-  <Subtitle name="sub3">
-    <voiceLine>Why don't you walk into the light first</voiceLine>
+    <Subtitle name="T0Sub3">
+      <voiceLine>Hoh yeah don't get too hasty. Step into the light first</voiceLine>
     </Subtitle>
-	  <Subtitle name="sub4">
-		  <voiceLine>Why don't you do some jumpingjacks for the audience</voiceLine>
+    <Subtitle name="T0Sub4AN">
+      <voiceLine>Sigh. Come on, the audience is waiting</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub5AN">
+      <voiceLine>It's not that hard. I instruct you. You follow</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub6AN">
+      <voiceLine>We haven't got all daaaay</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub7AN>"
+      <voiceLine>Ok. Actually we do have all day. Take your time......</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0SubAN">
+      <voiceLine>Humming</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub9">
+      <voiceLine>Finally</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub10">
+      <voiceLine>Very good. Looks like your legs are working, but we gotta make sure. Jump a couple of times</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub11">
+      <voiceLine>Excellent.... Now again</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub12">
+      <voiceLine>And again.....</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub13">
+      <voiceLine>Again.....</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub14">
+      <voiceLine>Just do it 3 more times</voiceLine>
+    </Subtitle>
+    	  <Subtitle name="T0Sub15">
+		  <voiceLine>That's splendid. Your legs seems to be working phenomenally well</voiceLine>
 	  </Subtitle>
-	  <Subtitle name="sub5">
-		  <voiceLine>Good job, now try and crawl around for a bit</voiceLine>
+    	  <Subtitle name="T0Sub16">
+		  <voiceLine>Can you guess what to do here?</voiceLine>
 	  </Subtitle>
-	  <Subtitle name="sub6">
-		  <voiceLine>Wonderful, semes like your legs still work, you DID have a rough trip</voiceLine>
+    	  <Subtitle name="T0Sub17">
+		  <voiceLine>Watch your head</voiceLine>
 	  </Subtitle>
-	  <Subtitle name="Test1">
-		  <voiceLine>Gj waiting please just go into the light</voiceLine>
+    	  <Subtitle name="T0Sub18">
+		  <voiceLine>The production team messed up. We should've had a door here. Instead we got a misplaced wall, just crawl under it</voiceLine>
 	  </Subtitle>
-	  <Subtitle name="Test2">
-		  <voiceLine>can we please just move on? go into the light</voiceLine>
+    	  <Subtitle name="T0Sub19">
+		  <voiceLine>It won't fall on you. I promise</voiceLine>
 	  </Subtitle>
+    <Subtitle name="T0Sub20">
+      <voiceLine>You see that button? Your'e gonna see a lot of those. Now press it!</voiceLine>
+    </Subtitle>
+      <Subtitle name="T0Sub21">
+      <voiceLine>It's locked</voiceLine>
+    </Subtitle>
+      <Subtitle name="T0Sub22">
+      <voiceLine>You hear that?Sounds like it's locked</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub23">
+      <voiceLine>Oh, i thik it's budging.... No it's just my imagination</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub24">
+      <voiceLine>Locked</voiceLine>
+    </Subtitle>
+      <Subtitle name="T0Sub25">
+      <voiceLine>You fiiiiiiinaly figured it out. Well done</voiceLine>
+    </Subtitle>
+      <Subtitle name="T0Sub26">
+      <voiceLine>I told you so</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub27">
+      <voiceLine>Doors normally open if you press 'em, bu sometimes there is a button. This was one of those</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub28">
+      <voiceLine>Now go through the door and oooon to the shooooow</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub29">
+      <voiceLine>No. No. No. Wrong way. Turn around</voiceLine>
+    </Subtitle>
+    <Subtitle name="T0Sub30">
+      <voiceLine>What are you DOING?</voiceLine>
+    </Subtitle>
+      <Subtitle name="T0Sub31">
+      <voiceLine>Alright, since you apparently don't think you're ready, lets take it from the top (sigh)</voiceLine>
+    </Subtitle>
   </Subtitles>
 </SubtitleCollection>
