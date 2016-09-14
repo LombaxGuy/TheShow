@@ -4,7 +4,10 @@ using System.Collections;
 public class FPSController : MonoBehaviour
 {
     Rigidbody rigid;
-    Animator animator;
+    [SerializeField]
+    Animator animatorHead;
+    [SerializeField]
+    Animator animatorBody;
 
     [SerializeField]
     [Tooltip("The top collider in the player object.")]
@@ -81,7 +84,7 @@ public class FPSController : MonoBehaviour
     #endregion
 
     [SerializeField]
-    private float fallDistance;
+    private float maxFallDistance = 20;
 
     private Vector3 oldPlayerPos = new Vector3(0, 0, 0);
 
@@ -130,7 +133,7 @@ public class FPSController : MonoBehaviour
         locked = true;
         topCollider.enabled = false;
 
-        animator.SetBool("animateHead", false);
+        animatorHead.SetBool("animateHead", false);
     }
 
     private void OnPlayerRespawn()
@@ -145,9 +148,8 @@ public class FPSController : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
 
-        animator.SetFloat("headbobDegree", headbobDegree);
+        animatorHead.SetFloat("headbobDegree", headbobDegree);
     }
 
     // Update is called once per frame
@@ -347,7 +349,7 @@ public class FPSController : MonoBehaviour
     {
         crouching = true;
 
-        animator.SetBool("crouched", true);
+        animatorHead.SetBool("crouched", true);
 
         // Disables the top collider so it won't collide with the environment.
         topCollider.enabled = false;
@@ -362,7 +364,7 @@ public class FPSController : MonoBehaviour
     {
         crouching = false;
 
-        animator.SetBool("crouched", false);
+        animatorHead.SetBool("crouched", false);
 
         // Enables the top collider so it won't collide with the environment.
         topCollider.enabled = true;
@@ -376,24 +378,24 @@ public class FPSController : MonoBehaviour
         //If sprinting increase the amount of headbobbing.
         if (sprintKey)
         {
-            animator.SetFloat("animationSpeed", bobSpeedSprinting);
+            animatorHead.SetFloat("animationSpeed", bobSpeedSprinting);
         }
 
         //If not sprinting, change the amount of headbobbing back to normal.
         if (!sprintKey)
         {
-            animator.SetFloat("animationSpeed", bobSpeed);
+            animatorHead.SetFloat("animationSpeed", bobSpeed);
         }
 
         //If WASD is pressed.
         if (moveVector != Vector3.zero && onGround)
         {
-            animator.SetBool("animateHead", true);
+            animatorHead.SetBool("animateHead", true);
         }
         //If no movement keys are pressed.
         else
         {
-            animator.SetBool("animateHead", false);
+            animatorHead.SetBool("animateHead", false);
         }
     }
 
@@ -530,14 +532,22 @@ public class FPSController : MonoBehaviour
 
     public void ComparePlayerPos()
     {
-        if (oldPlayerPos.y - this.transform.position.y >= fallDistance)
+        float fallDistance = oldPlayerPos.y - transform.position.y;
+
+        if (fallDistance >= maxFallDistance)
         {
             EventManager.RaiseOnPlayerDeath();
         }
-        //else if(oldPlayerPos.y - this.transform.position.y >= (fallDistance/2))
-        //{
-        //    //play animation
-        //}
+        else if(fallDistance >= maxFallDistance / 5)
+        {
+            float t = fallDistance / (maxFallDistance / 2);
+
+            animatorBody.SetFloat("fallAmount", Mathf.Clamp(t, 0, 1));
+
+            animatorBody.SetTrigger("triggerFall");
+
+        }
+
         comparePos = false;
     }
 }
