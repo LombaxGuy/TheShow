@@ -14,9 +14,6 @@ public class AnisoFiltSetting : MonoBehaviour
 
     private AnisotropicFilteringSettings currentSetting;
 
-    private SettingsMenu settingsMenu;
-
-
     /// <summary>
     /// Subscribes to events on awake
     /// </summary>
@@ -28,8 +25,6 @@ public class AnisoFiltSetting : MonoBehaviour
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
         EventManager.OnSavePref += OnSavePref;
         EventManager.OnLoadPref += OnLoadPref;
-
-        settingsMenu = GetComponentInParent<SettingsMenu>();
     }
 
     /// <summary>
@@ -51,20 +46,6 @@ public class AnisoFiltSetting : MonoBehaviour
     void Start()
     {
         SetToCurrentSetting();
-    }
-
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    Texture.anisotropicFiltering = AnisotropicFiltering.Enable;
-        //    Texture.SetGlobalAnisotropicFilteringLimits(16, 16);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    Texture.anisotropicFiltering = AnisotropicFiltering.Disable;
-        //}
     }
 
     /// <summary>

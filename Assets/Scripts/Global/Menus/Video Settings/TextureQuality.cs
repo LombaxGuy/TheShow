@@ -12,8 +12,6 @@ public class TextureQuality : MonoBehaviour
     [SerializeField]
     private TextureQualityLevel defaultTextureQuality = TextureQualityLevel.Medium;
 
-    private SettingsMenu settingsMenu;
-
     /// <summary>
     /// Subscribes to events on awake
     /// </summary>
@@ -38,11 +36,6 @@ public class TextureQuality : MonoBehaviour
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
         EventManager.OnSavePref -= OnSavePref;
         EventManager.OnLoadPref -= OnLoadPref;
-    }
-
-    void Start()
-    {
-        settingsMenu = GetComponentInParent<SettingsMenu>();
     }
 
     /// <summary>
