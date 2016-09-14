@@ -18,6 +18,10 @@ public class IntroSequence : MonoBehaviour {
     public static bool buttonPressed = false;
     public static bool wrongWay = false;
 
+
+    private bool waited = false;
+    private int annoyance = 0;
+
     public static float timer;
     public static float timeInSeconds;
 
@@ -56,9 +60,8 @@ public class IntroSequence : MonoBehaviour {
     // Use this for initialization
     void Start () {
         manager = GameObject.Find("WorldManager");
+        stage = 0;
 
-        manager.GetComponent<SubtitleControl>().StartSub("sub1", 3);
-        stage = 1;
 
     }
 	
@@ -68,117 +71,182 @@ public class IntroSequence : MonoBehaviour {
         timer += Time.deltaTime;
 
 
+        Intro();
+        if (lightEntered && !firstCleared)
+        {
+            Light();          
+        }
+
+        if (firstCleared && !buttonPressed)
+        {
+            Crouch();
+        }
+
+        if (buttonPressed && !wrongWay)
+        {
+
+        }
+
+        if (wrongWay)
+        {
+
+        }
+    }
+
+    void Intro()
+    {
+        if (timer > 2 && stage == 0)
+        {
+            //Welcome
+            StagePrep();
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("1", 2);
+        }
 
         if (timer > 4 && stage == 1)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("sub2",3);
-            stage = stage + 1;
-        }
-
-        if (timer > 8 && stage == 2)
-        {
-            manager.GetComponent<SubtitleControl>().StartSub("sub3", 3);
+            //Please step into the light
             manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use Wasd to move around", 3);
-            stage = stage + 1;
-            stageSaved = stage;
+            StagePrep();
             trigger.SetActive(true);
         }
 
-        if(timer > 26 && stage == 3 && !lightEntered)
+        //if (timer > 4 && stage == 2 && hasJumped && !lightEntered)
+        //{
+        //    // Be in light first    
+        //    manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("be in light", 2);
+        //    //StagePrep();
+        //}
+
+        if (timer > 24 && annoyance == 0)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("Test1", 3);
-            stage = stage + 1;
-            stageSaved = stage;
+            //Annoyed 1
+            timer = 0;
+            annoyance += 1;
+            waited = true;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("1 annoyed", 2);
         }
 
-        if (timer > 40 && stage == 4 && !lightEntered)
+        if (timer > 24 && annoyance == 1)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("Test2", 3);
-            stage = stage + 1;
-            stageSaved = stage;
+            //Annoyed 2
+            timer = 0;
+            annoyance += 1;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("2 annoyed", 2);
         }
 
-        //After light
-        if (lightEntered)
+        if (timer > 24 && annoyance == 2)
         {
-            if (!hasJumped && jumps < 3 && stage == stageSaved)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("sub4", 3);
-                manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use space to jump", 3);
-                StagePrep();
-            }
-            else if (hasJumped && jumps < 3 && stage == stageSaved)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("JumpComplete2", 3);
-                StagePrep();
-            }
-            else if(hasJumped && jumps >= 3 && stage == stageSaved)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("JumpComplete1", 3);
-                StagePrep();
-            }
-
-
-
-            if (timer > 4 && hasJumped && jumps >= 3 && !hasCrouched && stage == stageSaved + 1)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("sub5", 3);
-                manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use control to crouch", 3);
-                StagePrep();
-            }
-            else if(timer > 4 && hasJumped && jumps >= 3 && hasCrouched && stage == stageSaved + 1)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("CrouchComplete2", 3);
-                StagePrep();
-
-            }
-
-            if (timer > 4 && hasCrouched && stage == stageSaved + 2)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("sub6", 3);
-                StagePrep();
-                doorTrigger.SetActive(true);
-                door.SetActive(false);
-                stageSaved = stage;
-            }
-
-            if (timer > 12 && !firstCleared && stage == stageSaved + 1)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
-                StagePrep();
-            }
-
-            if (timer > 12 && !firstCleared && stage == stageSaved + 1)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
-                StagePrep();
-            }
-
-            if (timer > 12 && firstCleared && stage == stageSaved + 2)
-            {
-                manager.GetComponent<SubtitleControl>().StartSub("triggered", 3);
-                StagePrep();
-            }
-
-            if(buttonPressed)
-            {
-
-            }
-
-            if(wrongWay)
-            {
-
-            }
-
-            
+            //Annoyed 3
+            timer = 0;
+            annoyance += 1;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("3 annoyed", 2);
         }
+
+        if (timer > 24 && annoyance == 3)
+        {
+            //Annoyed 3
+            timer = 0;
+            annoyance += 1;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("4 annoyed", 2);
+        }
+
+        if (timer > 24 && annoyance == 4)
+        {
+            //Annoyed 3
+            timer = 0;
+            annoyance += 1;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("5 annoyed", 2);
+        }
+
+        if (timer > 24 && annoyance == 5)
+        {
+            //Annoyed 4
+            timer = 0;
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("6 annoyed", 2);
+
+
+        }
+    }
+
+    void Light()
+    {
+        if (timer > 4 && stage == 2 && !waited)
+        {
+            jumps = 0;
+            //normal
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("normal", 2);
+            StagePrep();
+        }
+
+        if(timer > 4 && stage == 2 && waited)
+        {
+            jumps = 0;
+            //Finally
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("finally", 2);
+            StagePrep();
+        }
+
+        if (timer > 4 && jumps >= 1 && stage == 3)
+        {
+            jumps = 0;
+            //exelent now again
+
+            StagePrep();
+        }
+
+        if (timer > 4 && jumps >= 1 && stage == 4)
+        {
+            jumps = 0;
+            //and again
+
+            StagePrep();
+        }
+        if (timer > 4 && jumps >= 1 && stage == 5)
+        {
+            jumps = 0;
+            //again
+
+            StagePrep();
+        }
+        if (timer > 4 && jumps >= 3 && stage == 6)
+        {
+            jumps = 0;
+            //3 more
+
+            StagePrep();
+        }
+        if (timer > 4 && stage == 7 && !waited)
+        {
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("gotta go fast", 2);
+            //gj
+            door.SetActive(false);
+            StagePrep();
+        }
+
+        if (timer > 4 && stage == 7 && waited)
+        {
+            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("ur 2 slow", 2);
+            //could have gone faster
+            door.SetActive(false);
+            StagePrep();
+        }
+
+    }
+
+    void Crouch()
+    {
+
+    }
+
+    void Button()
+    {
+
     }
 
     void StagePrep()
     {
         stage = stage + 1;
         timer = 0;
-
     }
 
 
