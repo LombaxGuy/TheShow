@@ -23,16 +23,6 @@ public class ResolutionSettings : MonoBehaviour
     [SerializeField]
     private Toggle windowedToggle;
 
-    private SettingsMenu settingsMenu;
-
-    private bool windowedChanged = false;
-    private bool resolutionChanged = false;
-
-    private bool startFullscreen = false;
-
-    private List<Resolution> fullscreenResolutions = new List<Resolution>();
-    private List<Resolution> windowedResolutions = new List<Resolution>();
-
     /// <summary>
     /// Subscribes to events on awake
     /// </summary>
@@ -42,18 +32,6 @@ public class ResolutionSettings : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
-        //EventManager.OnSavePref += OnSavePref;
-        //EventManager.OnLoadPref += OnLoadPref;
-
-        startFullscreen = Screen.fullScreen;
-
-        Screen.SetResolution(Screen.width, Screen.height, false);
-        windowedResolutions = Screen.resolutions.ToList();
-
-        Screen.SetResolution(Screen.width, Screen.height, true);
-        fullscreenResolutions = Screen.resolutions.ToList();
-
-        Screen.SetResolution(Screen.width, Screen.height, startFullscreen);
     }
 
     /// <summary>
@@ -65,8 +43,6 @@ public class ResolutionSettings : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
-        //EventManager.OnSavePref -= OnSavePref;
-        //EventManager.OnLoadPref -= OnLoadPref;
     }
 
     /// <summary>
@@ -74,7 +50,6 @@ public class ResolutionSettings : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        settingsMenu = GetComponentInParent<SettingsMenu>();
 #if (!DEBUG)
         // Sets the abailable resolutions based on what the monitor supports.
         SetAvailableResolutions();
@@ -84,18 +59,6 @@ public class ResolutionSettings : MonoBehaviour
         
         // If the game is running in windowed mode the windowedToggle.isOn is set to true otherwise it is set to false
         windowedToggle.isOn = !Screen.fullScreen ? (true) : (false);
-    }
-
-    private void Update()
-    {
-        if (windowedToggle.isOn && Screen.fullScreen)
-        {
-            SetAvailableResolutions(windowedResolutions);
-        }
-        else if (!windowedToggle.isOn && !Screen.fullScreen)
-        {
-            SetAvailableResolutions(fullscreenResolutions);
-        }
     }
 
     /// <summary>
@@ -117,26 +80,6 @@ public class ResolutionSettings : MonoBehaviour
         }
 
         resolutionDD.AddOptions(resolutions);
-
-        resolutionDD.RefreshShownValue();
-    }
-
-    private void SetAvailableResolutions(List<Resolution> resolutions)
-    {
-        resolutionDD.ClearOptions();
-
-        List<string> options = new List<string>();
-
-
-        for (int i = 0; i < resolutions.Count; i++)
-        {
-            if (!(resolutions[i].width < minimumResolutionWidth) && !(resolutions[i].height < minimumResolutionHeight))
-            {
-                options.Add(resolutions[i].width + "x" + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz");
-            }
-        }
-
-        resolutionDD.AddOptions(options);
 
         resolutionDD.RefreshShownValue();
     }
