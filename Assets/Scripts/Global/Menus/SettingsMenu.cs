@@ -11,6 +11,15 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField]
     private GameObject soundMenu;
 
+    [SerializeField]
+    private GameObject videoMenu;
+
+    [SerializeField]
+    private GameObject gameplayMenu;
+
+    [SerializeField]
+    private GameObject keybindingMenu;
+
 
     //Float that stores savedata
     private float[] values = new float[4];
@@ -38,7 +47,7 @@ public class SettingsMenu : MonoBehaviour
     {
         EventManager.RaiseOnLoadPref();
 
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -108,4 +117,23 @@ public class SettingsMenu : MonoBehaviour
         settingsChanged = true;
     }
 
+    private void OpenGameplaySettings()
+    {
+        
+    }
+
+    private void OpenVideoSettings()
+    {
+        
+    }
+
+    private void OpenAudioSettings()
+    {
+        
+    }
+
+    private void OpeKeybindingSettings()
+    {
+        
+    }
 }
