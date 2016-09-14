@@ -18,11 +18,9 @@ public class SubtitleControl : MonoBehaviour
     public void StartSub(string subName, float duration)
     {
         //Starts the coroutine if there is no subtitle currently being displayed
-        if (!isDisplayed)
-        {
             //Starts a coroutine of the DisplaySubtitles method
             StartCoroutine(DisplaySubtitles(subName, duration));
-        }
+     
     }
 
     /// <summary>

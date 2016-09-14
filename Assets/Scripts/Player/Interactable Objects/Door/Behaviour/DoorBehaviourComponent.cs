@@ -8,6 +8,9 @@ public class DoorBehaviourComponent : MonoBehaviour
     InteractableObjectComponent interactableObjectComponent;
 
     [SerializeField]
+    private bool locked = false;
+
+    [SerializeField]
     [Range(0f, 50000f)]
     // The force applied to the door when opened or closed
     private float doorOpenForce = 10000;
@@ -26,15 +29,26 @@ public class DoorBehaviourComponent : MonoBehaviour
     [SerializeField]
     private bool onCooldown = false;
 
+    [SerializeField]
+    private AudioClip lockedClip;
+
+    private AudioSource audioSource;
+
+
+    public bool Locked
+    {
+        get { return locked; }
+    }
+
     void OnEnable()
     {
-        // Subscribes to the OnRewpawnReset event
+        // Subscribes to the OnRespawnReset event
         EventManager.OnPlayerRespawn += OnPlayerRespawn;
     }
 
     void OnDisable()
     {
-        // Unsubscribes from the OnRewpawnReset event
+        // Unsubscribes from the OnRespawnReset event
         EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 
@@ -49,6 +63,15 @@ public class DoorBehaviourComponent : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
+        audioSource.loop = false;
+
+        if(Locked == true)
+        {
+            transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
         // Saves the starting rotation
         startRotation = transform.rotation;
 
@@ -78,20 +101,30 @@ public class DoorBehaviourComponent : MonoBehaviour
         // If interaction is not on cooldown
         if (!onCooldown)
         {
-            // Opens the door
-            if (yRotation < openOrCloseDoorAngle)
+            if(Locked == false)
             {
-                GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
-                StartCoroutine(StartDoorCooldown());
-                //Debug.Log("Open door");
+                // Opens the door
+                if (yRotation < openOrCloseDoorAngle)
+                {
+                    GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
+                    StartCoroutine(StartDoorCooldown());
+                    //Debug.Log("Open door");
+                }
+                // Closes the door
+                else
+                {
+                    GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
+                    StartCoroutine(StartDoorCooldown());
+                    //Debug.Log("Close door");
+                }
+
             }
-            // Closes the door
             else
             {
-                GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
+                audioSource.PlayOneShot(lockedClip);
                 StartCoroutine(StartDoorCooldown());
-                //Debug.Log("Close door");
             }
+            
         }
     }
 
@@ -103,4 +136,5 @@ public class DoorBehaviourComponent : MonoBehaviour
 
         onCooldown = false;
     }
+
 }

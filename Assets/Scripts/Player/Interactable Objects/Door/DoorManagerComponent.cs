@@ -3,6 +3,7 @@ using System.Collections;
 
 public class DoorManagerComponent : MonoBehaviour
 {
+
     [SerializeField]
     // The angle at which the door automatically closes
     private float doorAutoCloseAngle = 10.0f;
@@ -55,6 +56,7 @@ public class DoorManagerComponent : MonoBehaviour
             // Assign the above values to our HingeJoint
             hinge.limits = jointLimit;
             hinge.spring = jointSpring;
+
         }
         else
         {

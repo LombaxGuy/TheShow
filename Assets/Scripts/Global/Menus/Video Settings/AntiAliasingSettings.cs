@@ -40,7 +40,6 @@ public class AntiAliasingSettings : MonoBehaviour
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
         EventManager.OnSavePref += OnSavePref;
         EventManager.OnLoadPref += OnLoadPref;
-        Debug.Log("blargh1");
     }
 
     /// <summary>

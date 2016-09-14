@@ -104,6 +104,11 @@ public class FPSController : MonoBehaviour
         get { return onGround; }
     }
 
+    public bool Stunned
+    {
+        get { return stunned; }
+    }
+
     #region Events and EventHandlers
 
     void OnEnable()
@@ -148,7 +153,14 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        IsGrounded();
+        if (!stunned)
+        {
+            IsGrounded();
+        }
+        else
+        {
+            onGround = false;
+        }
 
         if (!locked)
         {

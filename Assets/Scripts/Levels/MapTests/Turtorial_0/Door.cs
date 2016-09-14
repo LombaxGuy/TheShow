@@ -17,11 +17,14 @@ public class Door : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
-        {
+        Transform player = other.GetComponent<Collider>().transform;
 
-            item.SetActive(false);
-        }
-        
+        if (player.parent != null)
+            if (player.parent.tag == "Player")
+            {
+                IntroSequence.firstCleared = true;
+                gameObject.SetActive(false);
+            }
+
     }
 }
