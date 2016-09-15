@@ -7,19 +7,21 @@ public class SettingsMenu : MonoBehaviour
     //The panel that pops up if changes has been made
     [SerializeField]
     private GameObject popUpApply;
-    //The menu where SoundSettings.cs is on
-    [SerializeField]
-    private GameObject soundMenu;
 
     [SerializeField]
-    private GameObject videoMenu;
+    private Canvas gameplayMenu;
 
     [SerializeField]
-    private GameObject gameplayMenu;
+    private Canvas videoMenu;
 
     [SerializeField]
-    private GameObject keybindingMenu;
+    private Canvas soundMenu;
 
+    [SerializeField]
+    private Canvas keybindingMenu;
+
+    private int menuFrontLayer = 90;
+    private int menuBackLayer = 80;
 
     //Float that stores savedata
     private float[] values = new float[4];
@@ -32,6 +34,11 @@ public class SettingsMenu : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnSettingsChanged += OnSettingsChanged;
+
+        soundMenu.gameObject.SetActive(true);
+        videoMenu.gameObject.SetActive(true);
+        gameplayMenu.gameObject.SetActive(true);
+        keybindingMenu.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -40,6 +47,11 @@ public class SettingsMenu : MonoBehaviour
     private void OnDisable()
     {
         EventManager.OnSettingsChanged -= OnSettingsChanged;
+
+        soundMenu.gameObject.SetActive(false);
+        videoMenu.gameObject.SetActive(false);
+        gameplayMenu.gameObject.SetActive(false);
+        keybindingMenu.gameObject.SetActive(false);
     }
 
     // Use this for initialization
@@ -77,6 +89,7 @@ public class SettingsMenu : MonoBehaviour
 
         settingsChanged = false;
 
+        popUpApply.SetActive(false);
         gameObject.SetActive(false);
     }
     
@@ -117,23 +130,35 @@ public class SettingsMenu : MonoBehaviour
         settingsChanged = true;
     }
 
-    private void OpenGameplaySettings()
+    public void OpenGameplaySettings()
     {
-        
+        gameplayMenu.sortingOrder = menuFrontLayer;
+        videoMenu.sortingOrder =menuBackLayer;
+        soundMenu.sortingOrder = menuBackLayer;
+        keybindingMenu.sortingOrder = menuBackLayer;
     }
 
-    private void OpenVideoSettings()
+    public void OpenVideoSettings()
     {
-        
+        gameplayMenu.sortingOrder = menuBackLayer;
+        videoMenu.sortingOrder = menuFrontLayer;
+        soundMenu.sortingOrder = menuBackLayer;
+        keybindingMenu.sortingOrder = menuBackLayer;
     }
 
-    private void OpenAudioSettings()
+    public void OpenSoundSettings()
     {
-        
+        gameplayMenu.sortingOrder = menuBackLayer;
+        videoMenu.sortingOrder = menuBackLayer;
+        soundMenu.sortingOrder = menuFrontLayer;
+        keybindingMenu.sortingOrder = menuBackLayer;
     }
 
-    private void OpeKeybindingSettings()
+    public void OpeKeybindingSettings()
     {
-        
+        gameplayMenu.sortingOrder = menuBackLayer;
+        videoMenu.sortingOrder = menuBackLayer;
+        soundMenu.sortingOrder = menuBackLayer;
+        keybindingMenu.sortingOrder = menuFrontLayer;
     }
 }

@@ -5,6 +5,7 @@ public class WorldManager : MonoBehaviour
 {
     [SerializeField]
     private bool destroyOnLoad = true;
+
     [SerializeField]
     private GameObject menuSettings;
 
