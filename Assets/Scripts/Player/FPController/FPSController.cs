@@ -330,8 +330,9 @@ public class FPSController : MonoBehaviour
                 rigid.velocity = curJumpVelocity;
             }
         }
+        
         //If the crouch key is held, the player isn't already crouching.
-        else if (crouchKey && !crouching)
+        if (crouchKey && !crouching)
         {
             StartCrouch();
         }
