@@ -17,6 +17,15 @@ public class SoundSettings : MonoBehaviour
 
     private float[] values = new float[4];
 
+    [SerializeField]
+    private GameObject masterSlider;
+    [SerializeField]
+    private GameObject musicSlider;
+    [SerializeField]
+    private GameObject fxSlider;
+    [SerializeField]
+    private GameObject voiceSlider;
+
     public AudioMixer[] Mixer
     {
         get { return mixer; }
@@ -87,7 +96,7 @@ public class SoundSettings : MonoBehaviour
     public void ChangeVolumeVoice(float value)
     {
         Mixer[3].SetFloat("voiceVol", LinearToDecibel(value));
-        EventManager.RaiseOnSettingsChanged();
+        //EventManager.RaiseOnSettingsChanged();
         currentValues[3] = value;
     }
 
@@ -129,18 +138,18 @@ public class SoundSettings : MonoBehaviour
 
     private void OnResetSettings()
     {
-        transform.FindChild("MasterSlider").GetComponent<Slider>().value = oldValues[0];
-        transform.FindChild("MusicSlider").GetComponent<Slider>().value = oldValues[1];
-        transform.FindChild("FXSlider").GetComponent<Slider>().value = oldValues[2];
-        transform.FindChild("VoiceSlider").GetComponent<Slider>().value = oldValues[3];
+        masterSlider.GetComponent<Slider>().value = oldValues[0];
+        musicSlider.GetComponent<Slider>().value = oldValues[1];
+        fxSlider.GetComponent<Slider>().value = oldValues[2];
+        voiceSlider.GetComponent<Slider>().value = oldValues[3];
     }
 
     private void OnResetToDefaultSettings()
     {
-        transform.FindChild("MasterSlider").GetComponent<Slider>().value = defaultVolume;
-        transform.FindChild("MusicSlider").GetComponent<Slider>().value = defaultVolume;
-        transform.FindChild("FXSlider").GetComponent<Slider>().value = defaultVolume;
-        transform.FindChild("VoiceSlider").GetComponent<Slider>().value = defaultVolume;
+        masterSlider.GetComponent<Slider>().value = defaultVolume;
+        musicSlider.GetComponent<Slider>().value = defaultVolume;
+        fxSlider.GetComponent<Slider>().value = defaultVolume;
+        voiceSlider.GetComponent<Slider>().value = defaultVolume;
     }
 
     private void OnApplySettingChanges()
@@ -152,12 +161,16 @@ public class SoundSettings : MonoBehaviour
     {
         //Sets the values variable to be equal to the array returned in the LoadPrefs method.
         oldValues = SaveLoad.LoadSoundPrefs();
+        Debug.Log(oldValues[0]);
+        Debug.Log(oldValues[1]);
+        Debug.Log(oldValues[2]);
+        Debug.Log(oldValues[3]);
 
         //Sets the slider values to be equal to the value variable and deactivates the menu
-        transform.FindChild("MasterSlider").GetComponent<Slider>().value = oldValues[0];
-        transform.FindChild("MusicSlider").GetComponent<Slider>().value = oldValues[1];
-        transform.FindChild("FXSlider").GetComponent<Slider>().value = oldValues[2];
-        transform.FindChild("VoiceSlider").GetComponent<Slider>().value = oldValues[3];
+        masterSlider.GetComponent<Slider>().value = oldValues[0];
+        musicSlider.GetComponent<Slider>().value = oldValues[1];
+        fxSlider.GetComponent<Slider>().value = oldValues[2];
+        voiceSlider.GetComponent<Slider>().value = oldValues[3];
     }
 
     /// <summary>
