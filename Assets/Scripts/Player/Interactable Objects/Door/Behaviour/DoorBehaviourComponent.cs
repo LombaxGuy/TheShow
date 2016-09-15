@@ -38,6 +38,7 @@ public class DoorBehaviourComponent : MonoBehaviour
     public bool Locked
     {
         get { return locked; }
+        set { locked = value; }
     }
 
     void OnEnable()
@@ -69,7 +70,7 @@ public class DoorBehaviourComponent : MonoBehaviour
 
         if(Locked == true)
         {
-            transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+            LockDoor(true);
         }
 
         // Saves the starting rotation
@@ -88,6 +89,20 @@ public class DoorBehaviourComponent : MonoBehaviour
         {
             Debug.Log("DoorBehaviourComponent.cs: No 'InteractableObjectComponent' was found!");
         }
+    }
+
+    public void LockDoor(bool state)
+    {
+        if(state)
+        {
+            transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+            
+        }
+        else
+        {
+            transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
+        locked = state;
     }
 
     /// <summary>

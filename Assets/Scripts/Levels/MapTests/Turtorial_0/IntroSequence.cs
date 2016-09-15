@@ -16,6 +16,8 @@ public class IntroSequence : MonoBehaviour {
     public static bool lightEntered = false;
     public static bool firstCleared = false;
     public static bool buttonPressed = false;
+    public static bool passedJump = false;
+    public static bool buttonRoom = false;
     public static bool wrongWay = false;
 
 
@@ -77,17 +79,17 @@ public class IntroSequence : MonoBehaviour {
             Light();          
         }
 
-        if (firstCleared && !buttonPressed)
+        if (firstCleared && !buttonRoom)
         {
             Crouch();
         }
 
-        if (buttonPressed && !wrongWay)
+        if (buttonRoom && !buttonPressed)
         {
-
+            Button();
         }
 
-        if (wrongWay)
+        if (buttonPressed)
         {
 
         }
@@ -98,13 +100,15 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 2 && stage == 0)
         {
             //Welcome
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub1",3);
             StagePrep();
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("1", 2);
+            
         }
 
         if (timer > 4 && stage == 1)
         {
             //Please step into the light
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub2", 4);
             manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use Wasd to move around", 3);
             StagePrep();
             trigger.SetActive(true);
@@ -120,50 +124,54 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 0)
         {
             //Annoyed 1
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub4AN", 2);
             timer = 0;
             annoyance += 1;
             waited = true;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("1 annoyed", 2);
+            
         }
 
         if (timer > 24 && annoyance == 1)
         {
             //Annoyed 2
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub5AN", 2);
             timer = 0;
             annoyance += 1;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("2 annoyed", 2);
+            
         }
 
         if (timer > 24 && annoyance == 2)
         {
             //Annoyed 3
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub6AN", 2);
             timer = 0;
             annoyance += 1;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("3 annoyed", 2);
+            
         }
 
         if (timer > 24 && annoyance == 3)
         {
             //Annoyed 3
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", 2);
             timer = 0;
             annoyance += 1;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("4 annoyed", 2);
+            
         }
 
         if (timer > 24 && annoyance == 4)
         {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", 2);
             //Annoyed 3
             timer = 0;
             annoyance += 1;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("5 annoyed", 2);
+            
         }
 
         if (timer > 24 && annoyance == 5)
         {
             //Annoyed 4
+            manager.GetComponent<SubtitleControl>().StartSub("T0SubAN", 2);
             timer = 0;
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("6 annoyed", 2);
-
 
         }
     }
@@ -174,60 +182,62 @@ public class IntroSequence : MonoBehaviour {
         {
             jumps = 0;
             //normal
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("normal", 2);
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub10", 2);
             StagePrep();
         }
 
-        if(timer > 4 && stage == 2 && waited)
+        if(timer > 3 && stage == 2 && waited)
         {
             jumps = 0;
             //Finally
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("finally", 2);
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub9", 2);
             StagePrep();
         }
 
-        if (timer > 4 && jumps >= 1 && stage == 3)
+        if (timer > 3 && jumps >= 1 && stage == 3)
         {
             jumps = 0;
-            //exelent now again
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub11", 2);
 
             StagePrep();
         }
 
-        if (timer > 4 && jumps >= 1 && stage == 4)
+        if (timer > 3 && jumps >= 1 && stage == 4)
         {
             jumps = 0;
-            //and again
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub12", 2);
 
             StagePrep();
         }
-        if (timer > 4 && jumps >= 1 && stage == 5)
+        if (timer > 3 && jumps >= 1 && stage == 5)
         {
             jumps = 0;
-            //again
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub13", 2);
 
             StagePrep();
         }
-        if (timer > 4 && jumps >= 3 && stage == 6)
+        if (timer > 3 && jumps >= 1 && stage == 6)
         {
             jumps = 0;
-            //3 more
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub14", 2);
 
             StagePrep();
         }
-        if (timer > 4 && stage == 7 && !waited)
+        if (timer > 3 && jumps >= 3 && stage == 7 && !waited)
         {
             manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("gotta go fast", 2);
             //gj
-            door.SetActive(false);
+            door.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+            doorTrigger.SetActive(true);
             StagePrep();
         }
 
-        if (timer > 4 && stage == 7 && waited)
+        if (timer > 3 && jumps >= 3 && stage == 7 && waited)
         {
             manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("ur 2 slow", 2);
             //could have gone faster
-            door.SetActive(false);
+            door.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+            doorTrigger.SetActive(true);
             StagePrep();
         }
 
@@ -236,10 +246,51 @@ public class IntroSequence : MonoBehaviour {
     void Crouch()
     {
 
+        if(timer > 3 && stage == 8)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub16", 2);
+            StagePrep();
+        }
+
+        if (timer > 3 && stage == 9)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub17", 2);
+            StagePrep();
+        }
+
+        if (timer > 3 && stage == 10)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub18", 2);
+            StagePrep();
+        }
+
+        if (timer > 3 && stage == 11)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub19", 2);
+            StagePrep();
+        }
+
     }
 
     void Button()
     {
+        if(timer > 3 && stage == 12)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub20", 2);
+            StagePrep();
+        }
+
+        if (timer > 3 && stage == 13)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub27", 2);
+            StagePrep();
+        }
+
+        if (timer > 3 && stage == 14)
+        {
+            manager.GetComponent<SubtitleControl>().StartSub("T0Sub28", 2);
+            StagePrep();
+        }
 
     }
 

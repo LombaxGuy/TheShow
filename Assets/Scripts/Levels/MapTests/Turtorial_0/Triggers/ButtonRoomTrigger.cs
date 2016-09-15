@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Door : MonoBehaviour {
-    [SerializeField]
-    private GameObject item;
+public class ButtonRoomTrigger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -22,8 +20,9 @@ public class Door : MonoBehaviour {
         if (player.parent != null)
             if (player.parent.tag == "Player")
             {
-                IntroSequence.firstCleared = true;
+                IntroSequence.buttonPressed = true;
                 gameObject.SetActive(false);
+
             }
 
     }
