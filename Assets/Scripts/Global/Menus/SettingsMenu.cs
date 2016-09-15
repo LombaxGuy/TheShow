@@ -9,6 +9,9 @@ public class SettingsMenu : MonoBehaviour
     private GameObject popUpApply;
 
     [SerializeField]
+    private GameObject popUpDefault;
+
+    [SerializeField]
     private Canvas gameplayMenu;
 
     [SerializeField]
@@ -67,7 +70,7 @@ public class SettingsMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyBindings.KeyEscape))
         {
-            if(popUpApply.activeInHierarchy)
+            if (popUpApply.activeInHierarchy || popUpDefault.activeInHierarchy)
             {
                 Cancel();
             }
@@ -92,7 +95,7 @@ public class SettingsMenu : MonoBehaviour
         popUpApply.SetActive(false);
         gameObject.SetActive(false);
     }
-    
+
     /// <summary>
     /// If there is unfinished changes a popup window appears asking if the user wants to save the changes
     /// </summary>
@@ -115,9 +118,29 @@ public class SettingsMenu : MonoBehaviour
     {
         EventManager.RaiseOnResetSettings();
 
-        popUpApply.SetActive(false);
+        if (popUpApply.activeInHierarchy)
+        {
+            popUpApply.SetActive(false);
 
-        gameObject.SetActive(false);
+            gameObject.SetActive(false);
+        }
+        else if(popUpDefault.activeInHierarchy)
+        {
+            popUpDefault.SetActive(false);
+        }
+    }
+
+    public void ResetToDefault()
+    {
+        popUpDefault.SetActive(true);
+    }
+
+    public void DefaultSettings()
+    {
+        EventManager.RaiseOnResetToDefaultSettings();
+        EventManager.RaiseOnApplySettingChanges();
+        settingsChanged = false;
+        popUpDefault.SetActive(false);
     }
 
     /// <summary>
@@ -133,7 +156,7 @@ public class SettingsMenu : MonoBehaviour
     public void OpenGameplaySettings()
     {
         gameplayMenu.sortingOrder = menuFrontLayer;
-        videoMenu.sortingOrder =menuBackLayer;
+        videoMenu.sortingOrder = menuBackLayer;
         soundMenu.sortingOrder = menuBackLayer;
         keybindingMenu.sortingOrder = menuBackLayer;
     }
@@ -154,7 +177,7 @@ public class SettingsMenu : MonoBehaviour
         keybindingMenu.sortingOrder = menuBackLayer;
     }
 
-    public void OpeKeybindingSettings()
+    public void OpenKeybindingSettings()
     {
         gameplayMenu.sortingOrder = menuBackLayer;
         videoMenu.sortingOrder = menuBackLayer;
