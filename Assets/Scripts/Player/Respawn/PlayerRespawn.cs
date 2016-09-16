@@ -106,9 +106,9 @@ public class PlayerRespawn : MonoBehaviour
         isAlive = false;
         deathCooldown = defaultDeathCooldown;
 
-        float randomAnim = Random.Range(0, 2);
+        bool randomAnim = Random.Range(0, 2) == 0 ? randomAnim = false : randomAnim = true;
 
-        animator.SetFloat("random", randomAnim);
+        animator.SetBool("dieFallRight", randomAnim);
         animator.SetBool("playerDead", true);
 
         StatTracker.TotalTimesDead += 1;

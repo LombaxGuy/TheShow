@@ -6,8 +6,6 @@ public class FPSController : MonoBehaviour
     Rigidbody rigid;
     [SerializeField]
     Animator animatorHead;
-    [SerializeField]
-    Animator animatorBody;
 
     [SerializeField]
     [Tooltip("The top collider in the player object.")]
@@ -543,9 +541,9 @@ public class FPSController : MonoBehaviour
         {
             float t = fallDistance / (maxFallDistance / 2);
 
-            animatorBody.SetFloat("fallAmount", Mathf.Clamp(t, 0, 1));
+            animatorHead.SetFloat("fallAmount", Mathf.Clamp(t, 0, 1));
 
-            animatorBody.SetTrigger("triggerFall");
+            animatorHead.SetTrigger("triggerFall");
 
         }
 
