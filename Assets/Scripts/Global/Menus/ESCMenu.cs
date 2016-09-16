@@ -72,6 +72,8 @@ public class ESCMenu : MonoBehaviour
     {
         StatTracker.TimeSpendOnAllLevels += StatTracker.TimeSpendOnCurrentLevel;
         popupExit.SetActive(false);
+        this.gameObject.SetActive(false);
+        Pause.SetPauseState(false);
         SceneManager.LoadScene("Menu");
     }
 
