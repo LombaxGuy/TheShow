@@ -14,7 +14,6 @@ public class ESCMenu : MonoBehaviour
     [SerializeField]
     private GameObject menuMain;
 
-    private bool closeThisShit = false;
 
     // Update is called once per frame
     void Update()
@@ -29,10 +28,6 @@ public class ESCMenu : MonoBehaviour
             {
                 Resume();
             }
-        }
-        if (gameObject.activeInHierarchy && closeThisShit)
-        {
-            closeThisShit = false;
         }
     }
 
