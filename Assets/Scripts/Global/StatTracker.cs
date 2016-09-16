@@ -21,6 +21,8 @@ public class StatTracker : MonoBehaviour
     private Text timeSpendOnCurrentLevelText;
     [SerializeField]
     private Text timeSpendInOneSettingText;
+    [SerializeField]
+    private Text frameRateText;
 
     private bool displayDebug = false;
 
@@ -175,6 +177,7 @@ public class StatTracker : MonoBehaviour
         currentLevelText.text = currentLevel.ToString();
         timeSpendOnCurrentLevelText.text = HelperFunctions.ConvertToTimeFormatDebug(timeSpendOnCurrentLevel);
         timeSpendInOneSettingText.text = HelperFunctions.ConvertToTimeFormatDebug(timeSpendInOneSetting);
+        frameRateText.text = (Mathf.RoundToInt(1.0f / Time.deltaTime)).ToString();
     }
 
     /// <summary>
