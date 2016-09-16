@@ -11,6 +11,10 @@ public class ESCMenu : MonoBehaviour
     private GameObject menuSettings;
     [SerializeField]
     private GameObject headsUpDisplay;
+    [SerializeField]
+    private GameObject menuMain;
+
+    private bool closeThisShit = false;
 
     // Update is called once per frame
     void Update()
@@ -25,6 +29,10 @@ public class ESCMenu : MonoBehaviour
             {
                 Resume();
             }
+        }
+        if (gameObject.activeInHierarchy && closeThisShit)
+        {
+            closeThisShit = false;
         }
     }
 
@@ -70,10 +78,12 @@ public class ESCMenu : MonoBehaviour
     /// </summary>
     public void ConfirmExitMainMenu()
     {
+        Debug.Log(gameObject.activeInHierarchy);
         StatTracker.TimeSpendOnAllLevels += StatTracker.TimeSpendOnCurrentLevel;
         popupExit.SetActive(false);
-        this.gameObject.SetActive(false);
-        Pause.SetPauseState(false);
+        gameObject.SetActive(false);
+        Debug.Log(gameObject.activeInHierarchy);
+        menuMain.SetActive(true);
         SceneManager.LoadScene("Menu");
     }
 
