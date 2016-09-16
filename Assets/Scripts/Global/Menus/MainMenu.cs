@@ -17,7 +17,6 @@ public class MainMenu : MonoBehaviour
     private GameObject menuSettings;
     [SerializeField]
     private GameObject continueButton;
-
     /// <summary>
     /// Called when the object is enabled
     /// </summary>
@@ -74,6 +73,7 @@ public class MainMenu : MonoBehaviour
     public void Continue()
     {
         EventManager.RaiseOnLoadGame();
+        Pause.SetPauseState(false);
     }
 
     /// <summary>
@@ -118,6 +118,7 @@ public class MainMenu : MonoBehaviour
         saveGame.DeleteSaveData();
         popupNewGame.SetActive(false);
         gameObject.SetActive(false);
+        Pause.SetPauseState(false);
         SceneManager.LoadScene("TestMap");
     }
 
