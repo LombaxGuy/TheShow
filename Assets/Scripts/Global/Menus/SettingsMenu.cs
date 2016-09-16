@@ -139,7 +139,6 @@ public class SettingsMenu : MonoBehaviour
     {
         EventManager.RaiseOnResetToDefaultSettings();
         EventManager.RaiseOnApplySettingChanges();
-        settingsChanged = false;
         popUpDefault.SetActive(false);
     }
 
