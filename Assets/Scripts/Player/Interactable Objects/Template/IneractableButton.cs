@@ -36,7 +36,8 @@ public class IneractableButton : MonoBehaviour {
         //unlock Door
         //PLay animation
         //trigger dialog
-        door.SetActive(false);
-        gameObject.SetActive(false);
+        door.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+        IntroSequence.buttonPressed = true;
+        
     }
 }

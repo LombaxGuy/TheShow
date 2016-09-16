@@ -28,7 +28,7 @@ public class Menu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyBindings.KeyEscape))
         {
-            if (!menuMain.activeInHierarchy && !menuSettings.activeInHierarchy)
+            if (!menuMain.activeInHierarchy && !menuSettings.activeInHierarchy && SceneManager.GetActiveScene().name != "Menu")
             {
                 menuESC.SetActive(true);
 
