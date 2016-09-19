@@ -10,6 +10,12 @@ public class NumberBoxToSliderValue : MonoBehaviour
     [SerializeField]
     private InputField numberBox;
 
+    [SerializeField]
+    private int minimumValue = 0;
+
+    [SerializeField]
+    private int maxumumValue = 100;
+
     private void OnEnable()
     {
         EventManager.OnLoadPref += OnLoadPref;
@@ -25,9 +31,9 @@ public class NumberBoxToSliderValue : MonoBehaviour
         int value = 0;
         int.TryParse(numberBox.text, out value);
 
-        value = value > 100 ? (100) : (value);
+        value = value > maxumumValue ? (maxumumValue) : (value);
 
-        value = value < 0 ? (0) : (value);
+        value = value < minimumValue ? (minimumValue) : (value);
 
         slider.value = value;
         numberBox.text = value.ToString();

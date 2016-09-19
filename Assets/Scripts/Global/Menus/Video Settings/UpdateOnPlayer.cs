@@ -8,6 +8,9 @@ public class UpdateOnPlayer : MonoBehaviour
     [SerializeField]
     private AntiAliasingSettings aASettings;
 
+    [SerializeField]
+    private FOVSetting fovSetting;
+
     private Antialiasing playerAA;
 
     [SerializeField]
@@ -31,6 +34,11 @@ public class UpdateOnPlayer : MonoBehaviour
         }
         else
         {
+            if (Camera.main.fieldOfView != fovSetting.CurrentFov)
+            {
+                Camera.main.fieldOfView = fovSetting.CurrentFov;
+            }
+
             switch (aASettings.CurrentType)
             {
                 case AAType.Disabled:
