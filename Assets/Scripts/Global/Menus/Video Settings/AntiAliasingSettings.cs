@@ -233,23 +233,28 @@ public class AntiAliasingSettings : MonoBehaviour
             {
                 case "Disabled":
                     currentType = AAType.Disabled;
+                    aATypeDD.value = 0;
                     QualitySettings.antiAliasing = 0;
                     break;
 
                 case "SSAA":
                     currentType = AAType.SSAA;
+                    aATypeDD.value = 1;
                     break;
 
                 case "NFAA":
                     currentType = AAType.NFAA;
+                    aATypeDD.value = 2;
                     break;
 
                 case "FXAA":
                     currentType = AAType.FXAA;
+                    aATypeDD.value = 3;
                     break;
 
                 case "DLAA":
                     currentType = AAType.DLAA;
+                    aATypeDD.value = 4;
                     break;
             }
         }
@@ -260,16 +265,19 @@ public class AntiAliasingSettings : MonoBehaviour
             {
                 case "x2":
                     QualitySettings.antiAliasing = 2;
+                    aAQualityDD.value = 0;
                     currentMS = AAMultiSampling.x2;
                     break;
 
                 case "x4":
                     QualitySettings.antiAliasing = 4;
+                    aAQualityDD.value = 1;
                     currentMS = AAMultiSampling.x4;
                     break;
 
                 case "x8":
                     QualitySettings.antiAliasing = 8;
+                    aAQualityDD.value = 2;
                     currentMS = AAMultiSampling.x8;
                     break;
             }

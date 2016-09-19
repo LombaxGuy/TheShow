@@ -161,10 +161,6 @@ public class SoundSettings : MonoBehaviour
     {
         //Sets the values variable to be equal to the array returned in the LoadPrefs method.
         oldValues = SaveLoad.LoadSoundPrefs();
-        Debug.Log(oldValues[0]);
-        Debug.Log(oldValues[1]);
-        Debug.Log(oldValues[2]);
-        Debug.Log(oldValues[3]);
 
         //Sets the slider values to be equal to the value variable and deactivates the menu
         masterSlider.GetComponent<Slider>().value = oldValues[0];

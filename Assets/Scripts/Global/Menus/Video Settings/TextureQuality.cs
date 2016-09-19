@@ -4,7 +4,7 @@ using System.Collections;
 
 public class TextureQuality : MonoBehaviour
 {
-    private enum TextureQualityLevel { Low, Medium, High};
+    private enum TextureQualityLevel { Low, Medium, High };
 
     [SerializeField]
     private Dropdown textureQualityDD;
@@ -49,7 +49,7 @@ public class TextureQuality : MonoBehaviour
         for (int i = 0; i < textureQualityDD.options.Count; i++)
         {
             // Compares the name of the setting in the dropdown menu with the currently active setting.
-            switch(textureQualityDD.options[textureQualityDD.value].text)
+            switch (textureQualityDD.options[textureQualityDD.value].text)
             {
                 case "Low":
                     hasSettingsChanged = QualitySettings.masterTextureLimit == 2 ? (false) : (true);
@@ -129,7 +129,7 @@ public class TextureQuality : MonoBehaviour
                 textureQualityDD.value = 0;
                 break;
         }
-        
+
     }
 
     /// <summary>
@@ -166,23 +166,22 @@ public class TextureQuality : MonoBehaviour
     private void OnLoadPref()
     {
         int textureSetting = SaveLoad.LoadSettingInt("textureQuality");
-        Debug.Log(textureSetting);
-        if(textureSetting != 0)
+
+        switch (textureSetting)
         {
-            switch(textureSetting)
-            {
-                case 0:
-                    QualitySettings.masterTextureLimit = 0;
-                    break;
-                case 1:
-                    QualitySettings.masterTextureLimit = 1;
-                    break;
-                case 2:
-                    QualitySettings.masterTextureLimit = 2;
-                    break;
-            }
+            case 0:
+                QualitySettings.masterTextureLimit = 0;
+                textureQualityDD.value = 2;
+                break;
+            case 1:
+                QualitySettings.masterTextureLimit = 1;
+                textureQualityDD.value = 1;
+                break;
+            case 2:
+                QualitySettings.masterTextureLimit = 2;
+                textureQualityDD.value = 0;
+                break;
         }
-        Debug.Log(QualitySettings.masterTextureLimit);
     }
 
     #endregion

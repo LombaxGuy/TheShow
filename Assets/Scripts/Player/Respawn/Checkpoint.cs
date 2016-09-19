@@ -14,13 +14,19 @@ public class Checkpoint : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.OnSaveGame += SavePlayerPosition;
+        if (tag == "MasterCheckpoint")
+        {
+            EventManager.OnSaveGame += SavePlayerPosition;
+        }
 
     }
 
     private void OnDisable()
     {
-        EventManager.OnSaveGame -= SavePlayerPosition;
+        if (tag == "MasterCheckpoint")
+        {
+            EventManager.OnSaveGame -= SavePlayerPosition;
+        }
     }
 
     private void Start()
@@ -38,7 +44,7 @@ public class Checkpoint : MonoBehaviour
             {
                 Debug.Log("Checkpoint.cs: No GameObjectPositionReset component could be found on the WorldManager!");
             }
-            
+
         }
         else
         {

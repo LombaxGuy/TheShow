@@ -13,9 +13,10 @@ public class SubtitleContainer
     /// Loads the subtitle xml file and reads it's content 
     /// </summary>
     /// <returns></returns>
-    public static SubtitleContainer LoadSubtitle()
+    public static SubtitleContainer LoadSubtitle(string levelName)
     {
-        TextAsset asset = Resources.Load<TextAsset>("UI/Subtitles/SubtitleCollection");
+
+        TextAsset asset = Resources.Load<TextAsset>("UI/Subtitles/" + levelName + "Collection");
 
         XmlSerializer serializer = new XmlSerializer(typeof(SubtitleContainer));
 
