@@ -14,12 +14,13 @@ public class SubtitleControl : MonoBehaviour
     /// This is the method other scripts should call in order to display subtitles.
     /// </summary>
     /// <param name="subName">The name of the subtitle</param>
+    /// <param name="levelName">The name of the level</param>
     /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
-    public void StartSub(string subName, float duration)
+    public void StartSub(string subName, string levelName, float duration)
     {
         //Starts the coroutine if there is no subtitle currently being displayed
             //Starts a coroutine of the DisplaySubtitles method
-            StartCoroutine(DisplaySubtitles(subName, duration));
+            StartCoroutine(DisplaySubtitles(subName, levelName, duration));
      
     }
 
@@ -30,10 +31,10 @@ public class SubtitleControl : MonoBehaviour
     /// </summary>
     /// <param name="subName">The name of the subtitle</param>
     /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
-    private IEnumerator DisplaySubtitles(string subName, float duration)
+    private IEnumerator DisplaySubtitles(string subName, string levelName, float duration)
     {
         line = "";
-        SubtitleContainer sc = SubtitleContainer.LoadSubtitle();
+        SubtitleContainer sc = SubtitleContainer.LoadSubtitle(levelName);
 
         //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
         foreach (Subtitle subtitle in sc.subtitles)
