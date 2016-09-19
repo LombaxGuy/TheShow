@@ -22,11 +22,21 @@ public class ToolTipTrigger : MonoBehaviour {
         if(player.parent != null)
         if(player.parent.tag == "Player")
         {
-            //manager.GetComponent<Tooltip>().DisplayTooltipForSeconds(messege, 5);
+            
             IntroSequence.lightEntered = true;
-            IntroSequence.timeInSeconds = IntroSequence.timer;
-            gameObject.SetActive(false);
+            IntroSequence.inLight = true;
 
         }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        Transform player = other.GetComponent<Collider>().transform;
+
+            if (player.parent != null)
+            if (player.parent.tag == "Player")
+            {
+                IntroSequence.inLight = false;
+            }
     }
 }

@@ -24,7 +24,7 @@ public class SpeakerTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            speakerManager.GetComponent<SpeakerManager>().PlaySpeakerSoundInstance(audioClips);
+            speakerManager.GetComponent<SpeakerManager>().PlaySpeakerSoundArray(audioClips);
         }
 
         Destroy(GetComponent<BoxCollider>());
