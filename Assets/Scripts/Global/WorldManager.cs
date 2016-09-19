@@ -11,7 +11,6 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
-        menuSettings.SetActive(true);
     }
 
     private void Awake()
@@ -20,5 +19,6 @@ public class WorldManager : MonoBehaviour
         {
             DontDestroyOnLoad(this.gameObject);
         }
+        menuSettings.SetActive(true);
     }
 }

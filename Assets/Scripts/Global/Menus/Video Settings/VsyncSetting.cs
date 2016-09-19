@@ -18,6 +18,9 @@ public class VsyncSetting : MonoBehaviour
         EventManager.OnApplySettingChanges += OnApplySettingChanges;
         EventManager.OnResetSettings += OnResetSettings;
         EventManager.OnResetToDefaultSettings += OnResetToDefaultSettings;
+        EventManager.OnSavePref += OnSavePref;
+        EventManager.OnLoadPref += OnLoadPref;
+        vSyncToggle = GetComponent<Toggle>();
     }
 
     /// <summary>
@@ -29,11 +32,8 @@ public class VsyncSetting : MonoBehaviour
         EventManager.OnApplySettingChanges -= OnApplySettingChanges;
         EventManager.OnResetSettings -= OnResetSettings;
         EventManager.OnResetToDefaultSettings -= OnResetToDefaultSettings;
-    }
-
-    private void Start()
-    {
-        vSyncToggle = GetComponent<Toggle>();
+        EventManager.OnSavePref -= OnSavePref;
+        EventManager.OnLoadPref -= OnLoadPref;
     }
 
     /// <summary>
@@ -95,5 +95,28 @@ public class VsyncSetting : MonoBehaviour
     {
         // Resets the vSync setting to the default setting.
         vSyncToggle.isOn = defaultVSyncSetting;
+    }
+
+    private void OnSavePref()
+    {
+        SaveLoad.SaveSettings("vSync", QualitySettings.vSyncCount);
+    }
+
+    private void OnLoadPref()
+    {
+        int vSyncSave = SaveLoad.LoadSettingInt("vSync");
+
+        Debug.Log(vSyncSave);
+
+        if(vSyncSave == 0)
+        {
+            QualitySettings.vSyncCount = 0;
+            vSyncToggle.isOn = false;
+        }
+        else
+        {
+            QualitySettings.vSyncCount = 1;
+            vSyncToggle.isOn = true;
+        }
     }
 }
