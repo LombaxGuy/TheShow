@@ -106,8 +106,6 @@ public class VsyncSetting : MonoBehaviour
     {
         int vSyncSave = SaveLoad.LoadSettingInt("vSync");
 
-        Debug.Log(vSyncSave);
-
         if(vSyncSave == 0)
         {
             QualitySettings.vSyncCount = 0;

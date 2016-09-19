@@ -166,7 +166,6 @@ public class TextureQuality : MonoBehaviour
     private void OnLoadPref()
     {
         int textureSetting = SaveLoad.LoadSettingInt("textureQuality");
-        Debug.Log(textureSetting);
 
         switch (textureSetting)
         {
@@ -183,8 +182,6 @@ public class TextureQuality : MonoBehaviour
                 textureQualityDD.value = 0;
                 break;
         }
-
-        Debug.Log(QualitySettings.masterTextureLimit);
     }
 
     #endregion
