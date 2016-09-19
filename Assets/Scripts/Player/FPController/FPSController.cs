@@ -60,13 +60,18 @@ public class FPSController : MonoBehaviour
     [Header("- Headbob Settings -")]
     [SerializeField]
     [Tooltip("The speed of bobbing when walking.")]
-    [Range(0.001f, 2f)]
+    [Range(0.001f, 1f)]
     float bobSpeed = 1f;
 
     [SerializeField]
     [Tooltip("The speed of bobbing when sprinting.")]
-    [Range(0.001f, 2f)]
-    float bobSpeedSprinting = 2f;
+    [Range(0.001f, 1f)]
+    float bobSpeedSprinting = 1.5f;
+
+    [SerializeField]
+    [Tooltip("The speed of bobbing when crouching.")]
+    [Range(0.001f, 1f)]
+    float bobSpeedCrouching = 0.5f;
 
 
     [SerializeField]
@@ -375,15 +380,18 @@ public class FPSController : MonoBehaviour
     void HeadBob()
     {
         //If sprinting increase the amount of headbobbing.
-        if (sprintKey)
+        if (sprintKey && !crouching)
         {
             animatorHead.SetFloat("animationSpeed", bobSpeedSprinting);
         }
-
         //If not sprinting, change the amount of headbobbing back to normal.
-        if (!sprintKey)
+        else if (!sprintKey && !crouching)
         {
             animatorHead.SetFloat("animationSpeed", bobSpeed);
+        }
+        else if (!sprintKey && crouching)
+        {
+            animatorHead.SetFloat("animationSpeed", bobSpeedCrouching);
         }
 
         //If WASD is pressed.

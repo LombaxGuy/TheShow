@@ -161,6 +161,25 @@ public static class SaveLoad
         }
     }
 
+    public static void SaveSettings(string name, bool boolValue)
+    {
+        if(boolValue == false)
+        {
+            PlayerPrefs.SetInt(name, 0);
+        }
+        else
+        {
+            PlayerPrefs.SetInt(name, 1);
+        }
+
+
+        //If the value is not stored in our playerpref list it is added to the list
+        if (!prefKeys.Contains(name))
+        {
+            prefKeys.Add(name);
+        }
+    }
+
 
     /// <summary>
     /// /Loads the saved preferences and returns it in a float array.
