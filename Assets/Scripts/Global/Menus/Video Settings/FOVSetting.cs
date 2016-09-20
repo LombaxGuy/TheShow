@@ -81,7 +81,7 @@ public class FOVSetting : MonoBehaviour
 
         Debug.Log(savedFOV);
 
-        if(savedFOV != 0)
+        if(savedFOV != -1)
         {
             currentFov = savedFOV;
             fovSlider.value = currentFov;

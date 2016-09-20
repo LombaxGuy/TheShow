@@ -9,7 +9,7 @@ public class HeadbobSetting : MonoBehaviour
     [SerializeField]
     private float defaultValue = 100;
 
-    private float currentValue = 0;
+    private float currentValue;
 
     public float CurrentValue
     {
@@ -71,11 +71,21 @@ public class HeadbobSetting : MonoBehaviour
 
     private void OnSavePref()
     {
-        // Save currentValue
+        SaveLoad.SaveSettings("Headbob", currentValue);
     }
 
     private void OnLoadPref()
     {
-        // Load currentValue
+        float savedBob = SaveLoad.LoadSettingFloat("Headbob");
+
+        if(savedBob != -1)
+        {
+            currentValue = savedBob;
+            headbobSlider.value = currentValue;
+        }
+        else
+        {
+            currentValue = defaultValue;
+        }
     }
 }

@@ -85,7 +85,7 @@ public class VsyncSetting : MonoBehaviour
             //... set the menu toggle to 'On'.
             vSyncToggle.isOn = true;
         }
-        
+
     }
 
     /// <summary>
@@ -106,15 +106,23 @@ public class VsyncSetting : MonoBehaviour
     {
         int vSyncSave = SaveLoad.LoadSettingInt("vSync");
 
-        if(vSyncSave == 0)
+        if (vSyncSave != -1)
         {
-            QualitySettings.vSyncCount = 0;
-            vSyncToggle.isOn = false;
+            if (vSyncSave == 0)
+            {
+                QualitySettings.vSyncCount = 0;
+                vSyncToggle.isOn = false;
+            }
+            else
+            {
+                QualitySettings.vSyncCount = 1;
+                vSyncToggle.isOn = true;
+            }
         }
         else
         {
-            QualitySettings.vSyncCount = 1;
-            vSyncToggle.isOn = true;
+            QualitySettings.vSyncCount = 0;
+            vSyncToggle.isOn = false;
         }
     }
 }
