@@ -11,25 +11,30 @@ public class UpdateOnPlayer : MonoBehaviour
     [SerializeField]
     private FOVSetting fovSetting;
 
+    [SerializeField]
+    private HeadbobSetting headbobSetting;
+
+    private Animator playerAnimator;
     private Antialiasing playerAA;
+
+    private float currentHeadbobAmount = 0;
+    private int indexOfHeadbobLayer;
 
     [SerializeField]
     private string nameOfFirstLevel = "TestMap";
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (playerAA == null)
+        if (playerAA == null || playerAnimator == null)
         {
             if (SceneManager.GetActiveScene().name == nameOfFirstLevel)
             {
                 playerAA = Camera.main.GetComponent<Antialiasing>();
+                playerAnimator = Camera.main.GetComponentInParent<Animator>();
+
+                indexOfHeadbobLayer = playerAnimator.GetLayerIndex("Headbob Layer");
+                currentHeadbobAmount = playerAnimator.GetLayerWeight(indexOfHeadbobLayer) * 100;
             }
         }
         else
@@ -37,6 +42,14 @@ public class UpdateOnPlayer : MonoBehaviour
             if (Camera.main.fieldOfView != fovSetting.CurrentFov)
             {
                 Camera.main.fieldOfView = fovSetting.CurrentFov;
+            }
+
+            if (currentHeadbobAmount != headbobSetting.CurrentValue)
+            {
+                float setValue = headbobSetting.CurrentValue == 0 ? (0.01f) : (headbobSetting.CurrentValue / 100);
+
+                playerAnimator.SetLayerWeight(indexOfHeadbobLayer, setValue);
+                currentHeadbobAmount = playerAnimator.GetLayerWeight(indexOfHeadbobLayer) * 100;
             }
 
             switch (aASettings.CurrentType)

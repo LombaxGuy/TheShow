@@ -257,7 +257,7 @@ public static class SaveLoad
         }
         else
         {
-            return 0;
+            return -1;
 
         }
     }
@@ -277,7 +277,7 @@ public static class SaveLoad
         }
         else
         {
-            return 0;
+            return -1;
 
         }
     }

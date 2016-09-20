@@ -2,24 +2,19 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class FOVSetting : MonoBehaviour
+public class HeadbobSetting : MonoBehaviour
 {
-    private Slider fovSlider;
+    private Slider headbobSlider;
 
     [SerializeField]
-    private float defaultFov = 90;
+    private float defaultValue = 100;
 
-    private float currentFov;
+    private float currentValue;
 
-    public float CurrentFov
+    public float CurrentValue
     {
-        get { return currentFov; }
-        set { currentFov = value; }
-    }
-
-    private void Awake()
-    {
-        fovSlider = GetComponentInChildren<Slider>();
+        get { return currentValue; }
+        set { currentValue = value; }
     }
 
     private void OnEnable()
@@ -45,9 +40,14 @@ public class FOVSetting : MonoBehaviour
         EventManager.OnLoadPref -= OnLoadPref;
     }
 
+    private void Awake()
+    {
+        headbobSlider = GetComponentInChildren<Slider>();
+    }
+
     private void OnCheckForSettingChanges()
     {
-        if (currentFov != fovSlider.value)
+        if (currentValue != headbobSlider.value)
         {
             EventManager.RaiseOnSettingsChanged();
         }
@@ -55,40 +55,37 @@ public class FOVSetting : MonoBehaviour
 
     private void OnResetSettings()
     {
-        fovSlider.value = currentFov;
+        headbobSlider.value = currentValue;
     }
 
     private void OnResetToDefaultSettings()
     {
-        fovSlider.value = defaultFov;
-        currentFov = defaultFov;
+        headbobSlider.value = defaultValue;
+        currentValue = defaultValue;
     }
 
     private void OnApplySettingChanges()
     {
-        currentFov = fovSlider.value;
+        currentValue = headbobSlider.value;
     }
 
     private void OnSavePref()
     {
-        SaveLoad.SaveSettings("FOVsetting", currentFov);
-        Debug.Log(currentFov);
+        SaveLoad.SaveSettings("Headbob", currentValue);
     }
 
     private void OnLoadPref()
     {
-        float savedFOV = SaveLoad.LoadSettingFloat("FOVsetting");
+        float savedBob = SaveLoad.LoadSettingFloat("Headbob");
 
-        Debug.Log(savedFOV);
-
-        if(savedFOV != -1)
+        if(savedBob != -1)
         {
-            currentFov = savedFOV;
-            fovSlider.value = currentFov;
+            currentValue = savedBob;
+            headbobSlider.value = currentValue;
         }
         else
         {
-            currentFov = defaultFov;
+            currentValue = defaultValue;
         }
     }
 }

@@ -167,20 +167,28 @@ public class TextureQuality : MonoBehaviour
     {
         int textureSetting = SaveLoad.LoadSettingInt("textureQuality");
 
-        switch (textureSetting)
+        if (textureSetting != -1)
         {
-            case 0:
-                QualitySettings.masterTextureLimit = 0;
-                textureQualityDD.value = 2;
-                break;
-            case 1:
-                QualitySettings.masterTextureLimit = 1;
-                textureQualityDD.value = 1;
-                break;
-            case 2:
-                QualitySettings.masterTextureLimit = 2;
-                textureQualityDD.value = 0;
-                break;
+            switch (textureSetting)
+            {
+                case 0:
+                    QualitySettings.masterTextureLimit = 0;
+                    textureQualityDD.value = 2;
+                    break;
+                case 1:
+                    QualitySettings.masterTextureLimit = 1;
+                    textureQualityDD.value = 1;
+                    break;
+                case 2:
+                    QualitySettings.masterTextureLimit = 2;
+                    textureQualityDD.value = 0;
+                    break;
+            }
+        }
+        else
+        {
+            QualitySettings.masterTextureLimit = 1;
+            textureQualityDD.value = 1;
         }
     }
 
