@@ -272,7 +272,7 @@ public static class SaveLoad
         float setting = 0;
         if (PlayerPrefs.HasKey(name))
         {
-            setting = PlayerPrefs.GetInt(name);
+            setting = PlayerPrefs.GetFloat(name);
             return setting;
         }
         else
