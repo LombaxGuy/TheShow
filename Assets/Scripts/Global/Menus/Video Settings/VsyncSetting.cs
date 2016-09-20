@@ -47,6 +47,11 @@ public class VsyncSetting : MonoBehaviour
             //... raise the following event.
             EventManager.RaiseOnSettingsChanged();
         }
+        else if (!vSyncToggle.isOn && QualitySettings.vSyncCount == 1)
+        {
+            //... raise the following event.
+            EventManager.RaiseOnSettingsChanged();
+        }
     }
 
     /// <summary>

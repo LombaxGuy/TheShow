@@ -10,6 +10,25 @@ public class SubtitleControl : MonoBehaviour
     [SerializeField]
     private Text subtitles;
 
+    [SerializeField]
+    private SubtitleSetting subtitleSetting;
+
+    private bool subtitlesEnabled = false;
+
+    public bool SubtitlesEnabled
+    {
+        get { return subtitlesEnabled; }
+    }
+
+    private void Update()
+    {
+        if (subtitlesEnabled != subtitleSetting.SubtitlesEnabled)
+        {
+            subtitlesEnabled = subtitleSetting.SubtitlesEnabled;
+        }
+    }
+
+
     /// <summary>
     /// This is the method other scripts should call in order to display subtitles.
     /// </summary>
