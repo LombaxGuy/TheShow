@@ -9,7 +9,7 @@ public class FOVSetting : MonoBehaviour
     [SerializeField]
     private float defaultFov = 90;
 
-    private float currentFov = 0;
+    private float currentFov;
 
     public float CurrentFov
     {
@@ -71,11 +71,24 @@ public class FOVSetting : MonoBehaviour
 
     private void OnSavePref()
     {
-        // Save currentFov
+        SaveLoad.SaveSettings("FOVsetting", currentFov);
+        Debug.Log(currentFov);
     }
 
     private void OnLoadPref()
     {
-        // Set currentFov
+        float savedFOV = SaveLoad.LoadSettingFloat("FOVsetting");
+
+        Debug.Log(savedFOV);
+
+        if(savedFOV != 0)
+        {
+            currentFov = savedFOV;
+            fovSlider.value = currentFov;
+        }
+        else
+        {
+            currentFov = defaultFov;
+        }
     }
 }
