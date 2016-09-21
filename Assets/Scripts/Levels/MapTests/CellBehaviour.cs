@@ -2,14 +2,23 @@
 using System.Collections;
 
 public class CellBehaviour : MonoBehaviour {
-
+    
+    [Tooltip("Is set to true, a death event will happen to the player. Else the room is considered the right way and wont kill the player.")]
     [SerializeField]
     private bool deathCell = false;
 
+    [Tooltip("Add the doors that connects the room.")]
     [SerializeField]
     private GameObject[] doors;
 
+    [Tooltip("Time when the player is trapped inside the room till its finish, death or not.")]
+    [SerializeField]
+    float timeTrapped = 4;
+
+
     float timer = 0;
+
+
 
     private GameObject player;
 
@@ -23,6 +32,22 @@ public class CellBehaviour : MonoBehaviour {
         	
 	}
 	
+    void OnEnable()
+    {
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    private void OnPlayerRespawn()
+    {
+        playerIsInside = false;
+        roomCleared = false;
+    }
+
 	// Update is called once per frame
 	void Update ()
     {
@@ -39,10 +64,12 @@ public class CellBehaviour : MonoBehaviour {
         if(deathCell == true)
         {
             player.transform.parent.transform.GetComponent<PlayerRespawn>().Kill();
+
         }
         else
         {
             //Play Sound
+            //Confetti?
             for (int i = 0; i < doors.Length; i++)
             {
                 doors[i].GetComponent<AnotherDoor>().OpenDoor();
@@ -54,10 +81,9 @@ public class CellBehaviour : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("I WAS HERE" + other.tag);
         if (other.transform.parent.tag == "Player" && playerIsInside == false && roomCleared == false)
         {
-            timer = 2;
+            timer = timeTrapped;
             playerIsInside = true;
             player = other.gameObject;
             for (int i = 0; i < doors.Length; i++)

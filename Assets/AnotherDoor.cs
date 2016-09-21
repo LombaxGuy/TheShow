@@ -3,9 +3,11 @@ using System.Collections;
 
 public class AnotherDoor : MonoBehaviour {
 
+    private Vector3 position;
+
 	// Use this for initialization
 	void Start () {
-
+        position = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -30,5 +32,20 @@ public class AnotherDoor : MonoBehaviour {
     public void CloseDoor()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y - 3, transform.position.z);
+    }
+
+    private void OnPlayerRespawn()
+    {
+        transform.position = position;
+    }
+
+    void OnEnable()
+    {
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
     }
 }
