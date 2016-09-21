@@ -11,6 +11,10 @@ public class ScreenShake : MonoBehaviour
 
     [SerializeField]
     private GameObject player;
+
+    [SerializeField]
+    private GameObject screenShakeCenter;
+
     private Animator playerAnimator;
 
 	// Use this for initialization
@@ -22,8 +26,15 @@ public class ScreenShake : MonoBehaviour
 
     private void SetScreenShakeValues()
     {
-        distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-
+        if (screenShakeCenter == null)
+        {
+            distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        }
+        else
+        {
+            distanceToPlayer = Vector3.Distance(player.transform.position, screenShakeCenter.transform.position);
+        }
+        
         if (distanceToPlayer <= screenShakeDistance)
         {
             screenShakeAmount = 1 - (distanceToPlayer / screenShakeDistance);
