@@ -64,31 +64,36 @@ public class Checkpoint : MonoBehaviour
     /// </summary> 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
-        {
-            PlayerRespawn respawnScript = other.GetComponent<PlayerRespawn>();
+        Transform player = other.GetComponent<Collider>().transform;
 
-            // Only if the player is alive can a checkpoint be triggered
-            if (respawnScript.IsAlive)
+        if (player.parent != null)
+            if (player.parent.tag == "Player")
             {
-                if (this.tag == "MasterRespawn")
-                {
-                    EventManager.RaiseOnSaveGame();
-                }
-                respawnScript.TargetSpawnpoint = transform.gameObject;
-                GetComponent<Collider>().enabled = false;
+                PlayerRespawn respawnScript = player.parent.GetComponent<PlayerRespawn>();
 
-                // If the 'savePositionsWithinBox' is not left blank (is not null)
-                if (savePositionsWithinBox)
+                // Only if the player is alive can a checkpoint be triggered
+                if (respawnScript.IsAlive)
                 {
-                    resetPositionsScript.UpdateListWithGameObjects(GetComponent<BoxCollider>());
+                    if (this.tag == "MasterRespawn")
+                    {
+                        EventManager.RaiseOnSaveGame();
+                    }
+                    Debug.Log("shit");
+                    respawnScript.TargetSpawnpoint = transform.gameObject;
+                    GetComponent<Collider>().enabled = false;
+
+                    // If the 'savePositionsWithinBox' is not left blank (is not null)
+                    if (savePositionsWithinBox)
+                    {
+                        resetPositionsScript.UpdateListWithGameObjects(GetComponent<BoxCollider>());
+                    }
+                    else
+                    {
+                        Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
+                    }
                 }
-                else
-                {
-                    Debug.Log("Checkpoint.cs: No positions will be saved from '" + transform.name + "' because 'savePositionsWithinBox' has not been set!");
-                }
-            }
-        }
+
+            }       
     }
 
     /// <summary>

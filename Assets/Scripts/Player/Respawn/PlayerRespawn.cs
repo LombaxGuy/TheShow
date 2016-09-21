@@ -18,6 +18,7 @@ public class PlayerRespawn : MonoBehaviour
 
     private bool isAlive;
 
+    [SerializeField]
     private GameObject targetSpawnpoint;
     private Animator animator;
 
