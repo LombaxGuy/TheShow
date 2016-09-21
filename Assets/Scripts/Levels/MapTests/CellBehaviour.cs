@@ -15,8 +15,26 @@ public class CellBehaviour : MonoBehaviour {
     [SerializeField]
     float timeTrapped = 4;
 
+    [SerializeField]
+    private bool[] allowedToOpen;
+    [SerializeField]
+    private int doorStartOpen = 0;
+
+    [SerializeField]
+    private bool startingRoom = false;
+
+    [SerializeField]
+    private GameObject particleObject;
+    private float particleTime = 3;
 
     float timer = 0;
+
+    [SerializeField]
+    private GameObject soundObject;
+    [SerializeField]
+    private AudioClip clip;
+
+    private AudioSource source;
 
 
 
@@ -29,7 +47,13 @@ public class CellBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        	
+        if(startingRoom == true)
+        {
+            doors[doorStartOpen].GetComponent<GridDoor>().OpenDoor();
+        }
+
+        source = soundObject.GetComponent<AudioSource>();
+        source.loop = false;
 	}
 	
     void OnEnable()
@@ -46,6 +70,18 @@ public class CellBehaviour : MonoBehaviour {
     {
         playerIsInside = false;
         roomCleared = false;
+
+        for (int i = 0; i < doors.Length; i++)
+        {
+            if(startingRoom == false)
+            {
+                doors[i].GetComponent<GridDoor>().CloseDoor();
+            }else if(startingRoom == true && i != doorStartOpen)
+            {
+                doors[i].GetComponent<GridDoor>().CloseDoor();
+            }
+                    
+        }
     }
 
 	// Update is called once per frame
@@ -56,6 +92,11 @@ public class CellBehaviour : MonoBehaviour {
         if(playerIsInside == true && timer <= 0)
         {
             DeathOrOpenDoors();
+        }
+
+        if(timer <= 0)
+        {
+            particleObject.SetActive(false);
         }
 	}
 
@@ -68,11 +109,16 @@ public class CellBehaviour : MonoBehaviour {
         }
         else
         {
-            //Play Sound
-            //Confetti?
+            
+            source.PlayOneShot(clip);
+            particleObject.SetActive(true);
+            timer = particleTime;
             for (int i = 0; i < doors.Length; i++)
             {
-                doors[i].GetComponent<AnotherDoor>().OpenDoor();
+                if(allowedToOpen[i] == true)
+                {
+                    doors[i].GetComponent<GridDoor>().OpenDoor();
+                }           
             }
         }
         roomCleared = true;
@@ -88,7 +134,10 @@ public class CellBehaviour : MonoBehaviour {
             player = other.gameObject;
             for (int i = 0; i < doors.Length; i++)
             {
-                doors[i].GetComponent<AnotherDoor>().CloseDoor();
+                if(doors[i].GetComponent<GridDoor>().DoorIsOpen == true)
+                {
+                    doors[i].GetComponent<GridDoor>().CloseDoor();
+                }           
             }
         }
     }
