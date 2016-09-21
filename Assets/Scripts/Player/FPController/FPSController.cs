@@ -53,6 +53,7 @@ public class FPSController : MonoBehaviour
     float timeSinceJump;
     float jumpAccelleration;
 
+
     Vector3 curJumpVelocity;
     #endregion
 
@@ -89,7 +90,8 @@ public class FPSController : MonoBehaviour
     [SerializeField]
     private float maxFallDistance = 20;
 
-    private Vector3 oldPlayerPos = new Vector3(0, 0, 0);
+    private float oldPlayerY = 0;
+    private float fallHeigth = 0;
 
     private bool comparePos = false;
 
@@ -153,6 +155,8 @@ public class FPSController : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
 
         animatorHead.SetFloat("headbobDegree", headbobDegree);
+
+        oldPlayerY = transform.position.y;
     }
 
     // Update is called once per frame
@@ -188,8 +192,7 @@ public class FPSController : MonoBehaviour
 
             if (!onGround && !comparePos)
             {
-                oldPlayerPos = this.transform.position;
-                comparePos = true;
+                CalculateFallHeigth();
             }
 
         }
@@ -539,7 +542,7 @@ public class FPSController : MonoBehaviour
 
     public void ComparePlayerPos()
     {
-        float fallDistance = oldPlayerPos.y - transform.position.y;
+        float fallDistance = fallHeigth - transform.position.y;
 
         if (fallDistance >= maxFallDistance)
         {
@@ -555,6 +558,21 @@ public class FPSController : MonoBehaviour
 
         }
 
+        oldPlayerY = transform.position.y;
         comparePos = false;
+    }
+
+    private void CalculateFallHeigth()
+    {
+        if(transform.position.y > oldPlayerY)
+        {
+            oldPlayerY = transform.position.y;
+        }
+        else
+        {
+            fallHeigth = transform.position.y;
+            Debug.Log(fallHeigth);
+            comparePos = true;
+        }
     }
 }
