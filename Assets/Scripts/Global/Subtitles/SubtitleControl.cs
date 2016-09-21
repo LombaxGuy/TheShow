@@ -38,9 +38,9 @@ public class SubtitleControl : MonoBehaviour
     public void StartSub(string subName, string levelName, float duration)
     {
         //Starts the coroutine if there is no subtitle currently being displayed
-            //Starts a coroutine of the DisplaySubtitles method
-            StartCoroutine(DisplaySubtitles(subName, levelName, duration));
-     
+        //Starts a coroutine of the DisplaySubtitles method
+        StartCoroutine(DisplaySubtitles(subName, levelName, duration));
+
     }
 
     /// <summary>
@@ -55,13 +55,16 @@ public class SubtitleControl : MonoBehaviour
         line = "";
         SubtitleContainer sc = SubtitleContainer.LoadSubtitle(levelName);
 
-        //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
-        foreach (Subtitle subtitle in sc.subtitles)
+        if (subtitlesEnabled == true)
         {
-            if (subtitle.name == (subName))
+            //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
+            foreach (Subtitle subtitle in sc.subtitles)
             {
-                line = subtitle.voiceLine;
-                break;
+                if (subtitle.name == (subName))
+                {
+                    line = subtitle.voiceLine;
+                    break;
+                }
             }
         }
 
