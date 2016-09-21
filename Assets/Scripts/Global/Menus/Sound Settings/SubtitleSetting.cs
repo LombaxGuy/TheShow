@@ -71,11 +71,30 @@ public class SubtitleSetting : MonoBehaviour
 
     private void OnSavePref()
     {
-        // Save subtitlesEnabled
+        SaveLoad.SaveSettings("Subtitles", subtitlesEnabled);
     }
 
     private void OnLoadPref()
     {
-        // Load subtitlesEnabled
+        int savedSubtitle = SaveLoad.LoadSettingInt("Subtitles");
+
+        if(savedSubtitle != -1)
+        {
+            if(savedSubtitle == 0)
+            {
+                subtitlesEnabled = false;
+                subtitleToggle.isOn = false;
+            }
+            else
+            {
+                subtitlesEnabled = true;
+                subtitleToggle.isOn = true;
+            }
+        }
+        else
+        {
+            subtitlesEnabled = defaultSubtitleSetting;
+            subtitleToggle.isOn = defaultSubtitleSetting;
+        }
     }
 }
