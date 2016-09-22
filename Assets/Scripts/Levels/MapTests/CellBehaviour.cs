@@ -2,10 +2,20 @@
 using System.Collections;
 
 public class CellBehaviour : MonoBehaviour {
-    
+
+    enum DeathWay { GAS, FIRE, ROOF, SPIKES, WATER, STUCK}
+
     [Tooltip("Is set to true, a death event will happen to the player. Else the room is considered the right way and wont kill the player.")]
     [SerializeField]
     private bool deathCell = false;
+
+    [SerializeField]
+    private DeathWay deathWay;
+    [SerializeField]
+    private float timeBeforeDeath = 2;
+    [SerializeField]
+    private GameObject gasObject;
+    private GameObject tempGasObject;
 
     [Tooltip("Add the doors that connects the room.")]
     [SerializeField]
@@ -36,13 +46,15 @@ public class CellBehaviour : MonoBehaviour {
 
     private AudioSource source;
 
-
-
     private GameObject player;
 
     private bool playerIsInside = false;
 
     private bool roomCleared = false;
+
+    private bool deathActivated = false;
+
+    
 
 	// Use this for initialization
 	void Start ()
@@ -70,12 +82,34 @@ public class CellBehaviour : MonoBehaviour {
     {
         playerIsInside = false;
         roomCleared = false;
+        switch (deathWay)
+        {
+            case DeathWay.GAS:
+                Destroy(tempGasObject);
+                break;
+            case DeathWay.FIRE:
+                break;
+            case DeathWay.ROOF:
+                break;
+            case DeathWay.SPIKES:
+                break;
+            case DeathWay.WATER:
+                break;
+            case DeathWay.STUCK:
+                break;
+            default:
+                break;
+        }
 
         for (int i = 0; i < doors.Length; i++)
         {
             if(startingRoom == false)
             {
-                doors[i].GetComponent<GridDoor>().CloseDoor();
+                if(doors[i].GetComponent<GridDoor>().DoorIsOpen == true)
+                {
+                    doors[i].GetComponent<GridDoor>().CloseDoor();
+                }
+               
             }else if(startingRoom == true && i != doorStartOpen)
             {
                 doors[i].GetComponent<GridDoor>().CloseDoor();
@@ -89,7 +123,7 @@ public class CellBehaviour : MonoBehaviour {
     {
         timer -= Time.deltaTime;
 
-        if(playerIsInside == true && timer <= 0)
+        if(playerIsInside == true && timer <= 0 && deathActivated == false)
         {
             DeathOrOpenDoors();
         }
@@ -98,18 +132,58 @@ public class CellBehaviour : MonoBehaviour {
         {
             particleObject.SetActive(false);
         }
+
+        if(deathActivated == true)
+        {
+            DeathWays();
+        }
 	}
+
+    private void DeathWays()
+    {
+        if(timer <= 0)
+        {
+            player.transform.parent.transform.GetComponent<PlayerRespawn>().Kill();
+            deathActivated = false;
+            Debug.Log(deathWay + " killed the Player");
+        }
+
+    }
 
     private void DeathOrOpenDoors()
     {
         if(deathCell == true)
         {
-            player.transform.parent.transform.GetComponent<PlayerRespawn>().Kill();
-
+            deathActivated = true;
+            timer = timeBeforeDeath;
+            switch (deathWay)
+            {
+                case DeathWay.GAS:
+                    tempGasObject = Instantiate(gasObject);
+                    tempGasObject.transform.SetParent(gameObject.transform.parent.transform);
+                    tempGasObject.transform.localPosition = new Vector3(0, -2, 0);
+                    break;
+                case DeathWay.FIRE:
+                    
+                    break;
+                case DeathWay.ROOF:
+                    
+                    break;
+                case DeathWay.SPIKES:
+                    
+                    break;
+                case DeathWay.WATER:
+                    
+                    break;
+                case DeathWay.STUCK:
+                    
+                    break;
+                default:
+                    break;
+            }
         }
         else
-        {
-            
+        {            
             source.PlayOneShot(clip);
             particleObject.SetActive(true);
             timer = particleTime;

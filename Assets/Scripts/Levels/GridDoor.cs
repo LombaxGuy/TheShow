@@ -34,7 +34,7 @@ public class GridDoor : MonoBehaviour
     }
 
     // Use this for initialization
-    private void Start()
+    private void Awake()
     {
         closedDoorPos = door.transform.position;
         closedDoorRot = door.transform.rotation;
