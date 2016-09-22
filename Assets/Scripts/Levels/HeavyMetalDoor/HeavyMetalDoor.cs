@@ -16,9 +16,16 @@ public class HeavyMetalDoor : MonoBehaviour
 
     private bool doorOpen = true;
 
+    private AudioSource audioPlayer;
+
+    [SerializeField]
+    [Tooltip("AudioClips. 0 = Close, 1 = Open")]
+    private AudioClip[] audioClips;
+
     // Use this for initialization
     void Start()
     {
+        audioPlayer = GetComponentInChildren<AudioSource>();
 
     }
 
@@ -34,6 +41,7 @@ public class HeavyMetalDoor : MonoBehaviour
                 doorAnimator.SetTrigger("triggerDoor");
                 cooldown = 0;
                 doorOpen = false;
+                audioPlayer.PlayOneShot(audioClips[0]);
             }
         }
         else
@@ -43,6 +51,7 @@ public class HeavyMetalDoor : MonoBehaviour
                 doorAnimator.SetTrigger("triggerDoor");
                 cooldown = 0;
                 doorOpen = true;
+                audioPlayer.PlayOneShot(audioClips[1]);
             }
         }
     }
