@@ -9,7 +9,7 @@ public class ScreenShake : MonoBehaviour
     [SerializeField]
     private float screenShakeDistance = 10.0f;
 
-    [SerializeField]
+    //[SerializeField]
     private GameObject player;
 
     [SerializeField]
