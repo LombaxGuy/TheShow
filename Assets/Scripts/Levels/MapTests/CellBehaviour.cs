@@ -3,23 +3,25 @@ using System.Collections;
 
 public class CellBehaviour : MonoBehaviour {
 
-    enum DeathWay { GAS, FIRE, ROOF, SPIKES, WATER, STUCK}
+    public enum DeathWay { GAS, FIRE, ROOF, SPIKES, WATER, STUCK}
 
     [Tooltip("Is set to true, a death event will happen to the player. Else the room is considered the right way and wont kill the player.")]
     [SerializeField]
     private bool deathCell = false;
 
-    [SerializeField]
-    private DeathWay deathWay;
+    //[SerializeField]
+    private DeathWay deathEvent;
     [SerializeField]
     private float timeBeforeDeath = 2;
-    [SerializeField]
+   // [SerializeField]
     private GameObject gasObject;
     private GameObject tempGasObject;
 
     [Tooltip("Add the doors that connects the room.")]
     [SerializeField]
-    private GameObject[] doors;
+    private GameObject[] doors = new GameObject[4];
+
+    private int doorCount;
 
     [Tooltip("Time when the player is trapped inside the room till its finish, death or not.")]
     [SerializeField]
@@ -54,10 +56,159 @@ public class CellBehaviour : MonoBehaviour {
 
     private bool deathActivated = false;
 
-    
+    public DeathWay DeathEvent
+    {
+        get { return deathEvent; }
+        set { deathEvent = value; }
+    }
 
-	// Use this for initialization
-	void Start ()
+    public GameObject GasObject
+    {
+        get { return gasObject; }
+        set { gasObject = value; }
+    }
+
+    public bool DeathCell
+    {
+        get { return deathCell; }
+
+        set { deathCell = value; }
+    }
+
+    public float TimeBeforeDeath
+    {
+        get
+        {
+            return timeBeforeDeath;
+        }
+
+        set
+        {
+            timeBeforeDeath = value;
+        }
+    }
+
+    public GameObject[] Doors
+    {
+        get
+        {
+            return doors;
+        }
+
+        set
+        {
+            doors = value;
+        }
+    }
+
+    public float TimeTrapped
+    {
+        get
+        {
+            return timeTrapped;
+        }
+
+        set
+        {
+            timeTrapped = value;
+        }
+    }
+
+    public bool[] AllowedToOpen
+    {
+        get
+        {
+            return allowedToOpen;
+        }
+
+        set
+        {
+            allowedToOpen = value;
+        }
+    }
+
+    public int DoorStartOpen
+    {
+        get
+        {
+            return doorStartOpen;
+        }
+
+        set
+        {
+            doorStartOpen = value;
+        }
+    }
+
+    public bool StartingRoom
+    {
+        get
+        {
+            return startingRoom;
+        }
+
+        set
+        {
+            startingRoom = value;
+        }
+    }
+
+    public GameObject ParticleObject
+    {
+        get
+        {
+            return particleObject;
+        }
+
+        set
+        {
+            particleObject = value;
+        }
+    }
+
+    public GameObject SoundObject
+    {
+        get
+        {
+            return soundObject;
+        }
+
+        set
+        {
+            soundObject = value;
+        }
+    }
+
+    public AudioClip Clip
+    {
+        get
+        {
+            return clip;
+        }
+
+        set
+        {
+            clip = value;
+        }
+    }
+
+    public int DoorCount
+    {
+        get
+        {
+            return doorCount;
+        }
+
+        set
+        {
+            doorCount = value;
+        }
+    }
+
+
+
+    // Use this for initialization
+    void Start ()
     {
         if(startingRoom == true)
         {
@@ -82,7 +233,7 @@ public class CellBehaviour : MonoBehaviour {
     {
         playerIsInside = false;
         roomCleared = false;
-        switch (deathWay)
+        switch (deathEvent)
         {
             case DeathWay.GAS:
                 Destroy(tempGasObject);
@@ -145,7 +296,7 @@ public class CellBehaviour : MonoBehaviour {
         {
             player.transform.parent.transform.GetComponent<PlayerRespawn>().Kill();
             deathActivated = false;
-            Debug.Log(deathWay + " killed the Player");
+            Debug.Log(deathEvent + " killed the Player");
         }
 
     }
@@ -156,7 +307,7 @@ public class CellBehaviour : MonoBehaviour {
         {
             deathActivated = true;
             timer = timeBeforeDeath;
-            switch (deathWay)
+            switch (deathEvent)
             {
                 case DeathWay.GAS:
                     tempGasObject = Instantiate(gasObject);
