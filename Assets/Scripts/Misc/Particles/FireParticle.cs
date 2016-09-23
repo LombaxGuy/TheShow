@@ -8,6 +8,12 @@ public class FireParticle : MonoBehaviour
     [SerializeField]
     private float changeIntensityInterval = 0.1f;
 
+    [SerializeField]
+    private float minIntensity = 3f;
+
+    [SerializeField]
+    private float maxIntensity = 3.5f;
+
     // Use this for initialization
     void Start()
     {
@@ -20,7 +26,7 @@ public class FireParticle : MonoBehaviour
     {
         while (true)
         {
-            fireLight.intensity = Random.Range(6.0f, 7.0f);
+            fireLight.intensity = Random.Range(minIntensity, maxIntensity);
             yield return new WaitForSeconds(changeIntensityInterval);
         }
     }
