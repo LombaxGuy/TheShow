@@ -5,43 +5,34 @@ public class CellBehaviour : MonoBehaviour {
 
     public enum DeathWay { GAS, FIRE, ROOF, SPIKES, WATER, STUCK}
 
-    [Tooltip("Is set to true, a death event will happen to the player. Else the room is considered the right way and wont kill the player.")]
-    [SerializeField]
     private bool deathCell = false;
-
-    //[SerializeField]
+    
     private DeathWay deathEvent;
-    [SerializeField]
+
     private float timeBeforeDeath = 2;
-   // [SerializeField]
+
     private GameObject gasObject;
+
     private GameObject tempGasObject;
 
-    [Tooltip("Add the doors that connects the room.")]
-    [SerializeField]
     private GameObject[] doors = new GameObject[4];
-    
-    [Tooltip("Time when the player is trapped inside the room till its finish, death or not.")]
-    [SerializeField]
+
     float timeTrapped = 4;
 
-    [SerializeField]
     private bool[] allowedToOpen;
-    [SerializeField]
+
     private int doorStartOpen = 0;
 
-    [SerializeField]
     private bool startingRoom = false;
 
-    [SerializeField]
     private GameObject particleObject;
+
     private float particleTime = 3;
 
     float timer = 0;
-
-    [SerializeField]
+    
     private GameObject soundObject;
-    [SerializeField]
+   
     private AudioClip clip;
 
     private AudioSource source;
@@ -69,125 +60,61 @@ public class CellBehaviour : MonoBehaviour {
     public bool DeathCell
     {
         get { return deathCell; }
-
         set { deathCell = value; }
     }
 
     public float TimeBeforeDeath
     {
-        get
-        {
-            return timeBeforeDeath;
-        }
-
-        set
-        {
-            timeBeforeDeath = value;
-        }
+        get { return timeBeforeDeath; }
+        set { timeBeforeDeath = value; }
     }
 
     public GameObject[] Doors
     {
-        get
-        {
-            return doors;
-        }
-
-        set
-        {
-            doors = value;
-        }
+        get { return doors; }
+        set { doors = value; }
     }
 
     public float TimeTrapped
     {
-        get
-        {
-            return timeTrapped;
-        }
-
-        set
-        {
-            timeTrapped = value;
-        }
+        get { return timeTrapped; }
+        set { timeTrapped = value; }
     }
 
     public bool[] AllowedToOpen
     {
-        get
-        {
-            return allowedToOpen;
-        }
-
-        set
-        {
-            allowedToOpen = value;
-        }
+        get { return allowedToOpen; }
+        set { allowedToOpen = value; }
     }
 
     public int DoorStartOpen
     {
-        get
-        {
-            return doorStartOpen;
-        }
-
-        set
-        {
-            doorStartOpen = value;
-        }
+        get { return doorStartOpen; }
+        set { doorStartOpen = value; }
     }
 
     public bool StartingRoom
     {
-        get
-        {
-            return startingRoom;
-        }
-
-        set
-        {
-            startingRoom = value;
-        }
+        get { return startingRoom; }
+        set { startingRoom = value; }
     }
 
     public GameObject ParticleObject
     {
-        get
-        {
-            return particleObject;
-        }
-
-        set
-        {
-            particleObject = value;
-        }
+        get { return particleObject; }
+        set { particleObject = value; }
     }
 
     public GameObject SoundObject
     {
-        get
-        {
-            return soundObject;
-        }
-
-        set
-        {
-            soundObject = value;
-        }
+        get { return soundObject; }
+        set { soundObject = value; }
     }
 
     public AudioClip Clip
     {
-        get
-        {
-            return clip;
-        }
-
-        set
-        {
-            clip = value;
-        }
+        get { return clip; }
+        set { clip = value; }
     }
 
 
