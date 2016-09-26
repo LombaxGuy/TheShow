@@ -19,7 +19,7 @@ public class CellBehaviour : MonoBehaviour {
 
     float timeTrapped = 4;
 
-    private bool[] allowedToOpen;
+    private bool[] allowedToOpen = new bool[4];
 
     private int doorStartOpen = 0;
 

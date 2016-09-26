@@ -36,6 +36,9 @@ public class CellBehaviourEditor : Editor {
 
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Check the one that is allowed to open:", EditorStyles.boldLabel);
+
+
+
         if(cellBehaviour.AllowedToOpen.Length == 4)
         {
             for (int i = 0; i < cellBehaviour.AllowedToOpen.Length; i++)
