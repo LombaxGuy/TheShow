@@ -20,9 +20,7 @@ public class CellBehaviour : MonoBehaviour {
     [Tooltip("Add the doors that connects the room.")]
     [SerializeField]
     private GameObject[] doors = new GameObject[4];
-
-    private int doorCount;
-
+    
     [Tooltip("Time when the player is trapped inside the room till its finish, death or not.")]
     [SerializeField]
     float timeTrapped = 4;
@@ -189,19 +187,6 @@ public class CellBehaviour : MonoBehaviour {
         set
         {
             clip = value;
-        }
-    }
-
-    public int DoorCount
-    {
-        get
-        {
-            return doorCount;
-        }
-
-        set
-        {
-            doorCount = value;
         }
     }
 

@@ -4,8 +4,7 @@ using UnityEditor;
 
 [CustomEditor(typeof(CellBehaviour))]
 public class CellBehaviourEditor : Editor {
-
-    private int doorCount;
+    
     private GameObject[] tempDoors;
 
     public override void OnInspectorGUI()
@@ -14,10 +13,20 @@ public class CellBehaviourEditor : Editor {
         CellBehaviour cellBehaviour = (CellBehaviour)target;
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Insert doors in the room:", EditorStyles.boldLabel);
-        for (int i = 0; i < cellBehaviour.Doors.Length; i++)
+        if(cellBehaviour.Doors.Length == 4)
         {
-            cellBehaviour.Doors[i] = (GameObject)EditorGUILayout.ObjectField("Door " + i + ":", cellBehaviour.Doors[i], typeof(GameObject), true);
+            for (int i = 0; i < cellBehaviour.Doors.Length; i++)
+            {
+                cellBehaviour.Doors[i] = (GameObject)EditorGUILayout.ObjectField("Door " + i + ":", cellBehaviour.Doors[i], typeof(GameObject), true);
+            }
+        }else
+        {
+            for (int i = 0; i < tempDoors.Length; i++)
+            {
+                tempDoors[i] = (GameObject)EditorGUILayout.ObjectField("Door " + i + ":", tempDoors[i], typeof(GameObject), true);
+            }
         }
+
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Check the one that is allowed to open:", EditorStyles.boldLabel);
         for (int i = 0; i < cellBehaviour.AllowedToOpen.Length; i++)
@@ -87,6 +96,10 @@ public class CellBehaviourEditor : Editor {
 
         if (GUI.changed)
         {
+            if(cellBehaviour.Doors.Length != 4)
+            {
+                cellBehaviour.Doors = tempDoors;
+            }
             EditorUtility.SetDirty(target);
         }
 
@@ -96,9 +109,10 @@ public class CellBehaviourEditor : Editor {
  
 
 // Use this for initialization
-void Start () {
-	
-	}
+void Start ()
+    {
+        tempDoors = new GameObject[4];
+    }
 	
 	// Update is called once per frame
 	void Update () {
