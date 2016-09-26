@@ -4,35 +4,35 @@ using System.Collections;
 public class CellBehaviour : MonoBehaviour {
 
     public enum DeathWay { GAS, FIRE, ROOF, SPIKES, WATER, STUCK}
-
+    [SerializeField]
     private bool deathCell = false;
-    
+    [SerializeField]
     private DeathWay deathEvent;
-
+    [SerializeField]
     private float timeBeforeDeath = 2;
-
+    [SerializeField]
     private GameObject gasObject;
 
     private GameObject tempGasObject;
-
+    [SerializeField]
     private GameObject[] doors = new GameObject[4];
 
     float timeTrapped = 4;
-
+    [SerializeField]
     private bool[] allowedToOpen = new bool[4];
-
+    [SerializeField]
     private int doorStartOpen = 0;
-
+    [SerializeField]
     private bool startingRoom = false;
-
+    [SerializeField]
     private GameObject particleObject;
 
     private float particleTime = 3;
 
     float timer = 0;
-    
+    [SerializeField]
     private GameObject soundObject;
-   
+    [SerializeField]
     private AudioClip clip;
 
     private AudioSource source;
