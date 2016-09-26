@@ -35,6 +35,9 @@ public class CellBehaviourEditor : Editor {
         }
 
         EditorGUILayout.LabelField("");
+        EditorGUILayout.LabelField("Time stuck in the room:", EditorStyles.boldLabel);
+        cellBehaviour.TimeTrapped = EditorGUILayout.FloatField(cellBehaviour.TimeTrapped);
+        EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Toggle death room:", EditorStyles.boldLabel);
         cellBehaviour.DeathCell = EditorGUILayout.Toggle(cellBehaviour.DeathCell);
 
@@ -49,11 +52,13 @@ public class CellBehaviourEditor : Editor {
             switch (cellBehaviour.DeathEvent)
             {
                 case CellBehaviour.DeathWay.GAS:
-                    EditorGUILayout.LabelField("Insert GAS particle prefab:");
+                    EditorGUILayout.LabelField("Insert GAS particle prefab:", EditorStyles.boldLabel);
                     cellBehaviour.GasObject = (GameObject)EditorGUILayout.ObjectField("Gas Particle Object:", cellBehaviour.GasObject, typeof(GameObject), false);
+                    EditorGUILayout.LabelField("Time it takes to kill the player:", EditorStyles.boldLabel);
+                    cellBehaviour.TimeBeforeDeath = EditorGUILayout.FloatField(cellBehaviour.TimeBeforeDeath);
                     break;
                 case CellBehaviour.DeathWay.FIRE:
-                    EditorGUILayout.LabelField("Insert FIRE particle prefab:");
+                    EditorGUILayout.LabelField("---COMING SOON---", EditorStyles.boldLabel);
                     break;
                 case CellBehaviour.DeathWay.ROOF:
                     EditorGUILayout.LabelField("---COMING SOON---", EditorStyles.boldLabel);
@@ -91,6 +96,9 @@ public class CellBehaviourEditor : Editor {
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Insert sound:", EditorStyles.boldLabel);
         cellBehaviour.Clip = (AudioClip)EditorGUILayout.ObjectField("Sound:", cellBehaviour.Clip, typeof(AudioClip), false);
+        EditorGUILayout.LabelField("");
+        EditorGUILayout.LabelField("Insert confetti particle:", EditorStyles.boldLabel);
+        cellBehaviour.ParticleObject = (GameObject)EditorGUILayout.ObjectField("Confetti:", cellBehaviour.ParticleObject, typeof(GameObject), true);
 
 
 
