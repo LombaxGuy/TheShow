@@ -20,8 +20,21 @@ public class GridDoor : MonoBehaviour
     private bool doorMoving = false;
     private bool doorIsOpen = false;
 
+    public bool DoorIsOpen
+    {
+        get
+        {
+            return doorIsOpen;
+        }
+
+        set
+        {
+            doorIsOpen = value;
+        }
+    }
+
     // Use this for initialization
-    private void Start()
+    private void Awake()
     {
         closedDoorPos = door.transform.position;
         closedDoorRot = door.transform.rotation;
@@ -77,7 +90,7 @@ public class GridDoor : MonoBehaviour
 
         door.transform.position = Vector3.Lerp(closedDoorPos, openedDoorPos, t);
 
-        doorIsOpen = true;
+        DoorIsOpen = true;
         doorMoving = false;
     }
 
@@ -98,7 +111,7 @@ public class GridDoor : MonoBehaviour
 
         door.transform.position = Vector3.Lerp(openedDoorPos, closedDoorPos, t);
 
-        doorIsOpen = false;
+        DoorIsOpen = false;
         doorMoving = false;
     }
 

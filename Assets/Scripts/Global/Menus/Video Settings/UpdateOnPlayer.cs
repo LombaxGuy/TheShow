@@ -14,22 +14,25 @@ public class UpdateOnPlayer : MonoBehaviour
     [SerializeField]
     private HeadbobSetting headbobSetting;
 
+    [SerializeField]
+    private string nameOfFirstLevel = "TestMap";
+
     private Animator playerAnimator;
     private Antialiasing playerAA;
 
     private float currentHeadbobAmount = 0;
     private int indexOfHeadbobLayer;
 
-    [SerializeField]
-    private string nameOfFirstLevel = "TestMap";
-
     // Update is called once per frame
     private void Update()
     {
+        // If playerAA or playerAnimator is null...
         if (playerAA == null || playerAnimator == null)
         {
-            if (SceneManager.GetActiveScene().name == nameOfFirstLevel)
+            //... and the scene is not the menu or the splashscreen.
+            if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "SplashScreen")
             {
+                //... the player variables are set.
                 playerAA = Camera.main.GetComponent<Antialiasing>();
                 playerAnimator = Camera.main.GetComponentInParent<Animator>();
 
@@ -39,11 +42,13 @@ public class UpdateOnPlayer : MonoBehaviour
         }
         else
         {
+            // The FOV is set
             if (Camera.main.fieldOfView != fovSetting.CurrentFov)
             {
                 Camera.main.fieldOfView = fovSetting.CurrentFov;
             }
 
+            // The amount of headbob is set
             if (currentHeadbobAmount != headbobSetting.CurrentValue)
             {
                 float setValue = headbobSetting.CurrentValue == 0 ? (0.01f) : (headbobSetting.CurrentValue / 100);
@@ -52,6 +57,7 @@ public class UpdateOnPlayer : MonoBehaviour
                 currentHeadbobAmount = playerAnimator.GetLayerWeight(indexOfHeadbobLayer) * 100;
             }
 
+            // The AA type is set
             switch (aASettings.CurrentType)
             {
                 case AAType.Disabled:
