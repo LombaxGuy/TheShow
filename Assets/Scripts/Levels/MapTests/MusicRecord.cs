@@ -90,6 +90,11 @@ public class MusicRecord : MonoBehaviour {
     }
 
 
+    private void PlayReworked()
+    {
+
+    }
+
     /// <summary>
     /// This method is to play the sounds in the list. For it can play the next sound, it needs to wait for the time between them. This can be played in loop or not.
     /// If it is not on loop it will reset it self.
@@ -100,11 +105,16 @@ public class MusicRecord : MonoBehaviour {
         {
             if (timeBetweenPlay <= 0)
             {
-                timeBetweenPlay = timeBetweenClip[whatToPlay];
+                if(whatToPlay < TimeBetweenClip.Count)
+                {
+                    timeBetweenPlay = timeBetweenClip[whatToPlay];
+                }
+   
                 soundSource.PlayOneShot(clipsQueue[whatToPlay]);
+
                 whatToPlay++;
 
-                if (whatToPlay >= clipsQueue.Count - 1)
+                if (whatToPlay >= clipsQueue.Count)
                 {
                     if (allowedLoop == true)
                     {
@@ -116,6 +126,8 @@ public class MusicRecord : MonoBehaviour {
                         soundsAllowedToPlay = false;
                     }
                 }
+
+
             }
         }
     }
@@ -163,6 +175,7 @@ public class MusicRecord : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             soundsAllowedToPlay = true;
+            whatToPlay = 0;
         }
 
     }
