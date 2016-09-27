@@ -2,9 +2,10 @@
 using System.Collections;
 
 
-public class Spinner : MonoBehaviour {
+public class Spinner : MonoBehaviour
+{
 
-    
+
 
     private bool isOut = false;
 
@@ -30,6 +31,9 @@ public class Spinner : MonoBehaviour {
     [SerializeField]
     [Tooltip("How long this stays out")]
     private float idleOutSeconds = 1;
+    [SerializeField]
+    [Tooltip("If the spinner should move at all times or only when triggered")]
+    public bool move = true;
 
     //used timers
     private float offsetTimer = 0;
@@ -43,9 +47,10 @@ public class Spinner : MonoBehaviour {
 
     // Use this for initialization
     //set positions and casing the rotation/piston mode
-    void Start () {
+    void Start()
+    {
 
-        
+
         startPos = transform.position;
         extPos = transform.position + transform.forward * distance;
 
@@ -59,44 +64,49 @@ public class Spinner : MonoBehaviour {
                 break;
         }
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
     /// <summary>
     /// controlling the time and checking positions
     /// </summary>
-	void Update () {
-        if (!isMoving)
-        {            
-            if (offsetTimer < offsetSeconds)
+    void Update()
+    {
+        if (move)
+        {
+            if (!isMoving)
             {
+                if (offsetTimer < offsetSeconds)
+                {
 
-                offsetTimer += Time.deltaTime;
+                    offsetTimer += Time.deltaTime;
+                }
+                else
+                {
+                    idleTimer += Time.deltaTime;
+                }
+            }
+
+            if (isOut)
+            {
+                if (idleTimer > idleOutSeconds)
+                {
+
+                    Move(extPos, startPos, pushOutTime);
+                    isOut = false;
+                    idleTimer = 0;
+                }
+
             }
             else
             {
-                idleTimer += Time.deltaTime;
-            }
-        }
-
-        if (isOut)
-        {
-            if (idleTimer > idleOutSeconds)
-            {
-
-                Move(extPos, startPos, pushOutTime);               
-                isOut = false;
-                idleTimer = 0;
+                if (idleTimer > idleInSeconds)
+                {
+                    Move(startPos, extPos, pushOutTime);
+                    isOut = true;
+                    idleTimer = 0;
+                }
             }
 
-        }
-        else
-        {
-            if (idleTimer > idleInSeconds)
-            {
-                Move(startPos, extPos, pushOutTime);             
-                isOut = true;
-                idleTimer = 0;
-            }
         }
 
     }
