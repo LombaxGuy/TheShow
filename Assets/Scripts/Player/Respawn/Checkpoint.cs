@@ -78,7 +78,7 @@ public class Checkpoint : MonoBehaviour
                     {
                         EventManager.RaiseOnSaveGame();
                     }
-                    Debug.Log("shit");
+
                     respawnScript.TargetSpawnpoint = transform.gameObject;
                     GetComponent<Collider>().enabled = false;
 
