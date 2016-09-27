@@ -7,12 +7,15 @@ public class CellBehaviourEditor : Editor {
     
     private GameObject[] tempDoors;
 
+    private bool[] AllowedToOpen;
+
     public override void OnInspectorGUI()
     {
 
         CellBehaviour cellBehaviour = (CellBehaviour)target;
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Insert doors in the room:", EditorStyles.boldLabel);
+
         if(cellBehaviour.Doors.Length == 4)
         {
             for (int i = 0; i < cellBehaviour.Doors.Length; i++)
@@ -21,6 +24,10 @@ public class CellBehaviourEditor : Editor {
             }
         }else
         {
+            if(tempDoors == null)
+            {
+                tempDoors = new GameObject[4];
+            }
             for (int i = 0; i < tempDoors.Length; i++)
             {
                 tempDoors[i] = (GameObject)EditorGUILayout.ObjectField("Door " + i + ":", tempDoors[i], typeof(GameObject), true);
@@ -29,10 +36,29 @@ public class CellBehaviourEditor : Editor {
 
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Check the one that is allowed to open:", EditorStyles.boldLabel);
-        for (int i = 0; i < cellBehaviour.AllowedToOpen.Length; i++)
+
+
+
+        if(cellBehaviour.AllowedToOpen.Length == 4)
         {
-            cellBehaviour.AllowedToOpen[i] = (bool)EditorGUILayout.Toggle("Door " + i + ":", cellBehaviour.AllowedToOpen[i]);
+            for (int i = 0; i < cellBehaviour.AllowedToOpen.Length; i++)
+            {
+                cellBehaviour.AllowedToOpen[i] = (bool)EditorGUILayout.Toggle("Door " + i + ":", cellBehaviour.AllowedToOpen[i]);
+            }
         }
+        else
+        {
+            if(AllowedToOpen == null)
+            {
+                AllowedToOpen = new bool[4];
+            }
+
+            for (int i = 0; i < AllowedToOpen.Length; i++)
+            {
+                AllowedToOpen[i] = (bool)EditorGUILayout.Toggle("Door " + i + ":", AllowedToOpen[i]);
+            }
+        }
+
 
         EditorGUILayout.LabelField("");
         EditorGUILayout.LabelField("Time stuck in the room:", EditorStyles.boldLabel);
