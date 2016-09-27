@@ -283,10 +283,10 @@ public class MovingPlatform : MonoBehaviour
     /// </summary>
     private void GameObjectMove()
     {
+
         if (locationOneFirst == true)
         {
             Move(true);
-
             if (Distance(true) < distance)
             {
                 locationOneFirst = false;
@@ -296,7 +296,6 @@ public class MovingPlatform : MonoBehaviour
         else
         {
             Move(false);
-
             if (Distance(false) < distance)
             {
                 locationOneFirst = true;
