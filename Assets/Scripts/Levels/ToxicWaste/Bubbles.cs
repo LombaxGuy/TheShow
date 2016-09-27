@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class Bubbles : MonoBehaviour
@@ -13,7 +14,6 @@ public class Bubbles : MonoBehaviour
 	void Start ()
     {
         system = GetComponent<ParticleSystem>();
-        Debug.Log(system.name);
 	}
 	
 	// Update is called once per frame
@@ -25,11 +25,9 @@ public class Bubbles : MonoBehaviour
 
         for (int i = 0; i < currentNumberOfParticles; i++)
         {
-            GameObject bubbel = (GameObject)Instantiate(Resources.Load<GameObject>("Level/ToxicWaste/Bubble"), emittedParticles[i].position + new Vector3(system.shape.box.x / 4, 0, -system.shape.box.z / 2), Quaternion.identity, transform);
+            GameObject bubble = (GameObject)Instantiate(Resources.Load<GameObject>("Level/ToxicWaste/Bubble"), emittedParticles[i].position + new Vector3(system.shape.box.x / 4, 0, -system.shape.box.z / 2), Quaternion.identity, transform);
 
-            float scale = Random.Range(0.25f, 0.75f);
-
-            bubbel.transform.localScale = new Vector3(scale, scale, scale);
+            bubble.GetComponent<Animator>().SetBool("bigBubble", Convert.ToBoolean(UnityEngine.Random.Range(0, 1))); 
 
             emittedParticles[i].lifetime = 0;
         }
