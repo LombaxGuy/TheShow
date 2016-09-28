@@ -4,8 +4,10 @@ using System.Collections;
 public class GazChamber : MonoBehaviour {
 
     private float gazTimer;
-    private bool entered = false;
+    private float gazY;
+    public bool entered = false;
     public bool inside = false;
+    public bool completed = false;
 
     [SerializeField]
     [Tooltip("The Time to solve the chamber")]
@@ -22,11 +24,22 @@ public class GazChamber : MonoBehaviour {
     private GameObject player;
 
     private Transform gaz;
-    
-	// Use this for initialization
-	void Start () {
-        gaz = gazArea.GetComponent<Transform>();
 
+
+    void OnEnable()
+    {
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    // Use this for initialization
+    void Start () {
+        gaz = gazArea.GetComponent<Transform>();
+        gazY = gaz.position.y;
 	
 	}
 	
@@ -34,20 +47,23 @@ public class GazChamber : MonoBehaviour {
 	void Update () {
 
         
-
-        if(entered)
+    if(!completed)
         {
-            gazTimer += Time.deltaTime;
-
-            if(gaz.position.y < 35)
-            gaz.position = new Vector3(gaz.position.x, gaz.position.y + 0.007f, gaz.position.z);
-
-            if (gazTimer > solveTime && inside == true)
+            if (entered)
             {
-                player.GetComponent<PlayerRespawn>().Kill();
-            }
+                gazTimer += Time.deltaTime;
 
+                if (gaz.position.y < 35)
+                    gaz.position = new Vector3(gaz.position.x, gaz.position.y + 0.007f, gaz.position.z);
+
+                if (gazTimer > solveTime && inside == true)
+                {
+                    player.GetComponent<PlayerRespawn>().Kill();
+                }
+
+            }
         }
+
 	
 	}
 
@@ -57,22 +73,23 @@ public class GazChamber : MonoBehaviour {
         Transform player = other.GetComponent<Collider>().transform;
             if (player.parent != null)
             if (player.parent.tag == "Player")
-            {               
-                if(!entered)
+            {   
+                if(!completed)
                 {
-                    inside = true;
-                    entered = true;
-                    enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(true);
-
-                    gazArea.Play();
-
-                    for (int i = 0; i < gazVents.Length; i++)
+                    if (entered)
                     {
-                        gazVents[i].Play();
-                    }
-                }
-            }
+                        inside = true;
+                        enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(true);
+                        gazArea.Play();
 
+                        for (int i = 0; i < gazVents.Length; i++)
+                        {
+                            gazVents[i].Play();
+                        }
+                    }
+                }            
+
+            }
     }
 
     void OnTriggerExit(Collider other)
@@ -82,6 +99,7 @@ public class GazChamber : MonoBehaviour {
             if (player.parent.tag == "Player")
             {
                 inside = false;
+                entered = false;
                 gazArea.Clear();
 
                 for (int i = 0; i < gazVents.Length; i++)
@@ -89,7 +107,38 @@ public class GazChamber : MonoBehaviour {
                     gazVents[i].Stop();
                 }
                 enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(false);
-                gameObject.SetActive(false);
+
+                completed = true;
             }
+
+    }
+
+    public void TurnOffSprinklers()
+    {
+        for (int i = 0; i < gazVents.Length; i++)
+        {
+            gazVents[i].Stop();
+        }
+    }
+
+    void OnPlayerRespawn()
+    {
+        if(!completed)
+        {
+            entered = false;
+            inside = false;
+            gazArea.Stop();
+            gazArea.Clear();
+            gazTimer = 0;
+            gaz.position = new Vector3(gaz.position.x, gazY, gaz.position.z);
+            enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+            for (int i = 0; i < gazVents.Length; i++)
+            {
+                gazVents[i].Stop();
+                gazVents[i].Clear();
+            }
+            gameObject.SetActive(false);
+        }
+
     }
 }

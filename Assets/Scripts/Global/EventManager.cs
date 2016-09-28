@@ -17,6 +17,8 @@ public class EventManager : MonoBehaviour
     public delegate void SettingsChangedDelegate();
     public delegate void ResetSettingsDelegate();
     public delegate void ResetToDefaultSettingsDelegate();
+    public delegate void ButtonPressed();
+    public delegate void TimerExpired();
 
     public static event PlayerDeathDelegate OnPlayerDeath;
     public static event PlayerRespawnDelegate OnPlayerRespawn;
@@ -32,6 +34,8 @@ public class EventManager : MonoBehaviour
     public static event SettingsChangedDelegate OnSettingsChanged;
     public static event ResetSettingsDelegate OnResetSettings;
     public static event ResetToDefaultSettingsDelegate OnResetToDefaultSettings;
+    public static event ButtonPressed OnButtonPressed;
+    public static event TimerExpired OnTimerExpired;
 
     public static void RaiseOnPlayerDeath()
     {
@@ -211,6 +215,32 @@ public class EventManager : MonoBehaviour
         else
         {
             Debug.Log("EventManager.cs: Event 'OnResetToDefaultSettings' not raised because nothing subscibes to it.");
+        }
+    }
+
+    public static void RaiseOnButtonPressed()
+    {
+        if(OnButtonPressed != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnButtonPressed' raised.");
+            OnButtonPressed.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnButtonPressed' not raised because nothing subscibes to it.");
+        }
+    }
+
+    public static void RaiseOnTimerExpired()
+    {
+        if (OnTimerExpired != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnTimerExpired' raised.");
+            OnTimerExpired.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnTimerExpired' not raised because nothing subscibes to it.");
         }
     }
 }
