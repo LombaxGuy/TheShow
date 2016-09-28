@@ -30,9 +30,10 @@ public class DoorBehaviourComponent : MonoBehaviour
     private bool onCooldown = false;
 
     [SerializeField]
-    private AudioClip lockedClip;
+    [Tooltip("AudioClips. 0 = Manipulate, 1 = Locked")]
+    private AudioClip[] audioClips;
 
-    private AudioSource audioSource;
+    private AudioSource audioPlayer;
 
 
     public bool Locked
@@ -64,9 +65,9 @@ public class DoorBehaviourComponent : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        audioPlayer = GetComponent<AudioSource>();
 
-        audioSource.loop = false;
+        audioPlayer.loop = false;
 
         if(Locked == true)
         {
@@ -123,6 +124,7 @@ public class DoorBehaviourComponent : MonoBehaviour
                 {
                     GetComponent<Rigidbody>().AddForce(-transform.forward * doorOpenForce);
                     StartCoroutine(StartDoorCooldown());
+                    audioPlayer.PlayOneShot(audioClips[0]);
                     //Debug.Log("Open door");
                 }
                 // Closes the door
@@ -130,13 +132,14 @@ public class DoorBehaviourComponent : MonoBehaviour
                 {
                     GetComponent<Rigidbody>().AddForce(transform.forward * doorOpenForce);
                     StartCoroutine(StartDoorCooldown());
+                    audioPlayer.PlayOneShot(audioClips[0]);
                     //Debug.Log("Close door");
                 }
 
             }
             else
             {
-                audioSource.PlayOneShot(lockedClip);
+                audioPlayer.PlayOneShot(audioClips[1]);
                 StartCoroutine(StartDoorCooldown());
             }
             
