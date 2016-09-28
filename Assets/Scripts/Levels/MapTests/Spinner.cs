@@ -9,6 +9,12 @@ public class Spinner : MonoBehaviour
 
     private bool isOut = false;
 
+    [SerializeField]
+    private bool useEvent = false;
+
+    [SerializeField]
+    private bool isActivated = true;
+
     private bool isMoving = false;
 
     [SerializeField]
@@ -45,6 +51,24 @@ public class Spinner : MonoBehaviour
 
     private Vector3 extPos;
 
+    private void OnEnable()
+    {
+        if (useEvent)
+        {
+            EventManager.OnTimerExpired += OnTimerExpired;
+            EventManager.OnButtonPressed += OnButtonPressed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (useEvent)
+        {
+            EventManager.OnTimerExpired -= OnTimerExpired;
+            EventManager.OnButtonPressed -= OnButtonPressed;
+        }
+    }
+
     // Use this for initialization
     //set positions and casing the rotation/piston mode
     void Start()
@@ -71,40 +95,44 @@ public class Spinner : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (move)
+        if (isActivated)
         {
-            if (!isMoving)
+            if (move)
             {
-                if (offsetTimer < offsetSeconds)
+                if (!isMoving)
                 {
+                    if (offsetTimer < offsetSeconds)
+                    {
 
-                    offsetTimer += Time.deltaTime;
+                        offsetTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        idleTimer += Time.deltaTime;
+                    }
+                }
+
+                if (isOut)
+                {
+                    if (idleTimer > idleOutSeconds)
+                    {
+
+                        Move(extPos, startPos, pushOutTime);
+                        isOut = false;
+                        idleTimer = 0;
+                    }
+
                 }
                 else
                 {
-                    idleTimer += Time.deltaTime;
-                }
-            }
-
-            if (isOut)
-            {
-                if (idleTimer > idleOutSeconds)
-                {
-
-                    Move(extPos, startPos, pushOutTime);
-                    isOut = false;
-                    idleTimer = 0;
+                    if (idleTimer > idleInSeconds)
+                    {
+                        Move(startPos, extPos, pushOutTime);
+                        isOut = true;
+                        idleTimer = 0;
+                    }
                 }
 
-            }
-            else
-            {
-                if (idleTimer > idleInSeconds)
-                {
-                    Move(startPos, extPos, pushOutTime);
-                    isOut = true;
-                    idleTimer = 0;
-                }
             }
 
         }
@@ -148,6 +176,16 @@ public class Spinner : MonoBehaviour
 
         StartCoroutine(CoroutineMove(from, to, timeInSeconds));
 
+    }
+
+    private void OnButtonPressed()
+    {
+        isActivated = true;
+    }
+
+    private void OnTimerExpired()
+    {
+        isActivated = false;
     }
 
 

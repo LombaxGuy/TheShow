@@ -12,8 +12,20 @@ public class GazChamberActivator : MonoBehaviour {
     [SerializeField]
     private bool atStart;
 
-	// Use this for initialization
-	void Start () {
+    private bool hasRun;
+
+    void OnEnable()
+    {
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -28,18 +40,34 @@ public class GazChamberActivator : MonoBehaviour {
             if (player.parent != null)
             if (player.parent.tag == "Player")
             {
-                if (atStart)
+                if(!hasRun)
                 {
-                    gazAreaTrigger.SetActive(true);
-                    gameObject.SetActive(false);
-                }
-                else if (!atStart)
-                {
-                gazAreaCloud.Stop();
-                gazAreaTrigger.GetComponent<GazChamber>().inside = false;
-                gameObject.SetActive(false);
+                    if (atStart)
+                    {
+                        gazAreaTrigger.SetActive(true);
+                        gazAreaTrigger.GetComponent<GazChamber>().entered = true;
+                        gazAreaTrigger.GetComponent<GazChamber>().inside = true;
+
+                    }
+                    else if (!atStart)
+                    {
+                        gazAreaCloud.Stop();
+                        gazAreaTrigger.GetComponent<GazChamber>().TurnOffSprinklers();
+                        gazAreaTrigger.GetComponent<GazChamber>().entered = false;
+                        gazAreaTrigger.GetComponent<GazChamber>().inside = false;
+
+                        
+                    }
+
+                    hasRun = true;
                 }
 
+
+            }
     }
+
+    void OnPlayerRespawn()
+    {
+        hasRun = false;
     }
 }
