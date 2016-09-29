@@ -6,9 +6,22 @@ public class ButtonPlatformEtender : MonoBehaviour {
 
     InteractableObjectComponent interactableObjectComponent;
     private bool isOut = false;
+    private float extendTimer = 0;
+    [SerializeField]
+    private float duration = 30;
 
     [SerializeField]
     private GameObject targetObject;
+
+    private void OnEnable()
+    {
+        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+    }
     // Use this for initialization
     void Start () {
         interactableObjectComponent = GetComponent<InteractableObjectComponent>();
@@ -26,8 +39,16 @@ public class ButtonPlatformEtender : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+    {
+        extendTimer += Time.deltaTime;
+        if (extendTimer > duration)
+        {
+            targetObject.GetComponent<PlatformExtender>().Substract();
+            isOut = false;
+            EventManager.RaiseOnTimerExpired();
+            extendTimer = 0;
+        }
 	}
 
     private void ThisSpecificBehaviour()
@@ -38,8 +59,13 @@ public class ButtonPlatformEtender : MonoBehaviour {
             targetObject.GetComponent<PlatformExtender>().Extend();
             isOut = true;
         }
-        
-        
 
+        EventManager.RaiseOnButtonPressed();
+
+    }
+
+    private void OnPlayerRespawn()
+    {
+        extendTimer = duration + 1;
     }
 }

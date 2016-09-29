@@ -13,19 +13,19 @@ public class SubtitleControl : MonoBehaviour
     [SerializeField]
     private SubtitleSetting subtitleSetting;
 
-    private bool subtitlesEnabled = false;
+    //private bool subtitlesEnabled = false;
 
-    public bool SubtitlesEnabled
-    {
-        get { return subtitlesEnabled; }
-    }
+    //public bool SubtitlesEnabled
+    //{
+    //    get { return subtitlesEnabled; }
+    //}
 
     private void Update()
     {
-        if (subtitlesEnabled != subtitleSetting.SubtitlesEnabled)
-        {
-            subtitlesEnabled = subtitleSetting.SubtitlesEnabled;
-        }
+        //if (subtitlesEnabled != subtitleSetting.SubtitlesEnabled)
+        //{
+        //    subtitlesEnabled = subtitleSetting.SubtitlesEnabled;
+        //}
     }
 
 
@@ -55,8 +55,8 @@ public class SubtitleControl : MonoBehaviour
         line = "";
         SubtitleContainer sc = SubtitleContainer.LoadSubtitle(levelName);
 
-        if (subtitlesEnabled == true)
-        {
+        //if (subtitlesEnabled == true)
+        //{
             //Looks through the contents of the subtitles List for an exact match of the number given when the method was called.
             foreach (Subtitle subtitle in sc.subtitles)
             {
@@ -66,7 +66,7 @@ public class SubtitleControl : MonoBehaviour
                     break;
                 }
             }
-        }
+        //}
 
         //If the line is not found a debug log is mad. If the line is found it's displayed and the isDisplayed bool is set to true
         if (line == "")

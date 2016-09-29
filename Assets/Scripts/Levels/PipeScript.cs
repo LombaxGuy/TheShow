@@ -17,38 +17,78 @@ public class PipeScript : MonoBehaviour
 
     private bool isFireing = false;
 
+    [SerializeField]
+    private bool isActivated = false;
+
+    [SerializeField]
+    private bool useEvent = true;
+
+
+    private void OnEnable()
+    {
+        if (useEvent)
+        {
+            EventManager.OnTimerExpired += OnTimerExpired;
+            EventManager.OnButtonPressed += OnButtonPressed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (useEvent)
+        {
+            EventManager.OnTimerExpired -= OnTimerExpired;
+            EventManager.OnButtonPressed -= OnButtonPressed;
+        }
+    }
 
     // Use this for initialization
     void Start()
     {
         coolDown -= offSet;
+        if (!useEvent)
+        {
+            isActivated = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        coolDown += Time.deltaTime;
-
-        if (isFireing == false)
+        if (isActivated)
         {
-            if (coolDown > idleTime)
+            coolDown += Time.deltaTime;
+            if (isFireing == false)
             {
-                coolDown = 0;
-                system.Play();
-                isFireing = true;
-                transform.GetChild(0).gameObject.SetActive(true);
-            }
+                if (coolDown > idleTime)
+                {
+                    coolDown = 0;
+                    system.Play();
+                    isFireing = true;
+                    transform.GetChild(0).gameObject.SetActive(true);
+                }
 
-        }
-        else
-        {
-            if (coolDown > duration)
+            }
+            else
             {
-                coolDown = 0;
-                isFireing = false;
-                transform.GetChild(0).gameObject.SetActive(false);
+                if (coolDown > duration)
+                {
+                    coolDown = 0;
+                    isFireing = false;
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
             }
         }
 
+    }
+
+    private void OnButtonPressed()
+    {
+        isActivated = true;
+    }
+
+    private void OnTimerExpired()
+    {
+        isActivated = false;
     }
 }
