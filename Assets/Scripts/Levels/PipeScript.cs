@@ -15,6 +15,13 @@ public class PipeScript : MonoBehaviour
 
     private float coolDown;
 
+    [SerializeField]
+    private GameObject flameLight;
+
+    private Light lightInt;
+
+    private bool flameOn = false;
+    private bool lightIntensity = false;
     private bool isFireing = false;
 
     [SerializeField]
@@ -45,6 +52,10 @@ public class PipeScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+       lightInt = flameLight.GetComponent<Light>();
+       
+       lightInt.intensity = 0;
+
         coolDown -= offSet;
         if (!useEvent)
         {
@@ -66,6 +77,9 @@ public class PipeScript : MonoBehaviour
                     system.Play();
                     isFireing = true;
                     transform.GetChild(0).gameObject.SetActive(true);
+                    flameOn = true;
+                    
+                    lightInt.intensity = 5;
                 }
 
             }
@@ -75,8 +89,35 @@ public class PipeScript : MonoBehaviour
                 {
                     coolDown = 0;
                     isFireing = false;
-                    transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(0).gameObject.SetActive(false);                    
+                    flameOn = false;
+                    
                 }
+
+
+            }
+            if (flameOn)
+            {
+                float r;
+                
+                if(lightIntensity)
+                {
+                    r = Random.Range(3, 5);
+                    lightInt.intensity = r;
+                    lightIntensity = false;
+                }
+                if(!lightIntensity)
+                {
+                    r = Random.Range(3, 5);
+                    lightInt.intensity = r;
+                    lightIntensity = true;
+                }
+                
+            }
+
+            if (!flameOn && lightInt.intensity > 0)
+            {
+                lightInt.intensity = lightInt.intensity - 8 * Time.deltaTime;
             }
         }
 
@@ -89,6 +130,8 @@ public class PipeScript : MonoBehaviour
 
     private void OnTimerExpired()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
         isActivated = false;
+        lightInt.intensity = 0;
     }
 }

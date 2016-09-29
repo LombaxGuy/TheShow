@@ -53,7 +53,7 @@ public class Dropper : MonoBehaviour {
         {
             Debug.DrawRay(transform.position, Vector3.down * 20, Color.red);
 
-            botPosition = new Vector3(transform.position.x, transform.position.y - hit.distance + 0.5f, transform.position.z);
+            botPosition = new Vector3(transform.position.x, transform.position.y - hit.distance, transform.position.z);
         }
 
     }

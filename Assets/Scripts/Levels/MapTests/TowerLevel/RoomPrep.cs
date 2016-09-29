@@ -68,10 +68,10 @@ public class RoomPrep : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            Initiate();
-        }
+        //if(Input.GetKeyDown(KeyCode.F))
+        //{
+        //    Initiate();
+        //}
 
         if(initiated)
         {
@@ -95,6 +95,16 @@ public class RoomPrep : MonoBehaviour {
         }
         
 
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Transform player = other.GetComponent<Collider>().transform;
+        if (player.parent != null)
+            if (player.parent.tag == "Player")
+            {
+                Initiate();
+            }
     }
 
     public void Initiate()
