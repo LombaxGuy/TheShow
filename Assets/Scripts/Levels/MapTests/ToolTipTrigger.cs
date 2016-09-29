@@ -1,31 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ToolTipTrigger : MonoBehaviour {
+public class ToolTipTrigger : MonoBehaviour
+{
+    private GameObject worldManager;
 
     [SerializeField]
-    private GameObject manager;
+    private IntroSequence introSequence;
 
     [SerializeField]
     private string messege;
 
     // Use this for initialization
-    void Start () {
-        manager = GameObject.Find("WorldManager");
-	
-	}
+    void Start()
+    {
+        worldManager = GameObject.Find("WorldManager");
+    }
 
     void OnTriggerEnter(Collider other)
     {
         Transform player = other.GetComponent<Collider>().transform;
 
-        if(player.parent != null)
-        if(player.parent.tag == "Player")
+        if (player.parent != null)
         {
-            
-            IntroSequence.lightEntered = true;
-            IntroSequence.inLight = true;
+            if (player.parent.tag == "Player")
+            {
 
+                introSequence.lightEntered = true;
+                introSequence.inLight = true;
+
+            }
         }
     }
 
@@ -33,10 +37,12 @@ public class ToolTipTrigger : MonoBehaviour {
     {
         Transform player = other.GetComponent<Collider>().transform;
 
-            if (player.parent != null)
+        if (player.parent != null)
+        {
             if (player.parent.tag == "Player")
             {
-                IntroSequence.inLight = false;
+                introSequence.inLight = false;
             }
+        }
     }
 }

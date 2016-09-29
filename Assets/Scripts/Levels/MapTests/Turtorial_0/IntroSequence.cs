@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IntroSequence : MonoBehaviour {
-    [SerializeField]
-    private GameObject manager;
+public class IntroSequence : MonoBehaviour
+{
+    private GameObject worldManager;
+
     [SerializeField]
     private GameObject trigger;
     [SerializeField]
@@ -16,13 +17,13 @@ public class IntroSequence : MonoBehaviour {
     [SerializeField]
     private AudioClip[] playlist;
 
-    public static bool lightEntered = false;
-    public static bool inLight = false;
-    public static bool firstCleared = false;
-    public static bool buttonPressed = false;
-    public static bool passedJump = false;
-    public static bool buttonRoom = false;
-    public static bool wrongWay = false;
+    public bool lightEntered = false;
+    public bool inLight = false;
+    public bool firstCleared = false;
+    public bool buttonPressed = false;
+    public bool passedJump = false;
+    public bool buttonRoom = false;
+    public bool wrongWay = false;
 
 
     private bool waited = false;
@@ -68,12 +69,14 @@ public class IntroSequence : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
-       manager = GameObject.Find("WorldManager");
+    void Start ()
+    {
+       worldManager = GameObject.Find("WorldManager");
+
        stage = 0;
-       sManager = manager.GetComponent<SpeakerManager>();
-       subManager = manager.GetComponent<SubtitleControl>();
-       tooltipManager = manager.GetComponent<Tooltip>();
+       sManager = worldManager.GetComponent<SpeakerManager>();
+       subManager = worldManager.GetComponent<SubtitleControl>();
+       tooltipManager = worldManager.GetComponent<Tooltip>();
 
     }
 	
@@ -110,7 +113,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 2 && stage == 0)
         {
             //Welcome
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub1", "Tutorial_0", 3);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub1", "Tutorial_0", 3);
             StagePrep();
             sManager.PlaySpeakerSoundOnce(playlist[0]);
             
@@ -119,8 +122,8 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 10 && stage == 1)
         {
             //Please step into the light
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub2", "Tutorial_0", 4);
-            manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use Wasd to move around", 3);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub2", "Tutorial_0", 4);
+            worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use Wasd to move around", 3);
             StagePrep();
             trigger.SetActive(true);
         }
@@ -135,7 +138,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 0)
         {
             //Annoyed 1
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub4AN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub4AN", "Tutorial_0", 2);
             timer = 0;
             annoyance += 1;
             waited = true;
@@ -146,7 +149,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 1)
         {
             //Annoyed 2
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub5AN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub5AN", "Tutorial_0", 2);
             timer = 0;
             annoyance += 1;
             sManager.PlaySpeakerSoundOnce(playlist[2]);
@@ -156,7 +159,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 2)
         {
             //Annoyed 3
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub6AN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub6AN", "Tutorial_0", 2);
             timer = 0;
             annoyance += 1;
             sManager.PlaySpeakerSoundOnce(playlist[3]);
@@ -166,7 +169,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 3)
         {
             //Annoyed 3
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", "Tutorial_0", 2);
             timer = 0;
             annoyance += 1;
             sManager.PlaySpeakerSoundOnce(playlist[4]);
@@ -175,7 +178,7 @@ public class IntroSequence : MonoBehaviour {
 
         if (timer > 24 && annoyance == 4)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub7AN", "Tutorial_0", 2);
             //Annoyed 3
             timer = 0;
             annoyance += 1;
@@ -186,7 +189,7 @@ public class IntroSequence : MonoBehaviour {
         if (timer > 24 && annoyance == 5)
         {
             //Annoyed 4
-            manager.GetComponent<SubtitleControl>().StartSub("T0SubAN", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0SubAN", "Tutorial_0", 2);
             timer = 0;
             sManager.PlaySpeakerSoundOnce(playlist[5]);
 
@@ -199,7 +202,7 @@ public class IntroSequence : MonoBehaviour {
         {
             jumps = 0;
             //normal
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub10", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub10", "Tutorial_0", 2);
             StagePrep();
             sManager.PlaySpeakerSoundOnce(playlist[7]);
         }
@@ -208,7 +211,7 @@ public class IntroSequence : MonoBehaviour {
         {
             jumps = 0;
             //Finally
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub9", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub9", "Tutorial_0", 2);
             StagePrep();
             sManager.PlaySpeakerSoundOnce(playlist[6]);
         }
@@ -218,7 +221,7 @@ public class IntroSequence : MonoBehaviour {
             if (timer > 3 && jumps >= 1 && stage == 3)
             {
                 jumps = 0;
-                manager.GetComponent<SubtitleControl>().StartSub("T0Sub11", "Tutorial_0", 2);
+                worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub11", "Tutorial_0", 2);
                 StagePrep();
                 sManager.PlaySpeakerSoundOnce(playlist[8]);
             }
@@ -226,28 +229,28 @@ public class IntroSequence : MonoBehaviour {
             if (timer > 3 && jumps >= 1 && stage == 4)
             {
                 jumps = 0;
-                manager.GetComponent<SubtitleControl>().StartSub("T0Sub12", "Tutorial_0", 2);
+                worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub12", "Tutorial_0", 2);
                 StagePrep();
                 sManager.PlaySpeakerSoundOnce(playlist[9]);
             }
             if (timer > 3 && jumps >= 1 && stage == 5)
             {
                 jumps = 0;
-                manager.GetComponent<SubtitleControl>().StartSub("T0Sub13", "Tutorial_0", 2);
+                worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub13", "Tutorial_0", 2);
                 StagePrep();
                 sManager.PlaySpeakerSoundOnce(playlist[10]);
             }
             if (timer > 3 && jumps >= 1 && stage == 6)
             {
                 jumps = 0;
-                manager.GetComponent<SubtitleControl>().StartSub("T0Sub14", "Tutorial_0", 2);
+                worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub14", "Tutorial_0", 2);
                 StagePrep();
                 sManager.PlaySpeakerSoundOnce(playlist[11]);
             }
 
             if (timer > 3 && jumps >= 3 && stage == 7 && !waited)
             {
-                manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("gotta go fast", 2);
+                worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds("gotta go fast", 2);
                 //gj
                 door.GetComponent<DoorBehaviourComponent>().LockDoor(false);
                 doorTrigger.SetActive(true);
@@ -256,7 +259,7 @@ public class IntroSequence : MonoBehaviour {
 
             if (timer > 3 && jumps >= 3 && stage == 7 && waited)
             {
-                manager.GetComponent<Tooltip>().DisplayTooltipForSeconds("ur 2 slow", 2);
+                worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds("ur 2 slow", 2);
                 //could have gone faster
                 door.GetComponent<DoorBehaviourComponent>().LockDoor(false);
                 doorTrigger.SetActive(true);
@@ -270,25 +273,25 @@ public class IntroSequence : MonoBehaviour {
 
         if(timer > 3 && stage == 8)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub16", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub16", "Tutorial_0", 2);
             StagePrep();
         }
 
         if (timer > 3 && stage == 9)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub17", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub17", "Tutorial_0", 2);
             StagePrep();
         }
 
         if (timer > 3 && stage == 10)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub18", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub18", "Tutorial_0", 2);
             StagePrep();
         }
 
         if (timer > 3 && stage == 11)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub19", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub19", "Tutorial_0", 2);
             StagePrep();
         }
 
@@ -298,19 +301,19 @@ public class IntroSequence : MonoBehaviour {
     {
         if(timer > 3 && stage == 12)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub20", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub20", "Tutorial_0", 2);
             StagePrep();
         }
 
         if (timer > 3 && stage == 13)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub27", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub27", "Tutorial_0", 2);
             StagePrep();
         }
 
         if (timer > 3 && stage == 14)
         {
-            manager.GetComponent<SubtitleControl>().StartSub("T0Sub28", "Tutorial_0", 2);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub28", "Tutorial_0", 2);
             StagePrep();
         }
 
