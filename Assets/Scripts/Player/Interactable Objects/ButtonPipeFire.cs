@@ -11,6 +11,8 @@ public class ButtonPipeFire : MonoBehaviour {
 
     private bool pipeFireing = true;
 
+    public bool outOfArea = false;
+
 
 
     private void OnEnable()
@@ -62,7 +64,7 @@ public class ButtonPipeFire : MonoBehaviour {
 
     private void OnPlayerRespawn()
     {
-        if (pipeFireing == false)
+        if (pipeFireing == false && outOfArea == false)
         {
             for (int i = 0; i < pipeFlames.Length; i++)
             {
