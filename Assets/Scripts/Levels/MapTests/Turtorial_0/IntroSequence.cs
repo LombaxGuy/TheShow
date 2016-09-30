@@ -113,7 +113,7 @@ public class IntroSequence : MonoBehaviour
         if (timer > 2 && stage == 0)
         {
             //Welcome
-            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub1", "Tutorial_0", 3);
+            worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub1", "Tutorial_0", playlist[0].length + 1);
             StagePrep();
             sManager.PlaySpeakerSoundOnce(playlist[0]);
             
@@ -123,7 +123,9 @@ public class IntroSequence : MonoBehaviour
         {
             //Please step into the light
             worldManager.GetComponent<SubtitleControl>().StartSub("T0Sub2", "Tutorial_0", 4);
-            worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds("Use Wasd to move around", 3);
+
+            string tooltip = string.Format("Use {0}, {1}, {2} ,{3} to move around", KeyBindings.KeyMoveForward, KeyBindings.KeyMoveLeft, KeyBindings.KeyMoveBackward, KeyBindings.KeyMoveRight);
+            worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds(tooltip, 3);
             StagePrep();
             trigger.SetActive(true);
         }
