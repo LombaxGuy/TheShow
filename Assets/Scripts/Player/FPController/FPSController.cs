@@ -91,7 +91,7 @@ public class FPSController : MonoBehaviour
     private float maxFallDistance = 20;
 
     private float oldPlayerY = 0;
-    private float fallHeigth = 0;
+    public float fallHeigth = 0;
 
     private bool comparePos = false;
 

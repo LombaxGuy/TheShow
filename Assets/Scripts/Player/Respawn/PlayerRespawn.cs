@@ -16,6 +16,7 @@ public class PlayerRespawn : MonoBehaviour
 
     private float deathCooldown = 2;
 
+    [SerializeField]
     private bool isAlive;
 
     [SerializeField]
@@ -106,6 +107,7 @@ public class PlayerRespawn : MonoBehaviour
     {
         isAlive = false;
         deathCooldown = defaultDeathCooldown;
+        gameObject.GetComponent<FPSController>().fallHeigth = targetSpawnpoint.GetComponent<Checkpoint>().GetRespawnTransform().position.y;
 
         bool randomAnim = Random.Range(0, 2) == 0 ? randomAnim = false : randomAnim = true;
 
