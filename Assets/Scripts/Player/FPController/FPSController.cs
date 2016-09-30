@@ -256,8 +256,10 @@ public class FPSController : MonoBehaviour
         if (Input.GetKey(KeyBindings.KeyMoveCrouch))
         {
             crouchKey = true;
+        }
 
-            //Adds the crouchSpeedModifier to the move vector.
+        if (crouching)
+        {
             moveVector *= crouchSpeedModifier;
         }
 
@@ -336,7 +338,7 @@ public class FPSController : MonoBehaviour
                 rigid.velocity = curJumpVelocity;
             }
         }
-        
+
         //If the crouch key is held, the player isn't already crouching.
         if (crouchKey && !crouching)
         {
