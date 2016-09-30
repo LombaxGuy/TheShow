@@ -25,7 +25,7 @@ public class PipeScript : MonoBehaviour
     private bool isFireing = false;
 
     [SerializeField]
-    private bool isActivated = false;
+    public bool isActivated = false;
 
     [SerializeField]
     private bool useEvent = true;
