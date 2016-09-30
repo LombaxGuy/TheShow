@@ -68,12 +68,12 @@ public class RoomPrep : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //if(Input.GetKeyDown(KeyCode.F))
-        //{
-        //    Initiate();
-        //}
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Initiate();
+        }
 
-        if(initiated)
+        if (initiated)
         {
             
             timer += Time.deltaTime;

@@ -133,5 +133,6 @@ public class PipeScript : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         isActivated = false;
         lightInt.intensity = 0;
+        flameOn = false;
     }
 }
