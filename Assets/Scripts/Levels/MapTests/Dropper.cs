@@ -122,7 +122,10 @@ public class Dropper : MonoBehaviour {
             yield return null;
         }
 
-
+        if(isDown)
+        {
+            gameObject.GetComponent<ScreenShake>().TriggerScreenShake();
+        }
         transform.position = Vector3.Lerp(from, to, t);
         isMoving = false;
     }

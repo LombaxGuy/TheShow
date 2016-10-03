@@ -10,6 +10,12 @@ public class Checkpoint : MonoBehaviour
 
     private Transform resetPlayerDirectionTransform;
 
+    [SerializeField]
+    private ParticleSystem[] confetti;
+
+    [SerializeField]
+    private AudioSource musicPlayer;
+
     private GameObject worldManager;
 
     private void OnEnable()
@@ -33,6 +39,7 @@ public class Checkpoint : MonoBehaviour
     {
         resetPlayerDirectionTransform = transform.GetChild(0).transform;
         worldManager = GameObject.Find("WorldManager");
+        musicPlayer = GetComponent<AudioSource>();
 
         if (worldManager != null)
         {
@@ -78,6 +85,13 @@ public class Checkpoint : MonoBehaviour
                     {
                         EventManager.RaiseOnSaveGame();
                     }
+
+
+                    for (int i = 0; i < confetti.Length; i++)
+                    {
+                        confetti[i].Play();
+                    }
+                    musicPlayer.Play();
 
                     respawnScript.TargetSpawnpoint = transform.gameObject;
                     GetComponent<Collider>().enabled = false;
