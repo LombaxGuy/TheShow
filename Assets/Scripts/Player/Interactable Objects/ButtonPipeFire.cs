@@ -54,7 +54,7 @@ public class ButtonPipeFire : MonoBehaviour {
         {
             for (int i = 0; i < pipeFlames.Length; i++)
             {
-                pipeFlames[i].GetComponent<PipeScript>().isActivated = false;
+                pipeFlames[i].GetComponent<PipeScript>().OnTimerExpired();
                 pipeFireing = false;
             }
         }
