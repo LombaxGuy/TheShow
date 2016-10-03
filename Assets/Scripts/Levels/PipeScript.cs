@@ -30,6 +30,12 @@ public class PipeScript : MonoBehaviour
     [SerializeField]
     private bool useEvent = true;
 
+    private static AudioSource audioPlayer;
+
+    [SerializeField]
+    [Tooltip("AudioClips. 0 = Ignition, 1 = Flame")]
+    private AudioClip[] audioClips;
+
 
     private void OnEnable()
     {
@@ -61,6 +67,8 @@ public class PipeScript : MonoBehaviour
         {
             isActivated = true;
         }
+
+        audioPlayer = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -78,8 +86,8 @@ public class PipeScript : MonoBehaviour
                     isFireing = true;
                     transform.GetChild(0).gameObject.SetActive(true);
                     flameOn = true;
-                    
                     lightInt.intensity = 5;
+                    audioPlayer.PlayOneShot(audioClips[1]);
                 }
 
             }
@@ -91,7 +99,8 @@ public class PipeScript : MonoBehaviour
                     isFireing = false;
                     transform.GetChild(0).gameObject.SetActive(false);                    
                     flameOn = false;
-                    
+                    audioPlayer.PlayOneShot(audioClips[0]);
+
                 }
 
 
