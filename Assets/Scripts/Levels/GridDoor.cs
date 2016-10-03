@@ -7,6 +7,9 @@ public class GridDoor : MonoBehaviour
     private GameObject door;
 
     [SerializeField]
+    private bool isOpen;
+
+    [SerializeField]
     private Transform openedDoorTransform;
 
     private Vector3 openedDoorPos;
@@ -40,6 +43,11 @@ public class GridDoor : MonoBehaviour
         closedDoorRot = door.transform.rotation;
 
         openedDoorPos = openedDoorTransform.position;
+
+        if(isOpen)
+        {
+            OpenDoor();
+        }
     }
 
     // Update is called once per frame

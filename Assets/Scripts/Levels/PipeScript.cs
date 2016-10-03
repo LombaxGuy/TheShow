@@ -137,7 +137,7 @@ public class PipeScript : MonoBehaviour
         isActivated = true;
     }
 
-    private void OnTimerExpired()
+    public void OnTimerExpired()
     {
         transform.GetChild(0).gameObject.SetActive(false);
         isActivated = false;

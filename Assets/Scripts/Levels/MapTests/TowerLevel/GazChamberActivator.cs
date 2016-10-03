@@ -7,6 +7,9 @@ public class GazChamberActivator : MonoBehaviour {
     private GameObject gazAreaTrigger;
 
     [SerializeField]
+    private GameObject door;
+
+    [SerializeField]
     private ParticleSystem gazAreaCloud;
 
     [SerializeField]
@@ -55,7 +58,7 @@ public class GazChamberActivator : MonoBehaviour {
                         gazAreaTrigger.GetComponent<GazChamber>().TurnOffSprinklers();
                         gazAreaTrigger.GetComponent<GazChamber>().entered = false;
                         gazAreaTrigger.GetComponent<GazChamber>().inside = false;
-
+                        door.GetComponent<GridDoor>().OpenDoor();
                         
                     }
 
