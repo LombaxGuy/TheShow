@@ -1,34 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Level0_Room2 : MonoBehaviour
+public class Level0_Room2 : RoomComponent
 {
-    private GameObject worldManager;
-
-    private SpeakerManager speakerManager;
-    private SubtitleControl subtitleManager;
-    private Tooltip tooltipManager;
-
-    [SerializeField]
-    private AudioClip[] room2Voicelines;
-
-    private float timer = 0;
-    private float timeUntilLineEnds = 0;
-    private bool entered = false;
-
-    private int stage = 0;
-
-    public float Timer
-    {
-        get { return timer; }
-    }
-
-    public bool Entered
-    {
-        get { return entered; }
-        set { entered = value; }
-    }
-
     // Use this for initialization
     void Start()
     {
@@ -49,7 +23,7 @@ public class Level0_Room2 : MonoBehaviour
             // When the player enteres the room.
             case 0:
 
-                if (entered)
+                if (playerInRoom)
                 {
                     stage = 10;
                 }
@@ -57,7 +31,10 @@ public class Level0_Room2 : MonoBehaviour
                 break;
 
             case 10:
-                PlaySoundAndSubtitlesLvl0(room2Voicelines[0], "T0Sub4");
+
+                PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "T0Sub4");
+                stage = 15;
+
                 break;
 
             default:
