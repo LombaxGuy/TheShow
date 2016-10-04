@@ -6,8 +6,23 @@ public class CameraLookAtPlayer : MonoBehaviour {
     [SerializeField]
     GameObject player;
 
-	// Use this for initialization
-	void Start () {
+
+    [SerializeField]
+    bool lookAtPlayer = true;
+
+    private bool playerInTheArea;
+
+    public bool PlayerInTheArea
+    {
+        get { return playerInTheArea; }
+
+        set {  playerInTheArea = value; }
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        playerInTheArea = false;
         Debug.Log("time time : " + Time.time);
 	}
 	
@@ -16,26 +31,49 @@ public class CameraLookAtPlayer : MonoBehaviour {
 
         //Vector3 direction = player.transform.position - transform.position;
         //Quaternion toRotation = Quaternion.FromToRotation(transform.forward, direction);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.7f);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.5f * Time.time);
     }
 
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 
-        Vector3 tmp = 2 * transform.position - player.transform.position;
-
-        transform.LookAt(tmp);
-
-
-
-
-        Vector3 temp = transform.rotation.eulerAngles;
-        temp.y = Mathf.Clamp(transform.rotation.eulerAngles.y, 100, 280);
-        temp.x = Mathf.Clamp(transform.rotation.eulerAngles.x, 310, 350);
-
-        transform.rotation = Quaternion.Euler(temp);
-
-
+        if(lookAtPlayer == true && PlayerInTheArea == true)
+        {
+            CamFollowPlayer();
+        }
+        
 
     }
+
+    private void CamFollowPlayer()
+    {
+
+        transform.LookAt(player.transform);
+
+        Vector3 temp = transform.localRotation.eulerAngles;
+
+        if (transform.localRotation.eulerAngles.y <= 270 && transform.localRotation.eulerAngles.y > 180)
+        {
+            temp.y = 270;
+        }
+        else if (transform.localRotation.eulerAngles.y <= 180 && transform.localRotation.eulerAngles.y >= 90)
+        {
+            temp.y = 90;
+        }
+
+        if (transform.localRotation.eulerAngles.x <= 350 && transform.localRotation.eulerAngles.x > 180)
+        {
+            temp.x = 350;
+        }
+        else if (transform.localRotation.eulerAngles.x <= 180 && transform.localRotation.eulerAngles.x >= 30)
+        {
+            temp.x = 30;
+        }
+
+        transform.localRotation = Quaternion.Euler(temp);
+
+    }
+
+    
 }
