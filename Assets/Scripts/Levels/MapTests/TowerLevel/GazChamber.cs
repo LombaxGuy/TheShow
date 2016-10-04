@@ -20,6 +20,11 @@ public class GazChamber : MonoBehaviour {
 
     [SerializeField]
     private GameObject enterDoor;
+
+    [SerializeField]
+    private GameObject gateDoor;
+
+
     [SerializeField]
     private GameObject player;
 
@@ -71,15 +76,19 @@ public class GazChamber : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         Transform player = other.GetComponent<Collider>().transform;
-            if (player.parent != null)
+ 
+
+        if (player.parent != null)
             if (player.parent.tag == "Player")
             {   
                 if(!completed)
                 {
                     if (entered)
                     {
+                        enterDoor.GetComponent<GridDoor>().CloseDoor();
+                        gateDoor.GetComponent<GridDoor>().OpenDoor();
                         inside = true;
-                        enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(true);
+                        
                         gazArea.Play();
 
                         for (int i = 0; i < gazVents.Length; i++)
@@ -106,7 +115,7 @@ public class GazChamber : MonoBehaviour {
                 {
                     gazVents[i].Stop();
                 }
-                enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+                
 
                 completed = true;
             }
@@ -131,7 +140,9 @@ public class GazChamber : MonoBehaviour {
             gazArea.Clear();
             gazTimer = 0;
             gaz.position = new Vector3(gaz.position.x, gazY, gaz.position.z);
-            enterDoor.GetComponent<DoorBehaviourComponent>().LockDoor(false);
+            enterDoor.GetComponent<GridDoor>().OpenDoor();
+            gateDoor.GetComponent<GridDoor>().CloseDoor();
+
             for (int i = 0; i < gazVents.Length; i++)
             {
                 gazVents[i].Stop();
