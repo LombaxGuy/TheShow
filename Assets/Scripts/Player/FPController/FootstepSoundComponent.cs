@@ -110,7 +110,7 @@ public class FootstepSoundComponent : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.parent.position, -transform.up, out hit, rayCastLength))
+        if (Physics.Raycast(transform.parent.parent.position, -transform.up, out hit, rayCastLength))
         {
             switch (hit.collider.material.name)
             {

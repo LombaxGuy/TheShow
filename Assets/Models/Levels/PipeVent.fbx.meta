@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 500ed36c094e8b44c87741407bf8f2d9
-timeCreated: 1475051945
+guid: 83503908564ed3a4f8e0a2993c177868
+timeCreated: 1475567576
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Plane
+    4300000: PipeVent
   materials:
     importMaterials: 1
     materialName: 0
