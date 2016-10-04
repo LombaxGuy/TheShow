@@ -32,7 +32,7 @@ public class Level0_Room1 : RoomComponent
 
                 if (timer > timeBeforeStart)
                 {
-                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room1Sub1");
+                    //PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room1Sub1");
                     stage = 10;
                 }
 
@@ -43,7 +43,7 @@ public class Level0_Room1 : RoomComponent
 
                 if (timer > timeUntilLineEnds)
                 {
-                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room1Sub2");
+                    //PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room1Sub2");
 
                     stage = 11;
                     timer = 0;

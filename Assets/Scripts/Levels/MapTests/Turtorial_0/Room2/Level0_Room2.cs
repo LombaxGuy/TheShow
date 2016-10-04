@@ -32,7 +32,7 @@ public class Level0_Room2 : RoomComponent
 
             case 10:
 
-                PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "T0Sub4");
+                //PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "T0Sub4");
                 stage = 15;
 
                 break;
