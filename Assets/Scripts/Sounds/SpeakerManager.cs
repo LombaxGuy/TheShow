@@ -52,7 +52,6 @@ public class SpeakerManager : MonoBehaviour
             {
 
                 speakers[i].GetComponent<AudioSource>().PlayOneShot(audioClip);
-                Debug.Log("Activated speaker" + i);
             }
         }
     }

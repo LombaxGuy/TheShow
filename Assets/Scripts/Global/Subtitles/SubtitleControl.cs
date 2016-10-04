@@ -4,14 +4,13 @@ using UnityEngine.UI;
 
 public class SubtitleControl : MonoBehaviour
 {
-    private bool isDisplayed = false;
     private string line = "";
 
     [SerializeField]
-    private Text subtitles;
+    private SubtitleSetting subtitleSetting;
 
     [SerializeField]
-    private SubtitleSetting subtitleSetting;
+    private GameObject subtitleParent;
 
     //private bool subtitlesEnabled = false;
 
@@ -52,6 +51,10 @@ public class SubtitleControl : MonoBehaviour
     /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
     private IEnumerator DisplaySubtitles(string subName, string levelName, float duration)
     {
+        Text uiText = Instantiate(Resources.Load<Text>("UI/Subtitles/Subtitle"));
+
+        uiText.transform.SetParent(subtitleParent.transform, false);
+
         line = "";
         SubtitleContainer sc = SubtitleContainer.LoadSubtitle(levelName);
 
@@ -71,15 +74,11 @@ public class SubtitleControl : MonoBehaviour
         //If the line is not found a debug log is mad. If the line is found it's displayed and the isDisplayed bool is set to true
         if (line == "")
         {
-            Debug.Log("SubtitleControl.cs: Subtitle not found!");
+            Debug.Log("SubtitleControl.cs: Subtitle with the name '" + subName + "' not found!");
         }
         else
         {
-            subtitles.text = line;
-
-            EnableSubtitle();
-
-            isDisplayed = true;
+            uiText.text = line;
         }
 
         //Stops the coroutine until a certain amount of time has passed
@@ -89,23 +88,6 @@ public class SubtitleControl : MonoBehaviour
         }
 
         //When the amount of time has passed the subtitle disappears from the screen and the isDisplayed bool is set to false
-        DisableSubtitel();
-        isDisplayed = false;
-    }
-
-    /// <summary>
-    /// Enables subtitles
-    /// </summary>
-    private void EnableSubtitle()
-    {
-        subtitles.enabled = true;
-    }
-
-    /// <summary>
-    /// Disables subtitles
-    /// </summary>
-    private void DisableSubtitel()
-    {
-        subtitles.enabled = false;
+        Destroy(uiText.gameObject);
     }
 }

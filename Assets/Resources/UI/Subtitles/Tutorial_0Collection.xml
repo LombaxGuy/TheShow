@@ -2,16 +2,16 @@
 <SubtitleCollection>
   <Subtitles>
     <Subtitle name="T0Sub1">
-      <voiceLine>Hello Contestant. You gotta use your legs in this show, so we better make sure they are working. Could you step into the light for a moment?</voiceLine>
+      <voiceLine>Hello Contestant. You gotta use your legs in this show, so we better make sure they are working.</voiceLine>
     </Subtitle>
     <Subtitle name="T0Sub2">
       <voiceLine>Could you step into the light for a moment?</voiceLine>
     </Subtitle>
     <Subtitle name="T0Sub3">
-      <voiceLine>Hoh yeah don't get too hasty. Step into the light first</voiceLine>
+      <voiceLine>Thank you! Now please go on into the next room.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub4AN">
-      <voiceLine>Sigh. Come on, the audience is waiting</voiceLine>
+    <Subtitle name="T0Sub4">
+      <voiceLine>Good. Now please go through the hole in the wall over there.</voiceLine>
     </Subtitle>
     <Subtitle name="T0Sub5AN">
       <voiceLine>It's not that hard. I instruct you. You follow</voiceLine>
