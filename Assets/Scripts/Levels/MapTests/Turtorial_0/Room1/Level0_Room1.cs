@@ -2,37 +2,10 @@
 using System.Collections;
 using System;
 
-public class Level0_Room1 : MonoBehaviour
+public class Level0_Room1 : RoomComponent
 {
-    private GameObject worldManager;
-
-    private SpeakerManager speakerManager;
-    private SubtitleControl subtitleManager;
-    private Tooltip tooltipManager;
-
-    [SerializeField]
-    private AudioClip[] room1Voicelines;
-
     [SerializeField]
     private float timeBeforeStart = 2;
-
-    private float timer = 0;
-    private float timeUntilLineEnds = 0;
-
-    private bool playerEnteredLight = false;
-
-    private int stage = 0;
-
-
-    public float Timer
-    {
-        get { return timer; }
-    }
-
-    public bool PlayerEnteredLight
-    {
-        set { playerEnteredLight = value; }
-    }
 
     // Use this for initialization
     void Start()
@@ -59,7 +32,7 @@ public class Level0_Room1 : MonoBehaviour
 
                 if (timer > timeBeforeStart)
                 {
-                    PlaySoundAndSubtitlesLvl0(room1Voicelines[0], "T0Sub1");
+                    //PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room1Sub1");
                     stage = 10;
                 }
 
@@ -68,43 +41,28 @@ public class Level0_Room1 : MonoBehaviour
                 // Player should enter the light.
             case 10:
 
-                if (playerEnteredLight)
+                if (timer > timeUntilLineEnds)
                 {
-                    stage = 15;
+                    //PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room1Sub2");
+
+                    stage = 11;
+                    timer = 0;
                 }
 
-                if (timer > timeUntilLineEnds && !playerEnteredLight)
+                break;
+
+                // Waiting for the player to leave the room. After 5 seconds a tooltip will be displayed showing how to move.
+            case 11:
+
+                if (timer > timeUntilLineEnds + 5 && playerInRoom)
                 {
                     string tooltip = string.Format("Use {0}, {1}, {2} ,{3} to move around", KeyBindings.KeyMoveForward, KeyBindings.KeyMoveLeft, KeyBindings.KeyMoveBackward, KeyBindings.KeyMoveRight);
 
                     tooltipManager.DisplayTooltipForSeconds(tooltip, 4);
 
-                    PlaySoundAndSubtitlesLvl0(room1Voicelines[1], "T0Sub2");
-
-                    stage = 11;
-                }
-                break;
-
-                // Waiting for the player to enter the light.
-            case 11:
-
-                if (playerEnteredLight)
-                {
                     stage = 15;
                 }
 
-                break;
-
-                // When player enters light.
-            case 15:
-
-                PlaySoundAndSubtitlesLvl0(room1Voicelines[2], "T0Sub3");
-
-                stage = 20;
-
-                break;
-
-            default:
                 break;
         }
     }

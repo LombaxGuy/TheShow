@@ -573,7 +573,6 @@ public class FPSController : MonoBehaviour
         else
         {
             fallHeigth = transform.position.y;
-            Debug.Log(fallHeigth);
             comparePos = true;
         }
     }

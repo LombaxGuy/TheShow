@@ -14,7 +14,7 @@ public class Room2_Entered : MonoBehaviour
         {
             if (other.transform.parent.tag == "Player" && !playerAlreadyEntered)
             {
-                room2.Entered = true;
+                room2.PlayerInRoom = true;
                 playerAlreadyEntered = true;
             }
         }

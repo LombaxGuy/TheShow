@@ -12,6 +12,11 @@ public class SubtitleControl : MonoBehaviour
     [SerializeField]
     private GameObject subtitleParent;
 
+    [SerializeField]
+    private Text subtitleText;
+
+    private Coroutine coroutine;
+
     //private bool subtitlesEnabled = false;
 
     //public bool SubtitlesEnabled
@@ -38,8 +43,14 @@ public class SubtitleControl : MonoBehaviour
     {
         //Starts the coroutine if there is no subtitle currently being displayed
         //Starts a coroutine of the DisplaySubtitles method
-        StartCoroutine(DisplaySubtitles(subName, levelName, duration));
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
+            subtitleText.text = "";
+        }
 
+        coroutine = StartCoroutine(DisplaySubtitles(subName, levelName, duration));
     }
 
     /// <summary>
@@ -51,10 +62,6 @@ public class SubtitleControl : MonoBehaviour
     /// <param name="duration">The amount of time the subtitle is displayed. Time is in seconds</param>
     private IEnumerator DisplaySubtitles(string subName, string levelName, float duration)
     {
-        Text uiText = Instantiate(Resources.Load<Text>("UI/Subtitles/Subtitle"));
-
-        uiText.transform.SetParent(subtitleParent.transform, false);
-
         line = "";
         SubtitleContainer sc = SubtitleContainer.LoadSubtitle(levelName);
 
@@ -78,7 +85,7 @@ public class SubtitleControl : MonoBehaviour
         }
         else
         {
-            uiText.text = line;
+            subtitleText.text = line;
         }
 
         //Stops the coroutine until a certain amount of time has passed
@@ -88,6 +95,6 @@ public class SubtitleControl : MonoBehaviour
         }
 
         //When the amount of time has passed the subtitle disappears from the screen and the isDisplayed bool is set to false
-        Destroy(uiText.gameObject);
+        subtitleText.text = "";
     }
 }
