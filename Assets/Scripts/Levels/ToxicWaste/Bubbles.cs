@@ -25,7 +25,7 @@ public class Bubbles : MonoBehaviour
 
         for (int i = 0; i < currentNumberOfParticles; i++)
         {
-            GameObject bubble = (GameObject)Instantiate(Resources.Load<GameObject>("Level/ToxicWaste/Bubble"), emittedParticles[i].position + new Vector3(system.shape.box.x / 4, 0, -system.shape.box.z / 2), Quaternion.identity, transform);
+            GameObject bubble = (GameObject)Instantiate(Resources.Load<GameObject>("Level/ToxicWaste/Bubble"), system.transform.position + emittedParticles[i].position, Quaternion.identity, transform);
 
             bubble.GetComponent<Animator>().SetBool("bigBubble", Convert.ToBoolean(UnityEngine.Random.Range(0, 1))); 
 
