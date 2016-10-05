@@ -21,14 +21,16 @@ public class AudioSequencePlayingScript : MonoBehaviour
 
     private bool endOfArray = false;
 
-    [SerializeField]
-    private bool test = false;
-
     // Use this for initialization
     void Start()
     {
         audioPlayer = GetComponent<AudioSource>();
 
+        
+    }
+
+    void OnEnable()
+    {
         if (audioClips.Length > 0)
         {
             PlayClip();

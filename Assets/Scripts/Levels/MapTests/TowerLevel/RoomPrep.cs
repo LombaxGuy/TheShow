@@ -19,8 +19,10 @@ public class RoomPrep : MonoBehaviour {
     private GameObject[] bFires;
     [SerializeField]
     private GameObject[] lights;
+    [SerializeField]
+    private AudioSource[] audioSources;
 
-    
+
 
     private bool initiated = false;
     private int lightNum = 0;
@@ -61,6 +63,11 @@ public class RoomPrep : MonoBehaviour {
         {
             bFires[i].GetComponent<PipeScript>().enabled = false;
 
+        }
+
+        for (int i = 0; i < audioSources.Length; i++)
+        {
+            audioSources[i].GetComponent<AudioSequencePlayingScript>().enabled = false;
         }
 
     }
@@ -138,6 +145,10 @@ public class RoomPrep : MonoBehaviour {
         {
             bFires[i].GetComponent<PipeScript>().enabled = true;
 
+        }
+        for (int i = 0; i < audioSources.Length; i++)
+        {
+            audioSources[i].GetComponent<AudioSequencePlayingScript>().enabled = true;
         }
 
         initiated = true;
