@@ -30,7 +30,7 @@ public class PipeScript : MonoBehaviour
     [SerializeField]
     private bool useEvent = true;
 
-    private static AudioSource audioPlayer;
+    private AudioSource audioPlayer;
 
     [SerializeField]
     [Tooltip("AudioClips. 0 = Ignition, 1 = Flame")]

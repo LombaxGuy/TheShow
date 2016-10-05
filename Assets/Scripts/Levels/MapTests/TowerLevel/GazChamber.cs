@@ -17,6 +17,8 @@ public class GazChamber : MonoBehaviour {
     private ParticleSystem[] gazVents;
     [SerializeField]
     private ParticleSystem gazArea;
+    [SerializeField]
+    private AudioSource[] gazVentsAudio;
 
     [SerializeField]
     private GameObject enterDoor;
@@ -94,6 +96,7 @@ public class GazChamber : MonoBehaviour {
                         for (int i = 0; i < gazVents.Length; i++)
                         {
                             gazVents[i].Play();
+                            gazVentsAudio[i].Play();
                         }
                     }
                 }            
@@ -147,6 +150,7 @@ public class GazChamber : MonoBehaviour {
             {
                 gazVents[i].Stop();
                 gazVents[i].Clear();
+                gazVentsAudio[i].Stop();
             }
             gameObject.SetActive(false);
         }

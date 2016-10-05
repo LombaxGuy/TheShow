@@ -35,7 +35,11 @@ public class Dropper : MonoBehaviour {
     [Tooltip("How long until this starts going up")]
     private float idleOutSeconds = 1;
 
+    private AudioSource audioPlayer;
 
+    [SerializeField]
+    [Tooltip("AudioClips. 0 = out, 1 = in")]
+    private AudioClip[] audioClips;
 
     /// <summary>
     /// Setting the positions for top and bottom vectors
@@ -46,6 +50,7 @@ public class Dropper : MonoBehaviour {
         topPosition = transform.position;
         botPosition = transform.position;
 
+        audioPlayer = GetComponentInChildren<AudioSource>();
 
         RaycastHit hit;
 
@@ -86,6 +91,7 @@ public class Dropper : MonoBehaviour {
                 Move(botPosition, topPosition, dropUpTime);
                 isDown = false;
                 idleTimer = 0;
+                audioPlayer.PlayOneShot(audioClips[1]);
             }
 
         }
@@ -96,6 +102,7 @@ public class Dropper : MonoBehaviour {
                 Move(topPosition, botPosition, dropDownTime);
                 isDown = true;
                 idleTimer = 0;
+                audioPlayer.PlayOneShot(audioClips[0]);
             }
         }
 

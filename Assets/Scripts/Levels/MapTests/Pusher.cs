@@ -40,7 +40,7 @@ public class Pusher : MonoBehaviour {
     //extended possition
     private Vector3 extPos;
 
-    private static AudioSource audioPlayer;
+    private AudioSource audioPlayer;
 
     [SerializeField]
     [Tooltip("AudioClips. 0 = out, 1 = in")]
