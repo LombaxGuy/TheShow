@@ -45,7 +45,8 @@ public class Spinner : MonoBehaviour
     private float offsetTimer = 0;
     private float idleTimer = 0;
 
-
+    private AudioSource[] audioChilden;
+    private bool audioInSession = false;
 
     private Vector3 startPos;
 
@@ -73,7 +74,7 @@ public class Spinner : MonoBehaviour
     //set positions and casing the rotation/piston mode
     void Start()
     {
-
+        audioChilden = GetComponentsInChildren<AudioSource>();
 
         startPos = transform.position;
         extPos = transform.position + transform.forward * distance;
@@ -176,6 +177,14 @@ public class Spinner : MonoBehaviour
 
         StartCoroutine(CoroutineMove(from, to, timeInSeconds));
 
+        if (!audioInSession)
+        {
+            for (int i = 0; i < audioChilden.Length; i++)
+            {
+                audioChilden[i].Play();
+            }
+            audioInSession = true;
+        }
     }
 
     private void OnButtonPressed()
