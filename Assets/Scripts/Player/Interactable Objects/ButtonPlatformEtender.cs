@@ -13,6 +13,11 @@ public class ButtonPlatformEtender : MonoBehaviour {
     [SerializeField]
     private GameObject targetObject;
 
+    [SerializeField]
+    private AudioClip audioClip;
+
+    private AudioSource audioPlayer;
+
     private void OnEnable()
     {
         EventManager.OnPlayerRespawn += OnPlayerRespawn;
@@ -25,6 +30,7 @@ public class ButtonPlatformEtender : MonoBehaviour {
     // Use this for initialization
     void Start () {
         interactableObjectComponent = GetComponent<InteractableObjectComponent>();
+        audioPlayer = GetComponent<AudioSource>();
 
         // If the component exists on the object we assign a behaviour to the delegate in the script component.
         if (interactableObjectComponent != null)
@@ -61,6 +67,8 @@ public class ButtonPlatformEtender : MonoBehaviour {
         }
 
         EventManager.RaiseOnButtonPressed();
+
+        audioPlayer.PlayOneShot(audioClip);
 
     }
 
