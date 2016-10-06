@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Level0_Room2 : RoomComponent
+public class Level0_Room3 : RoomComponent
 {
-    private bool triggerCrouchLine = false;
 
-    public bool TriggerCrouchLine
+    private void OnEnable()
     {
-        get { return triggerCrouchLine; }
-        set { triggerCrouchLine = value; }
+        EventManager.OnMusicSaved += OnMusicSaved;
     }
 
-    // Use this for initialization
+    private void OnDisable()
+    {
+        EventManager.OnMusicSaved -= OnMusicSaved;
+    }
+
     void Start()
     {
         worldManager = GameObject.Find("WorldManager");
@@ -21,7 +23,6 @@ public class Level0_Room2 : RoomComponent
         tooltipManager = worldManager.GetComponent<Tooltip>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         timer += Time.deltaTime;
@@ -41,20 +42,10 @@ public class Level0_Room2 : RoomComponent
 
             case 10:
 
-                if (timer > 4)
+                if (timer > 2)
                 {
-                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room2Sub1");
+                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room3Sub1");
                     stage = 15;
-                }
-
-                break;
-
-            case 15:
-
-                if (triggerCrouchLine)
-                {
-                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room2Sub2");
-                    stage = 20;
                 }
 
                 break;
@@ -62,5 +53,10 @@ public class Level0_Room2 : RoomComponent
             default:
                 break;
         }
+    }
+
+    private void OnMusicSaved()
+    {
+        PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room3Sub2");
     }
 }

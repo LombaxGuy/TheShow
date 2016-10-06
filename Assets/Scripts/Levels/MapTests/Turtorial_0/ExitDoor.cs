@@ -1,8 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 [RequireComponent(typeof(InteractableObjectComponent))]
-public class StartMusicBehaviour : MonoBehaviour {
+public class ExitDoor : MonoBehaviour
+{
+    private bool locked = true;
+
+    [SerializeField]
+    private string nextLevelName = "";
+
+    private void OnEnable()
+    {
+        EventManager.OnMusicSaved += OnMusicSaved;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnMusicSaved -= OnMusicSaved;
+    }
 
     // The script containing the delegate
     InteractableObjectComponent interactableObjectComponent;
@@ -17,11 +33,11 @@ public class StartMusicBehaviour : MonoBehaviour {
         if (interactableObjectComponent != null)
         {
             interactableObjectComponent.behaviourDelegate = ThisSpecificBehaviour;
-            Debug.Log("Music Start assigned to the BehaviourDelegate.");
+            //Debug.Log("Behaviour assigned to the BehaviourDelegate.");
         }
         else
         {
-            Debug.Log("No 'InteractableObjectComponent' was found!");
+            Debug.Log("TemplateBehaviourComponent.cs: No 'InteractableObjectComponent' was found!");
         }
     }
 
@@ -30,10 +46,20 @@ public class StartMusicBehaviour : MonoBehaviour {
     /// </summary>
     private void ThisSpecificBehaviour()
     {
-        transform.parent.GetComponent<MusicRecord>().PlaySounds();
-
-        EventManager.RaiseOnMusicSaved();
-
-        Debug.Log("Start Music touched");
+        if (!locked)
+        {
+            GetComponent<Animator>().SetTrigger("openDoor");
+        }
     }
+
+    private void OnMusicSaved()
+    {
+        locked = false;
+    }
+
+    public void LoadNextLevel()
+    {
+        SceneManager.LoadScene(nextLevelName);
+    }
+
 }

@@ -19,6 +19,7 @@ public class EventManager : MonoBehaviour
     public delegate void ResetToDefaultSettingsDelegate();
     public delegate void ButtonPressed();
     public delegate void TimerExpired();
+    public delegate void PlayerSavedMusic();
 
     public static event PlayerDeathDelegate OnPlayerDeath;
     public static event PlayerRespawnDelegate OnPlayerRespawn;
@@ -36,6 +37,7 @@ public class EventManager : MonoBehaviour
     public static event ResetToDefaultSettingsDelegate OnResetToDefaultSettings;
     public static event ButtonPressed OnButtonPressed;
     public static event TimerExpired OnTimerExpired;
+    public static event PlayerSavedMusic OnMusicSaved;
 
     public static void RaiseOnPlayerDeath()
     {
@@ -241,6 +243,19 @@ public class EventManager : MonoBehaviour
         else
         {
             Debug.Log("EventManager.cs: Event 'OnTimerExpired' not raised because nothing subscibes to it.");
+        }
+    }
+
+    public static void RaiseOnMusicSaved()
+    {
+        if (OnPlayerDeath != null)
+        {
+            Debug.Log("EventManager.cs: Event 'OnMusicSaved' raised.");
+            OnMusicSaved.Invoke();
+        }
+        else
+        {
+            Debug.Log("EventManager.cs: Event 'OnMusicSaved' not raised because nothing subscibes to it.");
         }
     }
 }
