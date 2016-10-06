@@ -25,10 +25,17 @@ public class PlatformExtender : MonoBehaviour {
     private Vector3 startPos;
     private Vector3 extPos;
 
+    [SerializeField]
+    private AudioClip audioClip;
+
+    private AudioSource audioPlayer;
+
     // Use this for initialization
     void Start () {
         startPos = transform.position;
         IsOut = false;
+
+        audioPlayer = GetComponent<AudioSource>();
 
         switch(direction)
         {
@@ -54,6 +61,7 @@ public class PlatformExtender : MonoBehaviour {
     {
         Move(startPos, extPos, pushOutTime);
         IsOut = true;
+        audioPlayer.PlayOneShot(audioClip);
     }
 
     public void Substract()
