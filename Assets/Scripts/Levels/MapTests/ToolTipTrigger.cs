@@ -3,46 +3,47 @@ using System.Collections;
 
 public class ToolTipTrigger : MonoBehaviour
 {
+    private enum HelpText { HowToMove, HowToJump, HowToCrouch, HowToInteract}
+
+    [SerializeField]
+    private HelpText tooltipText = HelpText.HowToMove;
+
     private GameObject worldManager;
 
-    [SerializeField]
-    private IntroSequence introSequence;
-
-    [SerializeField]
-    private string messege;
+    private Collider trigger;
 
     // Use this for initialization
     void Start()
     {
         worldManager = GameObject.Find("WorldManager");
+        trigger = GetComponent<Collider>();
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter()
     {
-        Transform player = other.GetComponent<Collider>().transform;
+        trigger.enabled = false;
 
-        if (player.parent != null)
+        string tooltip = "";
+
+        switch (tooltipText)
         {
-            if (player.parent.tag == "Player")
-            {
+            case HelpText.HowToMove:
+                tooltip = string.Format("Use {0}, {1}, {2} ,{3} to move around", KeyBindings.KeyMoveForward, KeyBindings.KeyMoveLeft, KeyBindings.KeyMoveBackward, KeyBindings.KeyMoveRight);
+                break;
 
-                introSequence.lightEntered = true;
-                introSequence.inLight = true;
+            case HelpText.HowToJump:
+                tooltip = string.Format("Use {0} to jump.", KeyBindings.KeyMoveJump);
+                break;
 
-            }
+            case HelpText.HowToCrouch:
+                tooltip = string.Format("Use {0} to crouch.", KeyBindings.KeyMoveCrouch);
+                break;
+
+            case HelpText.HowToInteract:
+                tooltip = string.Format("Use {0} to interact with objects.", KeyBindings.KeyInteraction);
+                break;
         }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        Transform player = other.GetComponent<Collider>().transform;
-
-        if (player.parent != null)
-        {
-            if (player.parent.tag == "Player")
-            {
-                introSequence.inLight = false;
-            }
-        }
+        
+        worldManager.GetComponent<Tooltip>().DisplayTooltipForSeconds(tooltip, 3);
     }
 }

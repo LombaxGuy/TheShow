@@ -31,6 +31,9 @@ public class StartMusicBehaviour : MonoBehaviour {
     private void ThisSpecificBehaviour()
     {
         transform.parent.GetComponent<MusicRecord>().PlaySounds();
+
+        EventManager.RaiseOnMusicSaved();
+
         Debug.Log("Start Music touched");
     }
 }

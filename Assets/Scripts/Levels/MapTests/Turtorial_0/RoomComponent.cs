@@ -17,7 +17,7 @@ public class RoomComponent : MonoBehaviour
 
     protected int stage = 0;
 
-    protected bool playerInRoom = true;
+    protected bool playerInRoom = false;
 
     public bool PlayerInRoom
     {
@@ -28,5 +28,17 @@ public class RoomComponent : MonoBehaviour
     public float Timer
     {
         get { return timer; }
+    }
+
+    protected void PlaySoundAndSubtitlesLvl0(AudioClip audioClip, string subtitleName)
+    {
+        float subtitleLength = audioClip.length + 1;
+        speakerManager.PlaySpeakerSoundOnce(audioClip);
+
+        Debug.Log(subtitleLength);
+        subtitleManager.StartSub(subtitleName, "Tutorial_0", subtitleLength);
+
+        timeUntilLineEnds = subtitleLength;
+        timer = 0;
     }
 }

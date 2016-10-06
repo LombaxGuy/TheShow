@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SubtitleCollection>
   <Subtitles>
-    <Subtitle name="T0Sub1">
-      <voiceLine>Hello Contestant. You gotta use your legs in this show, so we better make sure they are working.</voiceLine>
+    <Subtitle name="Room1Sub1">
+      <voiceLine>Good evening 'Contestant'. Had a good nights rest? I hope you did. Because YOU have been chosen as contestant for my little show. Now if you could just walk through the door and into the next room. Then we can start preparing you for the challenges ahead.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub2">
-      <voiceLine>Could you step into the light for a moment?</voiceLine>
+    <Subtitle name="Room1Sub2">
+      <voiceLine>Are you in a rush 'Contestant'? I'm glad to see that. The audience has been waiting for quite a while.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub3">
-      <voiceLine>Thank you! Now please go on into the next room.</voiceLine>
+    <Subtitle name="Room2Sub1">
+      <voiceLine>Now if you could just make it to the other side of the room please. Oh... and do excuse the rubble lying about. You see... this place is not quite finished yet. We are still lacking some finishing touches. But we really couldn't delay the show anymore. That wouldn't be fair to our long waiting audience.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub4">
-      <voiceLine>Good. Now please go through the hole in the wall over there.</voiceLine>
+    <Subtitle name="Room2Sub2">
+      <voiceLine>Oh... You will have to crawl under here... There was supposed to be a door but the production team misread my plans.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub5AN">
-      <voiceLine>It's not that hard. I instruct you. You follow</voiceLine>
+    <Subtitle name="Room3Sub1">
+      <voiceLine>Do you like music 'Contestant'? I do. And you see I have this little habbit of making my contestants record a piece of music just before they enter the show. You know. To have something to remember you by.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub6AN">
-      <voiceLine>We haven't got all daaaay</voiceLine>
+    <Subtitle name="Room3Sub2">
+      <voiceLine>That's a fine piece of music 'Contestant'. Now let's not make the audience wait any longer. Let's go onwards to the show.</voiceLine>
     </Subtitle>
-    <Subtitle name="T0Sub7AN">
-      <voiceLine>Ok. Actually we do have all day. Take your time......</voiceLine>
+    <Subtitle name="Level0Idle1">
+      <voiceLine>What is it 'Contestent'? Feeling a bit groggy prehaps? It might be the anesthesia. Uhmm... while you recover I'll just play a commercial for the audience.</voiceLine>
     </Subtitle>
     <Subtitle name="T0Sub8AN">
       <voiceLine>Humming</voiceLine>

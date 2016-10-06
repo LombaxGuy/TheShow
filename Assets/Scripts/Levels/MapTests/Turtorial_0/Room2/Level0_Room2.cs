@@ -3,6 +3,14 @@ using System.Collections;
 
 public class Level0_Room2 : RoomComponent
 {
+    private bool triggerCrouchLine = false;
+
+    public bool TriggerCrouchLine
+    {
+        get { return triggerCrouchLine; }
+        set { triggerCrouchLine = value; }
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -26,31 +34,33 @@ public class Level0_Room2 : RoomComponent
                 if (playerInRoom)
                 {
                     stage = 10;
+                    timer = 0;
                 }
 
                 break;
 
             case 10:
 
-                //PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "T0Sub4");
-                stage = 15;
+                if (timer > 4)
+                {
+                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[0], "Room2Sub1");
+                    stage = 15;
+                }
+
+                break;
+
+            case 15:
+
+                if (triggerCrouchLine)
+                {
+                    PlaySoundAndSubtitlesLvl0(roomVoiceLines[1], "Room2Sub2");
+                    stage = 20;
+                }
 
                 break;
 
             default:
                 break;
         }
-    }
-
-    private void PlaySoundAndSubtitlesLvl0(AudioClip audioClip, string subtitleName)
-    {
-        float subtitleLength = audioClip.length + 1;
-        speakerManager.PlaySpeakerSoundOnce(audioClip);
-
-        Debug.Log(subtitleLength);
-        subtitleManager.StartSub(subtitleName, "Tutorial_0", subtitleLength);
-
-        timeUntilLineEnds = subtitleLength;
-        timer = 0;
     }
 }
