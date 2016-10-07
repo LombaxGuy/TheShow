@@ -59,6 +59,8 @@ public class ButtonPipeFire : MonoBehaviour {
             }
         }
 
+        GetComponent<ValveRotationScript>().StartRotation();
+
 
     }
 
