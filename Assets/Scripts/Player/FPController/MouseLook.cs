@@ -28,7 +28,7 @@ public class MouseLook : MonoBehaviour
     private float xAngles = 0;
 
     #region Events and EventHandlers
-    void OnEnable()
+    void OnAwake()
     {
         // Subscribes to events
         EventManager.OnPlayerDeath += OnPlayerDeath;

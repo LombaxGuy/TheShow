@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(InteractableObjectComponent))]
 public class ExitDoor : MonoBehaviour
 {
+    [SerializeField]
     private bool locked = true;
 
     [SerializeField]
