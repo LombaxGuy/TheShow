@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MusicRecord : MonoBehaviour {
+public class MusicRecord : MonoBehaviour
+{
 
     [Header("Place your sound clips here")]
     [SerializeField]
@@ -21,7 +22,7 @@ public class MusicRecord : MonoBehaviour {
     private int whatToPlay;
 
     private bool firstTimePress = false;
-   
+
     private bool soundsAllowedToPlay = false;
     [SerializeField]
     private bool allowedLoop = false;
@@ -41,8 +42,8 @@ public class MusicRecord : MonoBehaviour {
 
     public List<AudioClip> ClipsQueue
     {
-        get{ return clipsQueue; }
-        set{ clipsQueue = value; }
+        get { return clipsQueue; }
+        set { clipsQueue = value; }
     }
 
     public List<float> TimeBetweenClip
@@ -54,14 +55,14 @@ public class MusicRecord : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         clipsQueue = new List<AudioClip>();
         timeBetweenClip = new List<float>();
         soundSource = GetComponent<AudioSource>();
         soundSource.loop = false;
         whatToPlay = 0;
-	}
+    }
 
     // Update is called once per frame
     void Update()
@@ -71,7 +72,7 @@ public class MusicRecord : MonoBehaviour {
         timeBetweenPlay -= Time.deltaTime;
         PlayWithOrWithoutLoop();
 
-        if(useMouse == false)
+        if (useMouse == false)
         {
             HandleKeys();
         }
@@ -79,14 +80,14 @@ public class MusicRecord : MonoBehaviour {
 
     private void OnEnable()
     {
-        EventManager.OnSaveGame += SaveAudioClip;
-        EventManager.OnLoadGame += LoadAudioClip;
+        EventManager.OnMusicSaved += OnMusicSaved;
+        EventManager.OnLoadGame += OnLoadGame;
     }
 
     private void OnDisable()
     {
-        EventManager.OnSaveGame -= SaveAudioClip;
-        EventManager.OnLoadGame -= LoadAudioClip;
+        EventManager.OnMusicSaved -= OnMusicSaved;
+        EventManager.OnLoadGame -= OnMusicSaved;
     }
 
 
@@ -105,11 +106,11 @@ public class MusicRecord : MonoBehaviour {
         {
             if (timeBetweenPlay <= 0)
             {
-                if(whatToPlay < TimeBetweenClip.Count)
+                if (whatToPlay < TimeBetweenClip.Count)
                 {
                     timeBetweenPlay = timeBetweenClip[whatToPlay];
                 }
-   
+
                 soundSource.PlayOneShot(clipsQueue[whatToPlay]);
 
                 whatToPlay++;
@@ -212,15 +213,37 @@ public class MusicRecord : MonoBehaviour {
         soundSource.PlayOneShot(clips[number]);
     }
 
-    private void SaveAudioClip()
+    private void OnMusicSaved()
     {
-        saveGame.SetMusicClip(clipsQueue, timeBetweenClip);
+        saveGame.SetMusicClip(clipsQueue, timeBetweenClip, timeBetween, timeBetweenPlay);
     }
 
-    private void LoadAudioClip()
+    private void OnLoadGame()
     {
-        clipsQueue = saveGame.GetMusicClip();
-        timeBetweenClip = saveGame.GetTimeBetweenClips();
+        List<AudioClip> tempclipsQueue = saveGame.GetMusicClip();
+        List<float> temptimeBetweenClip = saveGame.GetTimeBetweenClips();
+        float temptimeBetween = saveGame.GetTimeBetween("timeBetween");
+        float tempTimeBetweenPlay = saveGame.GetTimeBetween("timeBetweenPlay");
+
+        if(tempclipsQueue.Count != 0)
+        {
+            clipsQueue = tempclipsQueue;
+        }
+
+        if(temptimeBetweenClip.Count != 0)
+        {
+            timeBetweenClip = temptimeBetweenClip;
+        }
+
+        if(temptimeBetween != 0)
+        {
+            timeBetween = temptimeBetween;
+        }
+
+        if(tempTimeBetweenPlay != 0)
+        {
+            timeBetweenPlay = tempTimeBetweenPlay;
+        }
     }
 
 
