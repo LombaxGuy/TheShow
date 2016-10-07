@@ -11,7 +11,7 @@ public class ButtonPlatformEtender : MonoBehaviour {
     private float duration = 30;
 
     [SerializeField]
-    private GameObject targetObject;
+    private GameObject[] targetObject;
 
     [SerializeField]
     private AudioClip audioClip;
@@ -50,7 +50,11 @@ public class ButtonPlatformEtender : MonoBehaviour {
         extendTimer += Time.deltaTime;
         if (extendTimer > duration)
         {
-            targetObject.GetComponent<PlatformExtender>().Substract();
+            for (int i = 0; i < targetObject.Length; i++)
+            {
+                targetObject[i].GetComponent<PlatformExtender>().Substract();
+            }
+            
             isOut = false;
             EventManager.RaiseOnTimerExpired();
             extendTimer = 0;
@@ -62,7 +66,11 @@ public class ButtonPlatformEtender : MonoBehaviour {
 
         if(!isOut)
         {
-            targetObject.GetComponent<PlatformExtender>().Extend();
+            for (int i = 0; i < targetObject.Length; i++)
+            {
+                targetObject[i].GetComponent<PlatformExtender>().Extend();
+            }
+            
             isOut = true;
         }
 
