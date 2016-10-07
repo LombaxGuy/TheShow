@@ -2,8 +2,8 @@
 using System.Collections;
 
 [RequireComponent(typeof(InteractableObjectComponent))]
-public class ButtonPipeFire : MonoBehaviour {
-
+public class PipeFlameValve : MonoBehaviour
+{
     InteractableObjectComponent interactableObjectComponent;
 
     [SerializeField]
@@ -11,9 +11,15 @@ public class ButtonPipeFire : MonoBehaviour {
 
     private bool pipeFireing = true;
 
-    public bool outOfArea = false;
+    private bool outOfArea = false;
 
+    private Animator animator;
 
+    public bool OutOfArea
+    {
+        get { return outOfArea; }
+        set { outOfArea = value; }
+    }
 
     private void OnEnable()
     {
@@ -26,7 +32,7 @@ public class ButtonPipeFire : MonoBehaviour {
     }
     //
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         interactableObjectComponent = GetComponent<InteractableObjectComponent>();
 
@@ -40,26 +46,29 @@ public class ButtonPipeFire : MonoBehaviour {
         {
             Debug.Log("TemplateBehaviourComponent.cs: No 'InteractableObjectComponent' was found!");
         }
+
+        animator = GetComponentInChildren<Animator>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void ThisSpecificBehaviour()
     {
 
         if (pipeFireing == true)
         {
+            animator.SetTrigger("triggerTurn");
+
             for (int i = 0; i < pipeFlames.Length; i++)
             {
                 pipeFlames[i].GetComponent<PipeScript>().OnTimerExpired();
                 pipeFireing = false;
             }
         }
-
-
     }
 
     private void OnPlayerRespawn()
@@ -68,6 +77,8 @@ public class ButtonPipeFire : MonoBehaviour {
         {
             for (int i = 0; i < pipeFlames.Length; i++)
             {
+                animator.SetTrigger("triggerReset");
+
                 pipeFlames[i].GetComponent<PipeScript>().isActivated = true;
                 pipeFireing = true;
             }
