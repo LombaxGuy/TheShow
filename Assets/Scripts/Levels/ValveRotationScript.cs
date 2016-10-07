@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ValveRotationScript : MonoBehaviour {
-
-
+public class ValveRotationScript : MonoBehaviour
+{
     [SerializeField]
     private bool startRotating = false;
 
@@ -15,10 +14,11 @@ public class ValveRotationScript : MonoBehaviour {
     private Vector3 current;
 
     // Use this for initialization
-	
-	// Update is called once per frame
-	void Update () {
-	    if(startRotating && !rotated)
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (startRotating && !rotated)
         {
             rotateTimer += Time.deltaTime;
 
@@ -31,7 +31,7 @@ public class ValveRotationScript : MonoBehaviour {
                 rotated = true;
             }
         }
-	}
+    }
 
     public void StartRotation()
     {

@@ -12,7 +12,7 @@ public class OutOfAreaScript : MonoBehaviour {
         {
             if (other.transform.parent.tag == "Player")
             {
-                limitedObject.GetComponent<ButtonPipeFire>().outOfArea = true;
+                limitedObject.GetComponent<PipeFlameValve>().OutOfArea = true;
             }
         }
     }
