@@ -22,6 +22,7 @@ namespace UnityStandardAssets.Water
         public LayerMask reflectLayers = -1;
         public LayerMask refractLayers = -1;
 
+        private bool waterOcc = true;
 
         private Dictionary<Camera, Camera> m_ReflectionCameras = new Dictionary<Camera, Camera>(); // Camera -> Camera table
         private Dictionary<Camera, Camera> m_RefractionCameras = new Dictionary<Camera, Camera>(); // Camera -> Camera table
@@ -294,6 +295,11 @@ namespace UnityStandardAssets.Water
                     reflectionCamera.gameObject.AddComponent<FlareLayer>();
                     go.hideFlags = HideFlags.HideAndDontSave;
                     m_ReflectionCameras[currentCamera] = reflectionCamera;
+
+                    if(waterOcc)
+                    {
+                        reflectionCamera.useOcclusionCulling = false;
+                    }
                 }
             }
 
@@ -327,6 +333,13 @@ namespace UnityStandardAssets.Water
                     refractionCamera.gameObject.AddComponent<FlareLayer>();
                     go.hideFlags = HideFlags.HideAndDontSave;
                     m_RefractionCameras[currentCamera] = refractionCamera;
+
+                    if (waterOcc)
+                    {
+                        refractionCamera.useOcclusionCulling = false;
+                    }
+
+
                 }
             }
         }
