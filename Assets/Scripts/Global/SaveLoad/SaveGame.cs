@@ -24,8 +24,6 @@ public class SaveGame
     public List<string> prefKeys = SaveLoad.PrefKeys;
     public List<AudioClip> savedClips;
     public List<float> savedTimeBetweenClips;
-    public float savedTimeBetween;
-    public float savedTimeBetweenPlay;
 
 
     /// <summary>
@@ -44,7 +42,7 @@ public class SaveGame
         currentLevel = StatTracker.CurrentLevel;
     }
     
-    public void SetMusicClip(List<AudioClip> audio, List<float> timeBetweenClips, float timeBetween, float timeBetweenPlay)
+    public void SetMusicClip(List<AudioClip> audio, List<float> timeBetweenClips)
     {
         savedClips = audio;
         savedTimeBetweenClips = timeBetweenClips;
@@ -59,27 +57,6 @@ public class SaveGame
     public List<float> GetTimeBetweenClips()
     {
         return savedTimeBetweenClips;
-    }
-
-    public float GetTimeBetween(string name)
-    {
-        float temp = 0;
-        if(name != null)
-        {
-            switch(name)
-            {
-                case "timeBetween":
-                    temp = savedTimeBetween;
-                    break;
-                case "timeBetweenPlay":
-                    temp = savedTimeBetweenPlay;
-                    break;
-                default:
-                    break;
-                    
-            }
-        }
-        return temp;
     }
 
     /// <summary>

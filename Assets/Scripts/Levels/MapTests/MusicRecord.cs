@@ -215,15 +215,13 @@ public class MusicRecord : MonoBehaviour
 
     private void OnMusicSaved()
     {
-        saveGame.SetMusicClip(clipsQueue, timeBetweenClip, timeBetween, timeBetweenPlay);
+        saveGame.SetMusicClip(clipsQueue, timeBetweenClip);
     }
 
     private void OnLoadGame()
     {
         List<AudioClip> tempclipsQueue = saveGame.GetMusicClip();
         List<float> temptimeBetweenClip = saveGame.GetTimeBetweenClips();
-        float temptimeBetween = saveGame.GetTimeBetween("timeBetween");
-        float tempTimeBetweenPlay = saveGame.GetTimeBetween("timeBetweenPlay");
 
         if(tempclipsQueue.Count != 0)
         {
@@ -233,16 +231,6 @@ public class MusicRecord : MonoBehaviour
         if(temptimeBetweenClip.Count != 0)
         {
             timeBetweenClip = temptimeBetweenClip;
-        }
-
-        if(temptimeBetween != 0)
-        {
-            timeBetween = temptimeBetween;
-        }
-
-        if(tempTimeBetweenPlay != 0)
-        {
-            timeBetweenPlay = tempTimeBetweenPlay;
         }
     }
 
