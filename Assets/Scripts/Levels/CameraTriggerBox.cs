@@ -10,7 +10,7 @@ public class CameraTriggerBox : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("other tag " + other.tag);
-        if (other.tag == "Player")
+        if (other.transform.parent.tag == "Player")
         {
             cameraWithScript.GetComponent<CameraLookAtPlayer>().PlayerInTheArea = true;
         }
@@ -19,7 +19,7 @@ public class CameraTriggerBox : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.transform.parent.tag == "Player")
         {
             cameraWithScript.GetComponent<CameraLookAtPlayer>().PlayerInTheArea = false;
         }
