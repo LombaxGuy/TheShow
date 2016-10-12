@@ -28,28 +28,37 @@ public class MouseLook : MonoBehaviour
     private float xAngles = 0;
 
     #region Events and EventHandlers
-    void OnAwake()
+    void OnEnable()
     {
-        // Subscribes to events
-        EventManager.OnPlayerDeath += OnPlayerDeath;
-        EventManager.OnPlayerRespawn += OnPlayerRespawn;
+            // Subscribes to events
+            EventManager.OnPlayerDeath += OnPlayerDeath;
+            EventManager.OnPlayerRespawn += OnPlayerRespawn;
     }
 
     void OnDestroy()
     {
-        // Unsubscribes from events
-        EventManager.OnPlayerDeath -= OnPlayerDeath;
-        EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+            // Unsubscribes from events
+            EventManager.OnPlayerDeath -= OnPlayerDeath;
+            EventManager.OnPlayerRespawn -= OnPlayerRespawn;
+
+
     }
 
     private void OnPlayerDeath()
     {
-        this.enabled = false;
+        if (this != null)
+        {
+            this.enabled = false;
+        }
     }
 
     private void OnPlayerRespawn()
     {
+        if(this != null)
+        {
         this.enabled = true;
+
+        }
     }
     #endregion
 
