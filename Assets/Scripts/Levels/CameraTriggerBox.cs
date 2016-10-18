@@ -4,24 +4,35 @@ using System.Collections;
 public class CameraTriggerBox : MonoBehaviour {
 
     [SerializeField]
-    GameObject cameraWithScript;
+    GameObject[] cameraWithScript;
 
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("other tag " + other.tag);
-        if (other.transform.parent.tag == "Player")
+        if(cameraWithScript != null)
         {
-            cameraWithScript.GetComponent<CameraLookAtPlayer>().PlayerInTheArea = true;
+            if (other.transform.parent.tag == "Player")
+            {
+                for (int i = 0; i < cameraWithScript.Length; i++)
+                {
+                    cameraWithScript[i].transform.GetChild(0).GetComponent<CameraLookAtPlayer>().PlayerInTheArea = true;
+                }
+            }
         }
-
+        
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.transform.parent.tag == "Player")
+        if (cameraWithScript != null)
         {
-            cameraWithScript.GetComponent<CameraLookAtPlayer>().PlayerInTheArea = false;
+            if (other.transform.parent.tag == "Player")
+            {
+                for (int i = 0; i < cameraWithScript.Length; i++)
+                {
+                    cameraWithScript[i].transform.GetChild(0).GetComponent<CameraLookAtPlayer>().PlayerInTheArea = false;
+                }
+            }
         }
     }
 
