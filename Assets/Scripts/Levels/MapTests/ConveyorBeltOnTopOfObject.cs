@@ -15,7 +15,7 @@ public class ConveyorBeltOnTopOfObject : MonoBehaviour {
     {
         if (playerOnConveyor == true)
         {
-            player.GetComponent<Rigidbody>().MovePosition(player.transform.position + transform.forward * Time.deltaTime * 1);
+            player.GetComponent<Rigidbody>().MovePosition(player.transform.position + transform.forward * Time.deltaTime * 1.5f);
         }
     }
 
@@ -24,18 +24,19 @@ public class ConveyorBeltOnTopOfObject : MonoBehaviour {
 	
 	}
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision other)
     {
-        if (collision.transform.tag == "Player")
+        
+        if (other.transform.tag == "Player")
         {
             playerOnConveyor = true;
-            player = collision.gameObject;
+            player = other.gameObject;
         }
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnCollisionExit(Collision other)
     {
-        if (collision.transform.tag == "Player")
+        if (other.transform.tag == "Player")
         {
             playerOnConveyor = false;
         }
